@@ -1,0 +1,22 @@
+{
+  "name": "gamerdb_dev",
+  "version": "1.0.0",
+  "description": "GAMeRdb interfacing test. Oct 25 2018",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afelten-Anses/GAMeRdb_web.git"
+  },
+  "author": "A.Felten K.Durimel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/afelten-Anses/GAMeRdb_web/issues"
+  },
+  "homepage": "https://github.com/afelten-Anses/GAMeRdb_web#readme",
+  "dependencies": {
+    "semantic-ui": "^2.2.13"
+  }
+}
