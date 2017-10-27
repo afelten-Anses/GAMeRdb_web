@@ -201,3 +201,8 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
          Site Overrides
 *******************************/
 
+.sticky {
+  position: bottom;
+  bottom: 0;
+  width: 100%;
+}
