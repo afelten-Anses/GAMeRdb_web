@@ -755,6 +755,10 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
         Global Overrides
 *******************************/
 
+.submit {
+  float: right;
+}
+
 /*******************************
          Site Overrides
 *******************************/
