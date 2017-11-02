@@ -763,10 +763,18 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
          Site Overrides
 *******************************/
 
+/* fixer le footer en bas */
+
 .sticky {
   position: bottom;
   bottom: 0;
   width: 100%;
+}
+
+/* marge pour que le premier container (id="aftertopmenu")situé après le menu du haut container ne se retrouve pas caché par lui */
+
+#aftertopmenu {
+  margin-top: 4em;
 }
 /*!
  * # Semantic UI 2.2.13 - Button
