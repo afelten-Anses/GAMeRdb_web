@@ -1,3 +1,8 @@
 /*******************************
      User Global Variables
 *******************************/
+@mobileBreakpoint            : 420px;
+@tabletBreakpoint            : 868px;
+@computerBreakpoint          : 1600px;
+@largeMonitorBreakpoint      : 1920px;
+@widescreenMonitorBreakpoint : 2720px;

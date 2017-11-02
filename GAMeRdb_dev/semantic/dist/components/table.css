@@ -143,7 +143,7 @@
 }
 
 /* Responsive */
-@media only screen and (max-width: 767px) {
+@media only screen and (max-width: 867px) {
   .ui.table:not(.unstackable) {
     width: 100%;
   }
@@ -394,7 +394,7 @@
     Stackable
 ---------------*/
 
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1599px) {
   .ui[class*="tablet stackable"].table,
   .ui[class*="tablet stackable"].table tbody,
   .ui[class*="tablet stackable"].table tr,
