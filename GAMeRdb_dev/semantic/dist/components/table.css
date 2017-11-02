@@ -394,7 +394,7 @@
     Stackable
 ---------------*/
 
-@media only screen and (max-width: 1599px) {
+@media only screen and (max-width: 1399px) {
   .ui[class*="tablet stackable"].table,
   .ui[class*="tablet stackable"].table tbody,
   .ui[class*="tablet stackable"].table tr,

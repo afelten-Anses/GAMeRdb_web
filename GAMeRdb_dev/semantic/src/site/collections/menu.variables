@@ -6,3 +6,6 @@
 @itemTextColor: #FFFFFF;
 @hoverItemTextColor: #18BC9C;
 @hoverItemBackground: #233140;
+@secondaryItemColor: #2C3E50;
+@secondaryHoverItemColor: #233140;
+

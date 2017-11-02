@@ -3,6 +3,6 @@
 *******************************/
 @mobileBreakpoint            : 420px;
 @tabletBreakpoint            : 868px;
-@computerBreakpoint          : 1600px;
+@computerBreakpoint          : 1400px;
 @largeMonitorBreakpoint      : 1920px;
 @widescreenMonitorBreakpoint : 2720px;

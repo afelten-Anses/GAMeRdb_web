@@ -787,8 +787,19 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 
 #aftertopmenu {
   margin-top: 4em;
-  margin-bottom: em;
   padding: 0;
+}
+
+/* marge pour que menu de gauche (id="leftmenu")situé après le menu du haut container ne se retrouve pas caché par lui */
+
+#leftmenu {
+  margin-top: 18em;
+  margin-right: 1em;
+}
+
+#rightmenu {
+  margin-top: 18em;
+  margin-left: 1em;
 }
 /*!
  * # Semantic UI 2.2.13 - Button
@@ -5024,7 +5035,7 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 
 /* Tablet */
 
-@media only screen and (min-width: 868px) and (max-width: 1599px) {
+@media only screen and (min-width: 868px) and (max-width: 1399px) {
   .ui.container {
     width: 823px;
     margin-left: auto !important;
@@ -5046,23 +5057,23 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 
 /* Small Monitor */
 
-@media only screen and (min-width: 1600px) and (max-width: 1919px) {
+@media only screen and (min-width: 1400px) and (max-width: 1919px) {
   .ui.container {
-    width: 1541px;
+    width: 1341px;
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
   .ui.grid.container {
-    width: calc( 1541px  +  2rem ) !important;
+    width: calc( 1341px  +  2rem ) !important;
   }
 
   .ui.relaxed.grid.container {
-    width: calc( 1541px  +  3rem ) !important;
+    width: calc( 1341px  +  3rem ) !important;
   }
 
   .ui.very.relaxed.grid.container {
-    width: calc( 1541px  +  5rem ) !important;
+    width: calc( 1341px  +  5rem ) !important;
   }
 }
 
@@ -17397,7 +17408,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet Or Below */
 
-@media only screen and (max-width: 1599px) {
+@media only screen and (max-width: 1399px) {
   .ui[class*="tablet stackable"].steps {
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
@@ -19120,7 +19131,7 @@ ol.ui.horizontal.list li:before,
   }
 }
 
-@media only screen and (min-width: 868px) and (max-width: 1599px) {
+@media only screen and (min-width: 868px) and (max-width: 1399px) {
   .ui.page.grid {
     width: auto;
     margin-left: 0em;
@@ -19130,7 +19141,7 @@ ol.ui.horizontal.list li:before,
   }
 }
 
-@media only screen and (min-width: 1600px) and (max-width: 1919px) {
+@media only screen and (min-width: 1400px) and (max-width: 1919px) {
   .ui.page.grid {
     width: auto;
     margin-left: 0em;
@@ -19566,7 +19577,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet Sizing Combinations */
 
-@media only screen and (min-width: 868px) and (max-width: 1599px) {
+@media only screen and (min-width: 868px) and (max-width: 1399px) {
   .ui.grid > .row > [class*="one wide tablet"].column,
   .ui.grid > .column.row > [class*="one wide tablet"].column,
   .ui.grid > [class*="one wide tablet"].column,
@@ -19682,7 +19693,7 @@ ol.ui.horizontal.list li:before,
 
 /* Computer/Desktop Sizing Combinations */
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui.grid > .row > [class*="one wide computer"].column,
   .ui.grid > .column.row > [class*="one wide computer"].column,
   .ui.grid > [class*="one wide computer"].column,
@@ -20661,7 +20672,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet */
 
-@media only screen and (min-width: 868px) and (max-width: 1599px) {
+@media only screen and (min-width: 868px) and (max-width: 1399px) {
   .ui[class*="tablet reversed"].grid,
   .ui[class*="tablet reversed"].grid > .row,
   .ui.grid > [class*="tablet reversed"].row {
@@ -20719,7 +20730,7 @@ ol.ui.horizontal.list li:before,
 
 /* Computer */
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui[class*="computer reversed"].grid,
   .ui[class*="computer reversed"].grid > .row,
   .ui.grid > [class*="computer reversed"].row {
@@ -20781,7 +20792,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet Only */
 
-@media only screen and (min-width: 868px) and (max-width: 1599px) {
+@media only screen and (min-width: 868px) and (max-width: 1399px) {
   .ui.doubling.grid {
     width: auto;
   }
@@ -21127,7 +21138,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet Only Hide */
 
-@media only screen and (min-width: 868px) and (max-width: 1599px) {
+@media only screen and (min-width: 868px) and (max-width: 1399px) {
   .ui[class*="mobile only"].grid.grid.grid:not(.tablet),
   .ui.grid.grid.grid > [class*="mobile only"].row:not(.tablet),
   .ui.grid.grid.grid > [class*="mobile only"].column:not(.tablet),
@@ -21159,7 +21170,7 @@ ol.ui.horizontal.list li:before,
 
 /* Computer Only Hide */
 
-@media only screen and (min-width: 1600px) and (max-width: 1919px) {
+@media only screen and (min-width: 1400px) and (max-width: 1919px) {
   .ui[class*="mobile only"].grid.grid.grid:not(.computer),
   .ui.grid.grid.grid > [class*="mobile only"].row:not(.computer),
   .ui.grid.grid.grid > [class*="mobile only"].column:not(.computer),
@@ -22150,7 +22161,7 @@ Floated Menu / Item
 .ui.secondary.menu .link.item:hover,
 .ui.secondary.menu a.item:hover {
   background: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.95);
+  color: #233140;
 }
 
 /* Active */
@@ -24528,7 +24539,7 @@ Floated Menu / Item
     Stackable
 ---------------*/
 
-@media only screen and (max-width: 1599px) {
+@media only screen and (max-width: 1399px) {
   .ui[class*="tablet stackable"].table,
   .ui[class*="tablet stackable"].table tbody,
   .ui[class*="tablet stackable"].table tr,
@@ -26641,7 +26652,7 @@ a.ui.card:hover,
 
 /* Tablet Only */
 
-@media only screen and (min-width: 868px) and (max-width: 1599px) {
+@media only screen and (min-width: 868px) and (max-width: 1399px) {
   .ui.two.doubling.cards {
     margin-left: 0em;
     margin-right: 0em;
@@ -27746,7 +27757,7 @@ a.ui.card:hover,
 
 /* Tablet Only */
 
-@media only screen and (min-width: 868px) and (max-width: 1599px) {
+@media only screen and (min-width: 868px) and (max-width: 1399px) {
   .ui.items > .item {
     margin: 1em 0em;
   }
@@ -30164,7 +30175,7 @@ select.ui.dropdown {
   }
 }
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui.selection.dropdown .menu {
     max-height: 16.02857143rem;
   }
@@ -30378,7 +30389,7 @@ select.ui.dropdown {
   }
 }
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui.search.dropdown .menu {
     max-height: 16.02857143rem;
   }
@@ -30942,7 +30953,7 @@ select.ui.dropdown {
   }
 }
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui.scrolling.dropdown .menu,
   .ui.dropdown .scrolling.menu {
     max-height: 20.57142857rem;
@@ -31722,7 +31733,7 @@ select.ui.dropdown {
   }
 }
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui.modal {
     width: 850px;
     margin: 0em 0em 0em -425px;
@@ -31745,7 +31756,7 @@ select.ui.dropdown {
 
 /* Tablet and Mobile */
 
-@media only screen and (max-width: 1599px) {
+@media only screen and (max-width: 1399px) {
   .ui.modal > .header {
     padding-right: 2.25rem;
   }
@@ -31867,7 +31878,7 @@ select.ui.dropdown {
 
 /* Tablet and Mobile */
 
-@media only screen and (max-width: 1599px) {
+@media only screen and (max-width: 1399px) {
   .ui.basic.modal > .close {
     color: #FFFFFF;
   }
@@ -31938,7 +31949,7 @@ select.ui.dropdown {
   z-index: auto;
 }
 
-@media only screen and (max-width: 1599px) {
+@media only screen and (max-width: 1399px) {
   .modals.dimmer .ui.scrolling.modal {
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
@@ -32006,7 +32017,7 @@ select.ui.dropdown {
   }
 }
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui.mini.modal {
     width: 340px;
     margin: 0em 0em 0em -170px;
@@ -32049,7 +32060,7 @@ select.ui.dropdown {
   }
 }
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui.tiny.modal {
     width: 510px;
     margin: 0em 0em 0em -255px;
@@ -32092,7 +32103,7 @@ select.ui.dropdown {
   }
 }
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui.small.modal {
     width: 680px;
     margin: 0em 0em 0em -340px;
@@ -32133,7 +32144,7 @@ select.ui.dropdown {
   }
 }
 
-@media only screen and (min-width: 1600px) {
+@media only screen and (min-width: 1400px) {
   .ui.large.modal {
     width: 1020px;
     margin: 0em 0em 0em -510px;

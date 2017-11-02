@@ -425,7 +425,7 @@
 
 
 /* Tablet Or Below */
-@media only screen and (max-width: 1599px) {
+@media only screen and (max-width: 1399px) {
   .ui[class*="tablet stackable"].steps {
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
