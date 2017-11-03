@@ -21,12 +21,8 @@
         -->
     </head>
     <body>
-    <!-- main wrapper "bloc_page". Engloble tout le site pour la mise en page globale-->
-    <div id="bloc_page">
-        <!--
-        Container Semantic UI (responsive) : START
-        -->
-       <!-- <div class="ui container">-->
+        <!-- main wrapper "bloc_page". Engloble tout le site pour la mise en page globale-->
+        <div id="bloc_page">
             <header>
                 <div class="ui massive borderless fixed fluid menu">
                     <a class="disabled item" href="../homepage/index.html" title="Return to homepage">
@@ -47,17 +43,8 @@
                     </div>
                 </div>
             </header>        
-        <!--
-         Container section 1 Semantic UI (responsive) : END
-         -->
-       <!-- </div>-->  
-        <!--
-        Container section 2 Semantic UI (responsive) : START
-        -->
-        <!--<div class="ui container">-->
-            <!--stackable grid : 100% responsive : les colonnes passent a la ligne si ecran pas assez large-->
+
             <div class="ui stackable grid" id="aftertopmenu"> <!--grid principal (grids de grids) -->
-                
                 <!--GRID du de gauche-->
                 <div class="two wide column" id="leftmenu">
                     <div class="ui vertical menu">
@@ -75,7 +62,6 @@
                         </a>
                     </div>
                 </div>
-                
                 <!--GRID du milieu-->
                 <div class="eleven wide column" id="centermenu">
                     <div class="ui one column stackable grid">
@@ -122,7 +108,7 @@
                 </div>
                 <!--GRID de droite-->
                 <div class="column" id= "rightmenu">
-                    <div class="ui vertical  menu">
+                    <div class="ui vertical menu">
                         <a class="active yellow item">
                             Genomes
                         </a>
@@ -137,99 +123,65 @@
                         </a>
                     </div>
                 </div>
-            </div><!--thisdiv-->
+            </div>
 
-            
-            
-            
-        <!--
-        Container section 2 Semantic UI (responsive) : END
-        -->            
-        <!--</div>-->   
-        <!--classe sticky utilisée pour overide site.variables css, ne pas retirer!-->
-        <br/>
-        <br/>
-        <footer class= "sticky">
-        <!--
-        Pour ne pas avoir les bordures verticales du grid divided aux extremités du footer:
-            conteneur principal contient:
-                ui grid sans bordures qui contient:
-                    -Une colonne de largeur 3/16 sans bordures (id noborder)
-                    -Une colonne de largueur 10/16 sans bordure (id noborder) qui contient:
-                        Le contenu réel du footer avec bordures
-                    -Une colonne de largeur 3/16 sans bordures (id noborder)
-                Ce grid sans bordures permet de contenir au centre du footer son contenu sans afficher des bordures a ses extremités G et D.
-        -->
-            <div class="ui inverted grey vertical footer segment">
-                <!--<div class="ui center aligned container" id="conteneurprincipal">-->
-                    <!--<div class="ui grid" id="gridfooter">-->
-                        <!--<div class="one wide column" id="noborder"></div>--><!--vide de gauche-->
-                        <!--<div class="sixteen wide column" id="noborder">--><!--colonne de grids (contenu visible du footer)-->
-                            <div class="ui stackable inverted center aligned divided grid" id="gridfooter">
-                                <div class="two wide column">
-                                    <h3 class="ui inverted small orange header">Information</h3>
-                                    <div class="ui inverted link list">
-                                        <a href="#" class="item">News</a>
-                                        <a href="#" class="item">Groupe génomique</a>
-                                        <a href="#" class="item">F.A.Q</a>
-                                        <a href="#" class="item">About us</a>
-                                    </div>
-                                </div>
-                                <div class="two wide column">
-                                    <h3 class="ui inverted small green header">Getting started</h3>
-                                    <div class="ui inverted link list">
-                                        <a href="#" class="item">iVARCall2 tutorial</a>
-                                        <a href="#" class="item">RAxML tutorial</a>
-                                        <a href="#" class="item">Redmine forum</a>
-                                    </div>
-                                </div>
-                                <div class="two wide column">
-                                    <h3 class="ui inverted small blue header">Useful links</h3>
-                                    <div class="ui inverted link list">
-                                        <a href="#" class="item">Anses' intranet</a>
-                                        <a href="#" class="item">Anses' website</a>
-                                        <a href="#" class="item">Anses' webmail</a>
-                                        <a href="#" class="item">VigilAnses</a>
-                                    </div>
-                                </div>
-                                <div class="four wide column">
-                                    <h3 class="ui inverted small violet header">Contact us</h3>
-                                    <form class="ui mini form">
-                                        <div class="two fields">
-                                            <div class="field">
-                                                <input placeholder="Name" type="text"/>
-                                            </div>
-                                            <div class="field">
-                                                <input placeholder="Mail" type="text"/>
-                                            </div>
-                                        </div>
-                                        <div class="field">
-                                            <textarea placeholder="Message" rows=4></textarea>
-                                        </div>
-                                        <div class="submit">
-                                            <input type="submit" value="Submit" class="ui mini grey button"/>
-                                        </div>
-                                    </form>
-                                </div>
-                                <!-- grid vide pour forcer centrage footer : start -->
-                               <!-- <div class="ui grid">
-                                    <div class="column"></div>
-                                </div>
-                                <div class="ui grid">
-                                    <div class="column"></div>
-                                </div>-->
-                                <!-- grid vide pour forcer centrage footer : end -->
+            <br/><br/>
+
+            <!--classe sticky utilisée pour overide site.variables css, ne pas retirer!-->
+            <footer class= "sticky">
+                <div class="ui inverted grey vertical footer segment">
+                    <div class="ui stackable inverted center aligned divided grid" id="gridfooter">
+                        <div class="two wide column">
+                            <h3 class="ui inverted small orange header">Information</h3>
+                            <div class="ui inverted link list">
+                                <a href="#" class="item">News</a>
+                                <a href="#" class="item">Groupe génomique</a>
+                                <a href="#" class="item">F.A.Q</a>
+                                <a href="#" class="item">About us</a>
                             </div>
-                        <!--</div>-->
-                        <!--<div class="one wide column" id="noborder"></div>--><!--vide de droite-->
-                    <!--</div>-->
+                        </div>
+                        <div class="two wide column">
+                            <h3 class="ui inverted small green header">Getting started</h3>
+                            <div class="ui inverted link list">
+                                <a href="#" class="item">iVARCall2 tutorial</a>
+                                <a href="#" class="item">RAxML tutorial</a>
+                                <a href="#" class="item">Redmine forum</a>
+                            </div>
+                        </div>
+                        <div class="two wide column">
+                            <h3 class="ui inverted small blue header">Useful links</h3>
+                            <div class="ui inverted link list">
+                                <a href="#" class="item">Anses' intranet</a>
+                                <a href="#" class="item">Anses' website</a>
+                                <a href="#" class="item">Anses' webmail</a>
+                                <a href="#" class="item">VigilAnses</a>
+                            </div>
+                        </div>
+                        <div class="four wide column">
+                            <h3 class="ui inverted small violet header">Contact us</h3>
+                            <form class="ui mini form">
+                                <div class="two fields">
+                                    <div class="field">
+                                        <input placeholder="Name" type="text"/>
+                                    </div>
+                                    <div class="field">
+                                        <input placeholder="Mail" type="text"/>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <textarea placeholder="Message" rows=4></textarea>
+                                </div>
+                                <div class="submit">
+                                    <input type="submit" value="Submit" class="ui mini grey button"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     <div class="ui inverted section divider" id="lignefooter"></div>
                     <img src="../../img/ansesgamer.png" id="footerlogo">
                     <h4>2016-2018 GAMeRdb v.beta - Unless otherwise stated, all content on the site is licensed under (Creative Commons BY-SA 2.0+?)</h4>
-                <!--</div>-->
-            </div>
-        </footer>
-    </div>
-    </body>
-        
+                </div>
+            </footer>
+        </div>
+    </body>       
 </html>
