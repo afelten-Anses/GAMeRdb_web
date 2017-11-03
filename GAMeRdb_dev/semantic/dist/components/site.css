@@ -208,18 +208,19 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 /* fixer le footer en bas : utilisé code css pour sticky et body de:
 https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with-css/ */
 .sticky {
+  display: block;
   width: 100%;
-  height: 100px;
-  position: auto;
+  position: bottom;
   /*passer en absolute pour support 4K, bottom pour standard et mobiles*/
   bottom: 0;
   left: 0;
   margin-top: auto;
-  padding: auto;
+  margin-bottom: 0;
+  padding: 0;
 }
 #bloc_page {
-  margin: auto;
-  padding: auto;
+  margin: 0;
+  padding: 0;
   height: 100%;
 }
 
@@ -227,14 +228,46 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 #aftertopmenu {
   margin-top: 4em;
   padding: 0;
+  /*background-color: #ff7f50;*/
+  /*pour debug*/
 }
 
 /* marge pour que menu de gauche (id="leftmenu")situé après le menu du haut container ne se retrouve pas caché par lui */
 #leftmenu {
   margin-top: 18em;
-  margin-right: 1em;
+  margin-right: 0em;
+  margin-left: 0;
+  padding: 0;
+}
+#centermenu {
+  margin-right: 6em;
+  margin-left: 2em;
 }
 #rightmenu {
   margin-top: 18em;
-  margin-left: 1em;
+  margin-left: 0em;
+}
+#gridfooter {
+  margin-right: 3.5em;
+  /*alignement parfait avec limites grid central plus haut. Ratio 16:9*/
+}
+h4 {
+  text-align: center;
+  font-size: x-small;
+  color: grey;
+  margin: 0;
+  padding: 0;
+}
+#footerlogo {
+  width: 12%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+#lignefooter {
+  margin-top: 3em;
+  margin-bottom: 1em;
+  padding: 0;
 }

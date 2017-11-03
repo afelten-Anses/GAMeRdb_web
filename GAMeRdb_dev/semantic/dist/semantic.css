@@ -767,19 +767,20 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with-css/ */
 
 .sticky {
+  display: block;
   width: 100%;
-  height: 100px;
-  position: auto;
+  position: bottom;
   /*passer en absolute pour support 4K, bottom pour standard et mobiles*/
   bottom: 0;
   left: 0;
   margin-top: auto;
-  padding: auto;
+  margin-bottom: 0;
+  padding: 0;
 }
 
 #bloc_page {
-  margin: auto;
-  padding: auto;
+  margin: 0;
+  padding: 0;
   height: 100%;
 }
 
@@ -788,18 +789,55 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 #aftertopmenu {
   margin-top: 4em;
   padding: 0;
+  /*background-color: #ff7f50;*/
+  /*pour debug*/
 }
 
 /* marge pour que menu de gauche (id="leftmenu")situé après le menu du haut container ne se retrouve pas caché par lui */
 
 #leftmenu {
   margin-top: 18em;
-  margin-right: 1em;
+  margin-right: 0em;
+  margin-left: 0;
+  padding: 0;
+}
+
+#centermenu {
+  margin-right: 6em;
+  margin-left: 2em;
 }
 
 #rightmenu {
   margin-top: 18em;
-  margin-left: 1em;
+  margin-left: 0em;
+}
+
+#gridfooter {
+  margin-right: 3.5em;
+  /*alignement parfait avec limites grid central plus haut. Ratio 16:9*/
+}
+
+h4 {
+  text-align: center;
+  font-size: x-small;
+  color: grey;
+  margin: 0;
+  padding: 0;
+}
+
+#footerlogo {
+  width: 12%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0em;
+  margin-bottom: 0em;
+}
+
+#lignefooter {
+  margin-top: 3em;
+  margin-bottom: 1em;
+  padding: 0;
 }
 /*!
  * # Semantic UI 2.2.13 - Button
@@ -5013,7 +5051,7 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 
 /* Mobile */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.container {
     width: auto !important;
     margin-left: 1em !important;
@@ -5035,67 +5073,67 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 
 /* Tablet */
 
-@media only screen and (min-width: 868px) and (max-width: 1399px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
   .ui.container {
-    width: 823px;
+    width: 723px;
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
   .ui.grid.container {
-    width: calc( 823px  +  2rem ) !important;
+    width: calc( 723px  +  2rem ) !important;
   }
 
   .ui.relaxed.grid.container {
-    width: calc( 823px  +  3rem ) !important;
+    width: calc( 723px  +  3rem ) !important;
   }
 
   .ui.very.relaxed.grid.container {
-    width: calc( 823px  +  5rem ) !important;
+    width: calc( 723px  +  5rem ) !important;
   }
 }
 
 /* Small Monitor */
 
-@media only screen and (min-width: 1400px) and (max-width: 1919px) {
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
   .ui.container {
-    width: 1341px;
+    width: 933px;
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
   .ui.grid.container {
-    width: calc( 1341px  +  2rem ) !important;
+    width: calc( 933px  +  2rem ) !important;
   }
 
   .ui.relaxed.grid.container {
-    width: calc( 1341px  +  3rem ) !important;
+    width: calc( 933px  +  3rem ) !important;
   }
 
   .ui.very.relaxed.grid.container {
-    width: calc( 1341px  +  5rem ) !important;
+    width: calc( 933px  +  5rem ) !important;
   }
 }
 
 /* Large Monitor */
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1200px) {
   .ui.container {
-    width: 1847px;
+    width: 1127px;
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
   .ui.grid.container {
-    width: calc( 1847px  +  2rem ) !important;
+    width: calc( 1127px  +  2rem ) !important;
   }
 
   .ui.relaxed.grid.container {
-    width: calc( 1847px  +  3rem ) !important;
+    width: calc( 1127px  +  3rem ) !important;
   }
 
   .ui.very.relaxed.grid.container {
-    width: calc( 1847px  +  5rem ) !important;
+    width: calc( 1127px  +  5rem ) !important;
   }
 }
 
@@ -5273,7 +5311,7 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 
 /* Inside grid */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.stackable.grid .ui.vertical.divider,
   .ui.grid .stackable.row .ui.vertical.divider {
     display: table;
@@ -5406,7 +5444,7 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
   background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABaAAAAACCAYAAACuTHuKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyFpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo1OThBRDY4OUNDMTYxMUU0OUE3NUVGOEJDMzMzMjE2NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDo1OThBRDY4QUNDMTYxMUU0OUE3NUVGOEJDMzMzMjE2NyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjU5OEFENjg3Q0MxNjExRTQ5QTc1RUY4QkMzMzMyMTY3IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU5OEFENjg4Q0MxNjExRTQ5QTc1RUY4QkMzMzMyMTY3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+VU513gAAADVJREFUeNrs0DENACAQBDBIWLGBJQby/mUcJn5sJXQmOQMAAAAAAJqt+2prAAAAAACg2xdgANk6BEVuJgyMAAAAAElFTkSuQmCC');
 }
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.stackable.grid .ui.vertical.divider:before,
   .ui.grid .stackable.row .ui.vertical.divider:before,
   .ui.stackable.grid .ui.vertical.divider:after,
@@ -17249,7 +17287,7 @@ ol.ui.horizontal.list li:before,
 
 /* Mobile (Default) */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.steps:not(.unstackable) {
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
@@ -17408,7 +17446,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet Or Below */
 
-@media only screen and (max-width: 1399px) {
+@media only screen and (max-width: 991px) {
   .ui[class*="tablet stackable"].steps {
     display: -webkit-inline-box;
     display: -ms-inline-flexbox;
@@ -18667,7 +18705,7 @@ ol.ui.horizontal.list li:before,
 
 /* Swap to full width on mobile */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.form .fields {
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -18772,7 +18810,7 @@ ol.ui.horizontal.list li:before,
 
 /* Swap to full width on mobile */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.form:not(.unstackable) .two.fields:not(.unstackable) > .fields,
   .ui.form:not(.unstackable) .two.fields:not(.unstackable) > .field,
   .ui.form:not(.unstackable) .three.fields:not(.unstackable) > .fields,
@@ -19121,7 +19159,7 @@ ol.ui.horizontal.list li:before,
        Page Grid
 -------------------------*/
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.page.grid {
     width: auto;
     padding-left: 0em;
@@ -19131,7 +19169,7 @@ ol.ui.horizontal.list li:before,
   }
 }
 
-@media only screen and (min-width: 868px) and (max-width: 1399px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
   .ui.page.grid {
     width: auto;
     margin-left: 0em;
@@ -19141,7 +19179,7 @@ ol.ui.horizontal.list li:before,
   }
 }
 
-@media only screen and (min-width: 1400px) and (max-width: 1919px) {
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
   .ui.page.grid {
     width: auto;
     margin-left: 0em;
@@ -19151,7 +19189,7 @@ ol.ui.horizontal.list li:before,
   }
 }
 
-@media only screen and (min-width: 1920px) and (max-width: 2719px) {
+@media only screen and (min-width: 1200px) and (max-width: 1919px) {
   .ui.page.grid {
     width: auto;
     margin-left: 0em;
@@ -19161,7 +19199,7 @@ ol.ui.horizontal.list li:before,
   }
 }
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.page.grid {
     width: auto;
     margin-left: 0em;
@@ -19461,7 +19499,7 @@ ol.ui.horizontal.list li:before,
 
 /* Mobile Sizing Combinations */
 
-@media only screen and (min-width: 420px) and (max-width: 867px) {
+@media only screen and (min-width: 320px) and (max-width: 767px) {
   .ui.grid > .row > [class*="one wide mobile"].column,
   .ui.grid > .column.row > [class*="one wide mobile"].column,
   .ui.grid > [class*="one wide mobile"].column,
@@ -19577,7 +19615,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet Sizing Combinations */
 
-@media only screen and (min-width: 868px) and (max-width: 1399px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
   .ui.grid > .row > [class*="one wide tablet"].column,
   .ui.grid > .column.row > [class*="one wide tablet"].column,
   .ui.grid > [class*="one wide tablet"].column,
@@ -19693,7 +19731,7 @@ ol.ui.horizontal.list li:before,
 
 /* Computer/Desktop Sizing Combinations */
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui.grid > .row > [class*="one wide computer"].column,
   .ui.grid > .column.row > [class*="one wide computer"].column,
   .ui.grid > [class*="one wide computer"].column,
@@ -19809,7 +19847,7 @@ ol.ui.horizontal.list li:before,
 
 /* Large Monitor Sizing Combinations */
 
-@media only screen and (min-width: 1920px) and (max-width: 2719px) {
+@media only screen and (min-width: 1200px) and (max-width: 1919px) {
   .ui.grid > .row > [class*="one wide large screen"].column,
   .ui.grid > .column.row > [class*="one wide large screen"].column,
   .ui.grid > [class*="one wide large screen"].column,
@@ -19925,7 +19963,7 @@ ol.ui.horizontal.list li:before,
 
 /* Widescreen Sizing Combinations */
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.grid > .row > [class*="one wide widescreen"].column,
   .ui.grid > .column.row > [class*="one wide widescreen"].column,
   .ui.grid > [class*="one wide widescreen"].column,
@@ -20613,7 +20651,7 @@ ol.ui.horizontal.list li:before,
 
 /* Mobile */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui[class*="mobile reversed"].grid,
   .ui[class*="mobile reversed"].grid > .row,
   .ui.grid > [class*="mobile reversed"].row {
@@ -20672,7 +20710,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet */
 
-@media only screen and (min-width: 868px) and (max-width: 1399px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
   .ui[class*="tablet reversed"].grid,
   .ui[class*="tablet reversed"].grid > .row,
   .ui.grid > [class*="tablet reversed"].row {
@@ -20730,7 +20768,7 @@ ol.ui.horizontal.list li:before,
 
 /* Computer */
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui[class*="computer reversed"].grid,
   .ui[class*="computer reversed"].grid > .row,
   .ui.grid > [class*="computer reversed"].row {
@@ -20792,7 +20830,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet Only */
 
-@media only screen and (min-width: 868px) and (max-width: 1399px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
   .ui.doubling.grid {
     width: auto;
   }
@@ -20906,7 +20944,7 @@ ol.ui.horizontal.list li:before,
 
 /* Mobile Only */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.grid > .doubling.row,
   .ui.doubling.grid > .row {
     margin: 0em !important;
@@ -21017,7 +21055,7 @@ ol.ui.horizontal.list li:before,
       Stackable
 --------------------*/
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.stackable.grid {
     width: auto;
     margin-left: 0em !important;
@@ -21106,7 +21144,7 @@ ol.ui.horizontal.list li:before,
 
 /* Mobile Only Hide */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui[class*="tablet only"].grid.grid.grid:not(.mobile),
   .ui.grid.grid.grid > [class*="tablet only"].row:not(.mobile),
   .ui.grid.grid.grid > [class*="tablet only"].column:not(.mobile),
@@ -21138,7 +21176,7 @@ ol.ui.horizontal.list li:before,
 
 /* Tablet Only Hide */
 
-@media only screen and (min-width: 868px) and (max-width: 1399px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
   .ui[class*="mobile only"].grid.grid.grid:not(.tablet),
   .ui.grid.grid.grid > [class*="mobile only"].row:not(.tablet),
   .ui.grid.grid.grid > [class*="mobile only"].column:not(.tablet),
@@ -21170,7 +21208,7 @@ ol.ui.horizontal.list li:before,
 
 /* Computer Only Hide */
 
-@media only screen and (min-width: 1400px) and (max-width: 1919px) {
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
   .ui[class*="mobile only"].grid.grid.grid:not(.computer),
   .ui.grid.grid.grid > [class*="mobile only"].row:not(.computer),
   .ui.grid.grid.grid > [class*="mobile only"].column:not(.computer),
@@ -21202,7 +21240,7 @@ ol.ui.horizontal.list li:before,
 
 /* Large Screen Only Hide */
 
-@media only screen and (min-width: 1920px) and (max-width: 2719px) {
+@media only screen and (min-width: 1200px) and (max-width: 1919px) {
   .ui[class*="mobile only"].grid.grid.grid:not(.computer),
   .ui.grid.grid.grid > [class*="mobile only"].row:not(.computer),
   .ui.grid.grid.grid > [class*="mobile only"].column:not(.computer),
@@ -21227,7 +21265,7 @@ ol.ui.horizontal.list li:before,
 
 /* Widescreen Only Hide */
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui[class*="mobile only"].grid.grid.grid:not(.computer),
   .ui.grid.grid.grid > [class*="mobile only"].row:not(.computer),
   .ui.grid.grid.grid > [class*="mobile only"].column:not(.computer),
@@ -21664,7 +21702,7 @@ ol.ui.horizontal.list li:before,
     Container
 ---------------*/
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.menu > .ui.container {
     width: 100% !important;
     margin-left: 0em !important;
@@ -21672,7 +21710,7 @@ ol.ui.horizontal.list li:before,
   }
 }
 
-@media only screen and (min-width: 868px) {
+@media only screen and (min-width: 768px) {
   .ui.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) > .container > .item:not(.right):not(.borderless):first-child {
     border-left: 1px solid rgba(34, 36, 38, 0.1);
   }
@@ -22638,7 +22676,7 @@ Floated Menu / Item
     Stackable
 ---------------*/
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.stackable.menu {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -24271,7 +24309,7 @@ Floated Menu / Item
 
 /* Responsive */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.table:not(.unstackable) {
     width: 100%;
   }
@@ -24539,7 +24577,7 @@ Floated Menu / Item
     Stackable
 ---------------*/
 
-@media only screen and (max-width: 1399px) {
+@media only screen and (max-width: 991px) {
   .ui[class*="tablet stackable"].table,
   .ui[class*="tablet stackable"].table tbody,
   .ui[class*="tablet stackable"].table tr,
@@ -25634,7 +25672,7 @@ Floated Menu / Item
   display: none;
 }
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.mobile.ad {
     display: block;
   }
@@ -26549,7 +26587,7 @@ a.ui.card:hover,
 
 /* Mobile Only */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.two.doubling.cards {
     margin-left: 0em;
     margin-right: 0em;
@@ -26652,7 +26690,7 @@ a.ui.card:hover,
 
 /* Tablet Only */
 
-@media only screen and (min-width: 868px) and (max-width: 1399px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
   .ui.two.doubling.cards {
     margin-left: 0em;
     margin-right: 0em;
@@ -26757,7 +26795,7 @@ a.ui.card:hover,
       Stackable
 --------------------*/
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.stackable.cards {
     display: block !important;
   }
@@ -27757,7 +27795,7 @@ a.ui.card:hover,
 
 /* Tablet Only */
 
-@media only screen and (min-width: 868px) and (max-width: 1399px) {
+@media only screen and (min-width: 768px) and (max-width: 991px) {
   .ui.items > .item {
     margin: 1em 0em;
   }
@@ -27774,7 +27812,7 @@ a.ui.card:hover,
 
 /* Mobile Only */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.items:not(.unstackable) > .item {
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
@@ -27896,7 +27934,7 @@ a.ui.card:hover,
    Unstackable
 ----------------*/
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.unstackable.items > .item > .image,
   .ui.unstackable.items > .item > .image > img {
     width: 125px !important;
@@ -30163,25 +30201,25 @@ select.ui.dropdown {
   padding: 0.78571429rem 1.14285714rem;
 }
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.selection.dropdown .menu {
     max-height: 8.01428571rem;
   }
 }
 
-@media only screen and (min-width: 868px) {
+@media only screen and (min-width: 768px) {
   .ui.selection.dropdown .menu {
     max-height: 10.68571429rem;
   }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui.selection.dropdown .menu {
     max-height: 16.02857143rem;
   }
 }
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.selection.dropdown .menu {
     max-height: 21.37142857rem;
   }
@@ -30377,25 +30415,25 @@ select.ui.dropdown {
   -webkit-overflow-scrolling: touch;
 }
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.search.dropdown .menu {
     max-height: 8.01428571rem;
   }
 }
 
-@media only screen and (min-width: 868px) {
+@media only screen and (min-width: 768px) {
   .ui.search.dropdown .menu {
     max-height: 10.68571429rem;
   }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui.search.dropdown .menu {
     max-height: 16.02857143rem;
   }
 }
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.search.dropdown .menu {
     max-height: 21.37142857rem;
   }
@@ -30939,28 +30977,28 @@ select.ui.dropdown {
   }
 }
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.scrolling.dropdown .menu,
   .ui.dropdown .scrolling.menu {
     max-height: 10.28571429rem;
   }
 }
 
-@media only screen and (min-width: 868px) {
+@media only screen and (min-width: 768px) {
   .ui.scrolling.dropdown .menu,
   .ui.dropdown .scrolling.menu {
     max-height: 15.42857143rem;
   }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui.scrolling.dropdown .menu,
   .ui.dropdown .scrolling.menu {
     max-height: 20.57142857rem;
   }
 }
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.scrolling.dropdown .menu,
   .ui.dropdown .scrolling.menu {
     max-height: 20.57142857rem;
@@ -31719,35 +31757,35 @@ select.ui.dropdown {
 
 /* Modal Width */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.modal {
     width: 95%;
     margin: 0em 0em 0em -47.5%;
   }
 }
 
-@media only screen and (min-width: 868px) {
+@media only screen and (min-width: 768px) {
   .ui.modal {
     width: 88%;
     margin: 0em 0em 0em -44%;
   }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui.modal {
     width: 850px;
     margin: 0em 0em 0em -425px;
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1200px) {
   .ui.modal {
     width: 900px;
     margin: 0em 0em 0em -450px;
   }
 }
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.modal {
     width: 950px;
     margin: 0em 0em 0em -475px;
@@ -31756,7 +31794,7 @@ select.ui.dropdown {
 
 /* Tablet and Mobile */
 
-@media only screen and (max-width: 1399px) {
+@media only screen and (max-width: 991px) {
   .ui.modal > .header {
     padding-right: 2.25rem;
   }
@@ -31770,7 +31808,7 @@ select.ui.dropdown {
 
 /* Mobile */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.modal > .header {
     padding: 0.75rem 1rem !important;
     padding-right: 2.25rem !important;
@@ -31878,7 +31916,7 @@ select.ui.dropdown {
 
 /* Tablet and Mobile */
 
-@media only screen and (max-width: 1399px) {
+@media only screen and (max-width: 991px) {
   .ui.basic.modal > .close {
     color: #FFFFFF;
   }
@@ -31949,7 +31987,7 @@ select.ui.dropdown {
   z-index: auto;
 }
 
-@media only screen and (max-width: 1399px) {
+@media only screen and (max-width: 991px) {
   .modals.dimmer .ui.scrolling.modal {
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
@@ -32003,35 +32041,35 @@ select.ui.dropdown {
 
 /* Mini Modal Width */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.mini.modal {
     width: 95%;
     margin: 0em 0em 0em -47.5%;
   }
 }
 
-@media only screen and (min-width: 868px) {
+@media only screen and (min-width: 768px) {
   .ui.mini.modal {
     width: 35.2%;
     margin: 0em 0em 0em -17.6%;
   }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui.mini.modal {
     width: 340px;
     margin: 0em 0em 0em -170px;
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1200px) {
   .ui.mini.modal {
     width: 360px;
     margin: 0em 0em 0em -180px;
   }
 }
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.mini.modal {
     width: 380px;
     margin: 0em 0em 0em -190px;
@@ -32046,35 +32084,35 @@ select.ui.dropdown {
 
 /* Tiny Modal Width */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.tiny.modal {
     width: 95%;
     margin: 0em 0em 0em -47.5%;
   }
 }
 
-@media only screen and (min-width: 868px) {
+@media only screen and (min-width: 768px) {
   .ui.tiny.modal {
     width: 52.8%;
     margin: 0em 0em 0em -26.4%;
   }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui.tiny.modal {
     width: 510px;
     margin: 0em 0em 0em -255px;
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1200px) {
   .ui.tiny.modal {
     width: 540px;
     margin: 0em 0em 0em -270px;
   }
 }
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.tiny.modal {
     width: 570px;
     margin: 0em 0em 0em -285px;
@@ -32089,35 +32127,35 @@ select.ui.dropdown {
 
 /* Small Modal Width */
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.small.modal {
     width: 95%;
     margin: 0em 0em 0em -47.5%;
   }
 }
 
-@media only screen and (min-width: 868px) {
+@media only screen and (min-width: 768px) {
   .ui.small.modal {
     width: 70.4%;
     margin: 0em 0em 0em -35.2%;
   }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui.small.modal {
     width: 680px;
     margin: 0em 0em 0em -340px;
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1200px) {
   .ui.small.modal {
     width: 720px;
     margin: 0em 0em 0em -360px;
   }
 }
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.small.modal {
     width: 760px;
     margin: 0em 0em 0em -380px;
@@ -32130,35 +32168,35 @@ select.ui.dropdown {
   font-size: 1.6em;
 }
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.large.modal {
     width: 95%;
     margin: 0em 0em 0em -47.5%;
   }
 }
 
-@media only screen and (min-width: 868px) {
+@media only screen and (min-width: 768px) {
   .ui.large.modal {
     width: 88%;
     margin: 0em 0em 0em -44%;
   }
 }
 
-@media only screen and (min-width: 1400px) {
+@media only screen and (min-width: 992px) {
   .ui.large.modal {
     width: 1020px;
     margin: 0em 0em 0em -510px;
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1200px) {
   .ui.large.modal {
     width: 1080px;
     margin: 0em 0em 0em -540px;
   }
 }
 
-@media only screen and (min-width: 2720px) {
+@media only screen and (min-width: 1920px) {
   .ui.large.modal {
     width: 1140px;
     margin: 0em 0em 0em -570px;
@@ -33064,7 +33102,7 @@ a.ui.nag {
   max-width: 550px;
 }
 
-@media only screen and (max-width: 867px) {
+@media only screen and (max-width: 767px) {
   .ui.wide.popup,
   .ui[class*="very wide"].popup {
     max-width: 250px;
