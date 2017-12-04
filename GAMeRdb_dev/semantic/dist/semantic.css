@@ -766,17 +766,17 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
 /* fixer le footer en bas : utilisé code css pour sticky et body de:
 https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with-css/ */
 
-.sticky {
-  display: block;
-  width: 100%;
-  position: bottom;
-  /*passer en absolute pour support 4K, bottom pour standard et mobiles*/
-  bottom: 0;
-  left: 0;
-  margin-top: auto;
-  margin-bottom: 0;
-  padding: 0;
-}
+/*.sticky{
+	display:block;
+	width:100%;
+	position:bottom; /*passer en absolute pour support 4K, bottom pour standard et mobiles*/
+
+/*	bottom:0;
+	left:0;
+	margin-top:auto;
+	margin-bottom:0;
+	padding:0;
+}*/
 
 #bloc_page {
   margin: 0;
@@ -788,6 +788,7 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 
 #aftertopmenu {
   margin-top: 4em;
+  margin-bottom: 2em;
   padding: 0;
   /*background-color: #ff7f50;*/
   /*pour debug*/
