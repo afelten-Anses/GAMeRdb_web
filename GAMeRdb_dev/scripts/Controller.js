@@ -32,7 +32,7 @@ var server = http.createServer(function(req, res)
 				if(errors)
 				{
 			  		console.log(errors);
-			  		throw err;
+			  		throw errors;
 		     		}
 		     		else
 		     		{
@@ -69,32 +69,36 @@ var server = http.createServer(function(req, res)
 	{
 		ReadServerFile('./../interface/views/homepage/index.html','text/html',200);
 	}
-	else if(urlPath ==='/ffdfsdgdsgs') // test
+	else if(urlPath === '/ffdfsdgdsgs') // test
 	{ 
 		ReadServerFile('./../interface/views/tmp_tests/testgenomes.html','text/html',200);
 	}
 	//
 	// IMAGES
 	//
-	else if(urlPath ==='/img/anseslogomini.png') // test
+	else if(urlPath === '/img/anseslogomini.png') // test
 	{ 
 		ReadServerFile('./../interface/img/anseslogomini.png','image/png',200);
 	}
-	else if(urlPath ==='/img/gamergenomicdblogo.png') // test
+	else if(urlPath === '/img/gamergenomicdblogo.png') // test
 	{ 
 		ReadServerFile('./../interface/img/gamergenomicdblogo.png','image/png',200);
 	}
-	else if(urlPath ==='/img/statistics.png') // test
+	else if(urlPath === '/img/statistics.png') // test
 	{ 
 		ReadServerFile('./../interface/img/statistics.png','image/png',200);
 	}
-	else if(urlPath ==='/img/ansesgamer.png') // test
+	else if(urlPath === '/img/ansesgamer.png') // test
 	{ 
 		ReadServerFile('./../interface/img/ansesgamer.png','image/png',200);
 	}
-	else if(urlPath ==='/img/statistics.png') // test
+	else if(urlPath === '/img/statistics.png') // test
 	{ 
 		ReadServerFile('./../interface/img/statistics.png','image/png',200);
+	}
+	else if(urlPath === '/img/favicon.ico') // test
+	{ 
+	 	ReadServerFile('./../interface/img/favicon.ico','image/x-icon',200);
 	}
 	//
 	// FONTS
