@@ -24,23 +24,7 @@
         <!-- main wrapper "bloc_page". Engloble tout le site pour la mise en page globale-->
         <div id="bloc_page">
             <header>
-                <div class="ui massive borderless fixed fluid menu">
-                    <a class="disabled item" href="../homepage/index.html" title="Return to homepage">
-                        <img src="../../img/anseslogomini.png"/>
-                    </a>
-                    <a class="item" href="#" title="Bacillus workspace"><i>Bacillus</i></a>
-                    <a class="item" href="#" title="Clostridium workspace"><i>Clostridium</i></a>
-                    <a class="item" href="#" title="Listeria workspace"><i>Listeria</i></a>
-                    <a class="item" href="#" title="Salmonella workspace"><i>Salmonella</i></a>
-                    <a class="item" href="#" title="Staphylococcus workspace"><i>Staphylococcus</i></a>
-                    <div class="ui right simple dropdown item">
-                    Tools<i class="dropdown icon"></i>
-                        <div class="menu">
-                            <a class="item" href="#">Blast</a>
-                            <a class="disabled item" title="Very soon">QuickPhylo</a>
-                        </div>
-                    </div>
-                </div>
+                <%include ./../interface/views/includes/header.html%>
             </header>        
 
             <div class="ui stackable grid" id="aftertopmenu"> <!--grid principal (grids de grids) -->
@@ -58,7 +42,7 @@
                                 <div class="ui info large message">
                                     <i class="close icon"></i>
                                     <div class="messageinfo">
-                                        <h1 class="ui medium header">Welcome to the GAMeRdb genomic database interface.</h1>
+                                        <h1 class="ui medium header">Welcome to the GAMeRdb genomic interface database</h1>
                                     </div>
                                     Explications sur le fonctionnement du site, des fonctionnalitées intégrées et à venir. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Fonctionnalités suivantes :
                                     <ul class="list">

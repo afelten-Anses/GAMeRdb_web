@@ -15,7 +15,9 @@ var resolve = require('resolve');
 //params de DEV:
 	//en tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache'
 	//pour eviter biais d'affichage de pages pendant les maj du code controleur.js
-//app.set('views', path.join(__dirname, '../interface/views/'));
+	//app.set('views', path.join(__dirname, '../interface/views/'));
+//rappels :
+	//include avec res.render("flag","texte_a_inclure") pour include vite fait les retours du modele (mettre au format directement dans le modele!)
 
 expressApp.get('/', function(req, res) {
     res.setHeader('Content-Type', 'text/html');
