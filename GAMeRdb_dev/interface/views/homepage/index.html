@@ -80,63 +80,11 @@
                 <div class="two white wide column" id= "rightmenu">
                     <!-- pas de menu dans page d'accueuil : fill white pour eviter probleme d'affichage-->
                 </div>
-            </div>
-            
+            </div>          
             <!-- ex classe sticky-->
-            <footer> 
-                <div class="ui grey inverted  vertical footer segment">
-                    <div class="ui stackable inverted center aligned divided grid" id="gridfooter">
-                        <div class="two wide column">
-                            <h3 class="ui inverted small orange header">Information</h3>
-                            <div class="ui inverted link list">
-                                <a href="#" class="item">News</a>
-                                <a href="#" class="item">Groupe génomique</a>
-                                <a href="#" class="item">F.A.Q</a>
-                                <a href="#" class="item">About us</a>
-                            </div>
-                        </div>
-                        <div class="two wide column">
-                            <h3 class="ui inverted small green header">Getting started</h3>
-                            <div class="ui inverted link list">
-                                <a href="#" class="item">iVARCall2 tutorial</a>
-                                <a href="#" class="item">RAxML tutorial</a>
-                                <a href="#" class="item">Redmine forum</a>
-                            </div>
-                        </div>
-                        <div class="two wide column">
-                            <h3 class="ui inverted small blue header">Useful links</h3>
-                            <div class="ui inverted link list">
-                                <a href="#" class="item">Anses' intranet</a>
-                                <a href="#" class="item">Anses' website</a>
-                                <a href="#" class="item">Anses' webmail</a>
-                                <a href="#" class="item">VigilAnses</a>
-                            </div>
-                        </div>
-                        <div class="four wide column">
-                            <h3 class="ui inverted small violet header">Contact us</h3>
-                            <form class="ui mini form">
-                                <div class="two fields">
-                                    <div class="field">
-                                        <input placeholder="Name" type="text"/>
-                                    </div>
-                                    <div class="field">
-                                        <input placeholder="Mail" type="text"/>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <textarea placeholder="Message" rows=4></textarea>
-                                </div>
-                                <div class="submit">
-                                    <input type="submit" value="Submit" class="ui mini grey button"/>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="ui inverted section divider" id="lignefooter"></div>
-                    <img src="../../img/ansesgamer.png" id="footerlogo"/>
-                    <h4>2016-2018 GAMeRdb v.beta - Unless otherwise stated, all content on the site is licensed under (Creative Commons BY-SA 2.0+?)</h4>
-                </div>
-            </footer>
+            <footer>
+                <%include ./../interface/views/includes/footer.html%>
+            </footer>       
         </div>
     </body>       
 </html>
