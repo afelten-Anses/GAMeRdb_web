@@ -16,7 +16,6 @@ var template = require('templatesjs');
 //rappels :
 	//includes front-end automatisé avec readFileAndInclude()
 	//includes back-end avec res.render("flag","texte_a_inclure") pour include vite fait les retours du modele (mettre au format directement dans le modele!)
-
 var server = http.createServer(function(req, res) 
 {
 
@@ -28,7 +27,7 @@ var server = http.createServer(function(req, res)
 	console.log(params); //debug
 
 	//Read and show html template to front-end
-	function ReadServerFile(filePath,type,msg) // type : Content-Type / msg : server response code
+	function readServerFile(filePath,type,msg) // type : Content-Type / msg : server response code
 	{
 		fs.readFile(filePath, function (errors, contents) 
 			{
@@ -64,13 +63,12 @@ var server = http.createServer(function(req, res)
 		     }
 		});
 	}
-	
+	/*//////////////////////////////////////////////////////////////////////////////////////////////////////////*
 
+													ROUTES
 
-	/*////////////////////////////////////////////////////*
-						GESTION DES ROUTES
-	*/////////////////////////////////////////////////////*
-	//ReadServerFile('./../semantic/dist/semantic.min.css','text/css',200);
+	*///////////////////////////////////////////////////////////////////////////////////////////////////////////*
+	//readServerFile('./../semantic/dist/semantic.min.css','text/css',200);
 	// note : routage plus rapide en utilisant switch au lieu de if/else mais aléatoire si on rafraichit 
 	//trop vite les pages
 	//
@@ -78,11 +76,11 @@ var server = http.createServer(function(req, res)
 	//
 	if (urlPath === '/semantic/dist/semantic.min.css')
 	{
-		ReadServerFile('./../semantic/dist/semantic.min.css','text/css',200);
+		readServerFile('./../semantic/dist/semantic.min.css','text/css',200);
 	}
 	else if (urlPath === '/semantic/dist/semantic.min.js')
 	{
-		ReadServerFile('./../semantic/dist/semantic.min.js','application/javascript',200);
+		readServerFile('./../semantic/dist/semantic.min.js','application/javascript',200);
 	}
 	//
 	// PAGES
@@ -91,55 +89,64 @@ var server = http.createServer(function(req, res)
 	{
 		readFileAndInclude('./../interface/views/homepage/index.html','text/html',200);
 	}
+	else if(urlPath === '/views/species/homepage/index.html') //Page d'accueil
+	{
+		readFileAndInclude('./../interface/views/homepage/index.html','text/html',200);
+	}
 	else if(urlPath === '/ffdfsdgdsgs') // test
 	{ 
-		ReadServerFile('./../interface/views/tmp_tests/testgenomes.html','text/html',200);
+		readServerFile('./../interface/views/tmp_tests/testgenomes.html','text/html',200);
 	}
+	else if(urlPath === '/views/species/salmonella/salmogenomes.html') // test
+	{ 
+		readFileAndInclude('./../interface/views/species/salmonella/salmogenomes.html','text/html',200);
+	}
+	
 	//
 	// IMAGES
 	//
-	else if(urlPath === '/img/anseslogomini.png') // test
+	else if(urlPath === '/img/anseslogomini.png' || urlPath === '/views/img/anseslogomini.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
 	{ 
-		ReadServerFile('./../interface/img/anseslogomini.png','image/png',200);
+		readServerFile('./../interface/img/anseslogomini.png','image/png',200);
 	}
 	else if(urlPath === '/img/gamergenomicdblogo.png') // test
 	{ 
-		ReadServerFile('./../interface/img/gamergenomicdblogo.png','image/png',200);
+		readServerFile('./../interface/img/gamergenomicdblogo.png','image/png',200);
 	}
 	else if(urlPath === '/img/statistics.png') // test
 	{ 
-		ReadServerFile('./../interface/img/statistics.png','image/png',200);
+		readServerFile('./../interface/img/statistics.png','image/png',200);
 	}
-	else if(urlPath === '/img/ansesgamer.png') // test
+	else if(urlPath === '/img/ansesgamer.png' || urlPath === '/views/img/ansesgamer.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
 	{ 
-		ReadServerFile('./../interface/img/ansesgamer.png','image/png',200);
+		readServerFile('./../interface/img/ansesgamer.png','image/png',200);
 	}
 	else if(urlPath === '/img/statistics.png') // test
 	{ 
-		ReadServerFile('./../interface/img/statistics.png','image/png',200);
+		readServerFile('./../interface/img/statistics.png','image/png',200);
 	}
-	else if(urlPath === '/img/favicon.ico') // test
+	else if(urlPath === '/img/favicon.ico' || urlPath === '/views/img/favicon.ico') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
 	{ 
-	 	ReadServerFile('./../interface/img/favicon.ico','image/x-icon',200);
+	 	readServerFile('./../interface/img/favicon.ico','image/x-icon',200);
 	}
 	//
 	// FONTS
 	//
 	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff2') // test
 	{ 
-		ReadServerFile('./../semantic/dist/themes/default/assets/fonts/icons.woff2','application/x-font-woff',200);
+		readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.woff2','application/x-font-woff',200);
 	}
 	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff') // test
 	{ 
-		ReadServerFile('./../semantic/dist:themes/default/assets/fonts/icons.woff','application/x-font-woff',200);
+		readServerFile('./../semantic/dist:themes/default/assets/fonts/icons.woff','application/x-font-woff',200);
 	}
 	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.ttf') // test
 	{ 
-		ReadServerFile('./../semantic/dist/themes/default/assets/fonts/icons.ttf','application/x-font-ttf',200);
+		readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.ttf','application/x-font-ttf',200);
 	}
 	else //Ressource demandée introuvable : erreur 404
 	{ 
-		ReadServerFile('./../interface/views/404.html','text/html',404);
+		readServerFile('./../interface/views/404.html','text/html',404);
 	}
 })
 server.listen(listenPort,listenIp);
