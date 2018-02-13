@@ -8,7 +8,10 @@ var pageDemandee = '/views/homepage/index.html';
 var listenPort = 3000;
 var listenIp = '127.0.0.1';
 var model = require('./Model') // use Model.js as a NodeJS module
-var template = require('templatesjs');
+var template = require('templatesjs'); // useful for header and footer "includes"
+const args = process.argv; //basic args parse
+
+
 
 //params de DEV:
 	//en tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache'
@@ -18,7 +21,13 @@ var template = require('templatesjs');
 	//includes back-end avec res.render("flag","texte_a_inclure") pour include vite fait les retours du modele (mettre au format directement dans le modele!)
 var server = http.createServer(function(req, res) 
 {
+	// if  --dev mode : change localhost ip to server ip
+	if(args[2]!= null && args[2]==="--dev")
+	{
+		listenIp = '192.168.184.133';
+		listenPort = 3001;
 
+	}
 	// var params = querystring.parse(url.parse(req.url).query);
 	var urlPath = url.parse(req.url).pathname;
 	var params = querystring.parse(url.parse(req.url).query);
@@ -65,14 +74,14 @@ var server = http.createServer(function(req, res)
 	}
 	/*//////////////////////////////////////////////////////////////////////////////////////////////////////////*
 
-													ROUTES
+										ROUTING AND VIEWS PROCESSING
 
 	*///////////////////////////////////////////////////////////////////////////////////////////////////////////*
 	//readServerFile('./../semantic/dist/semantic.min.css','text/css',200);
 	// note : routage plus rapide en utilisant switch au lieu de if/else mais aléatoire si on rafraichit 
 	//trop vite les pages
 	//
-	//STATIC Files
+	// STATIC Files Routing
 	//
 	if (urlPath === '/semantic/dist/semantic.min.css')
 	{
@@ -83,7 +92,7 @@ var server = http.createServer(function(req, res)
 		readServerFile('./../semantic/dist/semantic.min.js','application/javascript',200);
 	}
 	//
-	// PAGES
+	// Routing and VIEWS PROCESSING
 	//
 	else if(urlPath === '/') //Page d'accueil
 	{
@@ -103,7 +112,7 @@ var server = http.createServer(function(req, res)
 	}
 	
 	//
-	// IMAGES
+	// Routing : IMAGES
 	//
 	else if(urlPath === '/img/anseslogomini.png' || urlPath === '/views/img/anseslogomini.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
 	{ 
@@ -130,7 +139,7 @@ var server = http.createServer(function(req, res)
 	 	readServerFile('./../interface/img/favicon.ico','image/x-icon',200);
 	}
 	//
-	// FONTS
+	// Routage : FONTS
 	//
 	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff2') // test
 	{ 
@@ -151,5 +160,6 @@ var server = http.createServer(function(req, res)
 })
 server.listen(listenPort,listenIp);
 console.log('Server running at http://' + listenIp + ':' + listenPort);
-blabla=model.direBonjour();
-console.log(blabla);
+blabla=model.direBonjour(); // model import test
+bye=model.direByeBye();
+console.log(blabla + " et " + bye);

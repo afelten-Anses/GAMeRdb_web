@@ -1,12 +1,12 @@
 var direBonjour = function() {
     console.log('Bonjour !');
-    return "ma var"
+    return "Yo";
 }
 
-var direByeBye = function() {
+exports.direByeBye = function() {
     console.log('Bye bye !');
+    return "See u"
 }
 
 //Export functions 
 exports.direBonjour = direBonjour;
-exports.direByeBye = direByeBye;
