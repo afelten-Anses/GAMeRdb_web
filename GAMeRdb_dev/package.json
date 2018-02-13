@@ -23,6 +23,7 @@
     "semantic-ui": "^2.2.13",
     "semantic-ui-css": "^2.2.12",
     "templatejs": "^1.0.0",
-    "templatesjs": "^2.0.0"
+    "templatesjs": "^2.0.0",
+    "validator": "^9.4.0"
   }
 }
