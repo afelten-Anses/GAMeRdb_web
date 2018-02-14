@@ -1,14 +1,26 @@
+// -Author : Kevin Durimel 
+// -Goal : Controller script (MVC Scheme)
+
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+												*******	CONTROLLER init : modules, MVC scripts, args *******
+*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// NodeJS modules
 var http = require('http'); //httpserver
 var fs = require('fs'); //filesystem (file parser)
 var url = require('url'); // url parser
-var querystring = require('querystring') // query parser
-var listenPort = 3000; //default listening port
-var listenIp = '127.0.0.1'; // default listening ip
-var model = require('./Model') // use Model.js as a NodeJS module
+// External modules
 var template = require('templatesjs'); // useful for header and footer "includes"
 var validator = require('validator'); // queries validator and sanitizer
+var querystring = require('querystring') // query parser
+// MVC scripts dependencies
+var model = require('./Model.njs') // use Model.js as a NodeJS module
+var model = require('./Views.njs') // use Views.js as a NodeJS module
+// Network configuration
+var listenPort = 3000; //default listening port
+var listenIp = '127.0.0.1'; // default listening ip
+// Args
 const args = process.argv; //basic args parse
-
 
 
 /*A ENLEVER OU COMMENTER EN PRODUCTION :
@@ -21,6 +33,11 @@ const args = process.argv; //basic args parse
 	-Includes front-end automatisé avec readFileAndInclude()
 	-Includes back-end avec res.render("flag","texte_a_inclure") pour include vite fait les retours du modele (mettre au format directement dans le modele!)
 */
+
+
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+															*******	CONTROLLER code *******
+*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var server = http.createServer(function(req, res) 
 {
@@ -76,10 +93,9 @@ var server = http.createServer(function(req, res)
 	}
 
 	/*//////////////////////////////////////////////////////////////////////////////////////////////////////////*
-
 										ROUTING AND VIEWS PROCESSING
-
 	*///////////////////////////////////////////////////////////////////////////////////////////////////////////*
+
 	//readServerFile('./../semantic/dist/semantic.min.css','text/css',200);
 	// note : routage plus rapide en utilisant switch au lieu de if/else mais aléatoire si on rafraichit 
 	//trop vite les pages
@@ -105,7 +121,6 @@ var server = http.createServer(function(req, res)
 	{
 		readServerFile('./../interface/js/gamer.effects.js','application/javascript',200);
 	}
-	
 	//
 	// IMAGES routing
 	//
@@ -182,6 +197,11 @@ var server = http.createServer(function(req, res)
 		readServerFile('./../interface/views/404.html','text/html',404);
 	}
 })
+
+/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+													******* START SERVER and show some info  *******
+*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 server.listen(listenPort,listenIp);
 console.log('Server running at http://' + listenIp + ':' + listenPort);
 blabla=model.direBonjour(); // model import test
