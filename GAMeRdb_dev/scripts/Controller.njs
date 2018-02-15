@@ -17,8 +17,8 @@ var querystring = require('querystring') // query parser
 var model = require('./Model.njs') // use Model.js as a NodeJS module
 var views = require('./Views.njs') // use Views.js as a NodeJS module
 // Network configuration
-var listenPort = 3000; //default listening port
-var listenIp = '127.0.0.1'; // default listening ip
+var listenPort = 3001; //default listening port
+var listenIp = '192.168.184.133'; // default listening ip
 // Args
 const args = process.argv; //basic args parse
 
@@ -43,8 +43,8 @@ const args = process.argv; //basic args parse
 // if  --dev mode : change localhost ip to server ip
 if(args[2]!= null && args[2]==="--dev")
 {
-	listenIp = '192.168.184.133';
-	listenPort = 3001;
+	listenIp = '127.0.0.1';
+	listenPort = 3000;
 }
 
 var server = http.createServer(function(req, res) 
