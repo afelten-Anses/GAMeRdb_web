@@ -4,76 +4,59 @@
         <meta charset="utf-8"/>
         <title>GAMeRdb - Genomes </title>
         <meta name="description" content="GAMeR genomic database - Salmonella genomes"/>
-        <!--
-        Favicon, CSS et Javascript généré par Semantic UI après compilation code LESS
-        -->
         <link rel="shortcut icon" type="image/x-icon" href="../../../img/favicon.ico" />
+        <!-- SEMANTIC UI main styles-->
         <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/semantic.min.css"/>
-        <script src="../../../../js/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/components/icon.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/components/icon.min.css"/> <!--Use CDN in case of icons issues-->
+        <!--DataTables css-->
+        <link rel="stylesheet" type="text/css" href="../../../css/gamer.effects.datatables.css"/> <!--DataTables custom CSS overrides-->    
+        <link rel="stylesheet" type="text/css" href="../../../css/dataTables.semanticui.min.css"/> <!--SemanticUI integration for DataTables-->
+        <link rel="stylesheet" type="text/css" href="../../../css/select.dataTables.min.css"> <!--SemanticUI styling for DataTables selected rows -->
+        <link rel="stylesheet" type="text/css" href="../../../css/buttons.semanticui.min.css"/> <!--SemanticUI styling for DataTables buttons-->       
+        <!-- SEMANTIC UI main JS-->
         <script src="../../../../semantic/dist/semantic.min.js"></script>
-        <script src="../../js/../gamer.effects.js" defer></script>
-        <!--tmp-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/components/icon.min.css"/>
-        <link rel="stylesheet" href="../../../c../ss/datatables.css"/>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.semanticui.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.2.5/css/select.dataTables.min.css">
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/dataTables.semanticui.min.js"></script>
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.2.5/js/dataTables.select.min.js"></script>
-        <style>
-            .upload-btn-wrapper {
-              position: relative;
-              overflow: hidden;
-              display: inline-block;
-            }
-
-            .btn {
-              border: 2px solid gray;
-              color: gray;
-              background-color: white;
-              padding: 8px 20px;
-              border-radius: 8px;
-              font-size: 20px;
-              font-weight: bold;
-            }
-
-            .upload-btn-wrapper input[type=file] {
-              font-size: 100px;
-              position: absolute;
-              left: 0;
-              top: 0;
-              opacity: 0;
-            }
-            #start-button{
-                margin-top: 1em; 
-            }
-            footer{
-                margin-top:7em;
-            }
-            .tab_items{
-                color : black;
-            }
-            #page_buttons{
-                margin-top:5em;
-            }
-            #aftertopmenu{
-                margin-top: 10em;
-            }
-        </style>
+        <!--jQuery-->
+        <script src="../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery-1.12.4.js"></script><!--jQuery version adapted to DataTables-->
+        <!--DataTables JS-->
+        <script type="text/javascript" charset="utf8" src="../../../js/gamer.effects.js" defer></script><!--Setting Semantic UI custom JS effects settings + DataTables settings-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery.dataTables.min.js"></script><!--Main jQuery for Datatables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.semanticui.min.js"></script><!--SemanticUI integration for DataTables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.select.min.js"></script><!--SemanticUI integration for DataTables selected rows-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.buttons.min.js"></script><!--SemanticUI integration for DataTables selected buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.semanticui.min.js"></script><!--SemanticUI integration for DataTables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jszip.min.js"></script><!--JS class for generating or read zip files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/pdfmake.min.js"></script><!--JS class for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/vfs_fonts.js"></script><!--PdfMake dependency for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.html5.min.js" defer></script><!--JS class for generating Datatables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.print.min.js" defer></script><!--JS class for copying/priting the DataTable-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.colVis.min.js"></script><!--JS class for handling DataTables columns visibility-->
     </head>
-    <body>
-        <!-- main wrapper "bloc_page". Engloble tout le site pour la mise en page globale-->
-        <div id="bloc_page">
+    <body>    
+        <div id="bloc_page"><!-- main wrapper-->
             <header>
-                <%include ./../interface/views/includes/header.html%>
+                <div class="ui massive borderless fixed fluid menu">
+                    <a class="disabled item" href="/" title="Back to homepage">
+                        <img src="../../../img/anseslogomini.png" id="logogrow" href="/">
+                    </a>
+                    <a class="item" href="../../views/species/bacillus/bacgenomes.html" title="Bacillus workspace"><i>Bacillus</i></a>
+                    <a class="item" href="../../views/species/clostridium/closgenomes.html" title="Clostridium workspace"><i>Clostridium</i></a>
+                    <a class="item" href="../../views/species/listeria/lisgenomes.html" title="Listeria workspace"><i>Listeria</i></a>
+                    <a class="active item" href="../../views/species/salmonella/salmogenomes.html" title="Salmonella workspace"><i>Salmonella</i></a>
+                    <a class="item" href="../../views/species/staphylococcus/staphgenomes.html" title="Staphylococcus workspace"><i>Staphylococcus</i></a>
+                    <div class="ui right simple dropdown item">
+                    Tools<i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a class="item" href="#">Blast</a>
+                            <a class="disabled item" title="Very soon">QuickPhylo</a>
+                        </div>
+                    </div>
+                </div>
             </header>        
-
-            <div class="ui stackable grid" id="aftertopmenu"> <!--grid principal (grids de grids) -->
-                <!--GRID du de gauche-->
+            
+            <div class="ui stackable grid" id="aftertopmenu"> <!--main grid (grid of grids) -->
+                <!--LEFT GRID : vertical menu -->
                 <div class="two wide column" id="leftmenu">
                     <div class="ui vertical menu">
                         <a class="active yellow item">
@@ -89,400 +72,353 @@
                             Phylogeny
                         </a>
                     </div>
-                </div>
-                <!--GRID du milieu-->
-                <div class="eleven wide column" id="centermenu">
-                    <table id="table_id" class="display" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>ALGORITHM</th>
-                                <th>SESSION ID</th>
-                                <th>SESSION NAME</th>
-                                <th>DATE</th>
-                                <th>AUC</th>
-                                <th>ROC CURVE</th>
-                                <th>F1 SCORE</th>
-                                <th>ACCURACY</th>
-                                <th>REPORT</th>
-                                <th>LOG</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Linear SVM</a></td>
-                                <td>1</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Gaussian Process</a></td>
-                                <td>2</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Decision Tree</a></td>
-                                <td>3</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Decision Tree</a></td>
-                                <td>4</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Decision Tree</a></td>
-                                <td>5</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Random Forest</a></td>
-                                <td>6</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Random Forest</a></td>
-                                <td>7</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Random Forest</a></td>
-                                <td>8</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Neural Network</a></td>
-                                <td>9</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Neural Network</a></td>
-                                <td>5</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>AdaBoost</a></td>
-                                <td>11</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>AdaBoost</a></td>
-                                <td>12</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>AdaBoost</a></td>
-                                <td>14</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>AdaBoost</a></td>
-                                <td>9</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>AdaBoost</a></td>
-                                <td>12</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>AdaBoost</a></td>
-                                <td>5</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Naive Bayes</a></td>
-                                <td>11</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Naive Bayes</a></td>
-                                <td>9</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>Naive Bayes</a></td>
-                                <td>8</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td><a href="algo.dump" download>QD analysis</a></td>
-                                <td>13</td>
-                                <td>Projet xxx</td>
-                                <td>xx/xx/2018</td>
-                                <td>0.89</td>
-                                <td>Roc_xxx.svg</td>
-                                <td>XX</td>
-                                <td>XX%</td>
-                                <td><a href="../../img/matrix.png">View</a></td>
-                                <td><a href="simu.log" download>xxxxx.log</a></td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                </div>
-                <!--GRID de droite-->
-                <div class="column" id= "rightmenu">
-                    <div class="ui vertical menu">
-                        <a class="active yellow item">
-                            Genomes
-                        </a>
-                        <a class="item">
-                            References
-                        </a>
-                        <a class="item">
-                            ST Distribution
-                        </a>
-                        <a class="item">
-                            Phylogeny
-                        </a>
+                </div>     
+                <!--RIGHT grid : DataTables -->
+                <div class="twelve wide column" id="centermenu">
+                    <div class="column">
+                        <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text"><i>Salmonella </i>genomes</span></h1>
+                    </div>
+                    <div class="ui divider"></div>
+                    <div class="column">
+                        <table id="table_id" class="ui celled table" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>ALGORITHM</th>
+                                    <th>SESSION ID</th>
+                                    <th>SESSION NAME</th>
+                                    <th>DATE</th>
+                                    <th>AUC</th>
+                                    <th>ROC CURVE</th>
+                                    <th>F1 SCORE</th>
+                                    <th>ACCURACY</th>
+                                    <th>REPORT</th>
+                                    <th>LOG</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Linear SVM</a></td>
+                                    <td>1</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Gaussian Process</a></td>
+                                    <td>2</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Decision Tree</a></td>
+                                    <td>3</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Decision Tree</a></td>
+                                    <td>4</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Decision Tree</a></td>
+                                    <td>5</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Random Forest</a></td>
+                                    <td>6</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Random Forest</a></td>
+                                    <td>7</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Random Forest</a></td>
+                                    <td>8</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Neural Network</a></td>
+                                    <td>9</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Neural Network</a></td>
+                                    <td>5</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>AdaBoost</a></td>
+                                    <td>11</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>AdaBoost</a></td>
+                                    <td>12</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>AdaBoost</a></td>
+                                    <td>14</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>AdaBoost</a></td>
+                                    <td>9</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>AdaBoost</a></td>
+                                    <td>12</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>AdaBoost</a></td>
+                                    <td>5</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Naive Bayes</a></td>
+                                    <td>11</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Naive Bayes</a></td>
+                                    <td>9</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>Naive Bayes</a></td>
+                                    <td>8</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><a href="algo.dump" download>QD analysis</a></td>
+                                    <td>13</td>
+                                    <td>Projet xxx</td>
+                                    <td>xx/xx/2018</td>
+                                    <td>0.89</td>
+                                    <td>Roc_xxx.svg</td>
+                                    <td>XX</td>
+                                    <td>XX%</td>
+                                    <td><a href="../../img/matrix.png">View</a></td>
+                                    <td><a href="simu.log" download>xxxxx.log</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="ui divider">
                     </div>
                 </div>
             </div>
-
-            <!--classe sticky utilisée pour overide site.variables css, ne pas retirer!-->
+            
             <footer class= "sticky">
-                <%include ./../interface/views/includes/footer.html%>
+                <div class="ui grey inverted  vertical footer segment">
+                    <div class="ui stackable inverted center aligned divided grid" id="gridfooter">
+                        <div class="two wide column">
+                            <h3 class="ui inverted small orange header">Information</h3>
+                            <div class="ui inverted link list">
+                                <a href="../../views/moreinfo/news.html" class="item">News</a>
+                                <a href="http://192.168.4.30/GroupeGenomique/GG.html" class="item" target="_blank" rel="noopener noreferrer">Groupe génomique</a>
+                                <a href="../../views/moreinfo/faq.html" class="item">F.A.Q</a>
+                                <a href="../../views/moreinfo/about.html" class="item">About us</a>
+                            </div>
+                        </div>
+                        <div class="two wide column">
+                            <h3 class="ui inverted small green header">Getting started</h3>
+                            <div class="ui inverted link list">
+                                <a href="../../views/moreinfo/howto_ivarcall2.html" class="item">iVARCall2 tutorial</a>
+                                <a href="../../views/moreinfo/howto_raxml.html" class="item">RAxML tutorial</a>
+                                <a href="http://sas-pp-lscalc1:8081/redmine" class="item" target="_blank" rel="noopener noreferrer">Redmine forum</a>
+                            </div>
+                        </div>
+                        <div class="two wide column">
+                            <h3 class="ui inverted small blue header">Useful links</h3>
+                            <div class="ui inverted link list">
+                                <a href="http://intranet.anses.fr/Pages/accueil.aspx" class="item" target="_blank" rel="noopener noreferrer">Anses' intranet</a>
+                                <a href="https://www.anses.fr/fr" class="item" target="_blank" rel="noopener noreferrer">Anses' website</a>
+                                <a href="https://webmail.anses.fr/" class="item" target="_blank" rel="noopener noreferrer">Anses' webmail</a>
+                                <a href="http://vigilanses.mag.anses.fr/fr" class="item" target="_blank" rel="noopener noreferrer">VigilAnses</a>
+                            </div>
+                        </div>
+                        <div class="four wide column">
+                            <h3 class="ui inverted small violet header">Contact us</h3>
+                            <form class="ui mini form">
+                                <div class="two fields">
+                                    <div class="field">
+                                        <input placeholder="Name" type="text"/>
+                                    </div>
+                                    <div class="field">
+                                        <input placeholder="Mail" type="text"/>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <textarea placeholder="Message" rows=4></textarea>
+                                </div>
+                                <div class="submit">
+                                    <input type="submit" value="Submit" class="ui mini grey button"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="ui inverted section divider" id="lignefooter"></div>
+                    <img src="../../../img/ansesgamer.png" id="footerlogo"/>
+                    <h4>2016-2018 GAMeRdb v.beta - Unless otherwise stated, all content on the site is licensed under (Creative Commons BY-SA 2.0+?)</h4>
+                </div>
             </footer>
         </div>
     </body>  
-       <script>
-    //datatables initialisation
-    $(document).ready(function() {
-    $('#table_id').DataTable( {
-        columnDefs: [ {
-            orderable: false,
-            className: 'select-checkbox',
-            targets:   0
-        } ],
-        select: {
-            style:    'os',
-            selector: 'td:first-child'
-        },
-        order: [[ 1, 'asc' ]]
-    } );
-} );
-    var filesList=new Array(); //FORM 1 : Nom des fichiers
-    $('.ui.dropdown').dropdown(); // activer dropdown effect
-    $('.ui.accordion').accordion(); // activer accordion effect
-    $('.menu .item').tab(); // activer tab effect
-    document.getElementById("filepicker").addEventListener("change", function(event) {
-    let output = document.getElementById("listing");
-    var files = event.target.files;
-    console.log(event.target.files[1]);
-    let num = 0;
-    for (let i=0; i<files.length; i++) 
-    {
-        let item = document.createElement("li");
-        item.innerHTML = files[i].webkitRelativePath;
-        filesList[i] = files[i].webkitRelativePath;
-        output.appendChild(item);
-        num=num+1; //compteur nombre de fichiers dans le dossier selectionné
-      };
-    var div = document.getElementById("filesCount"); 
-    div.textContent = num + " files selected";   
-    console.log(filesList);
-    //FORM 1 : Nom des fichiers
-    //on button click submit 3 forms (filesList,algoslist,metadata(session name, etc...))
-    /*var form1 = document.getElementById("directory").innerHTML;
-    var form2 =  document.getElementById("algos").innerHTML;
-    var lala = document.getElementById("toSubmit").innerHTML = form1;
-    console.log("lala " + lala);*/
-    //document.forms["directory"].submit(); //submit FORM 1
-    //document.forms.toSubmit.submit();
-    //document.forms.toSubmit.submit();
-    //document.getElementById('hiddenField').value = "?truc=machin"; // in order to merge 3 forms data
-    //let truc=document.getElementById("directory").submit();
-    }, false);
-    //FORM2
-    /*function getForm2()
-    {
-        var algos=document.getElementsByClassName("ui label transition visible");
-        var algosTab= new Array();
-        for (var i=0 ; i< document.getElementsByClassName("ui label transition visible").length ; i++)
-        {
-            algosTab[i]=algos[i].getAttribute('data-value');
-        }
-        console.log(algosTab);
-    }*/
-    function getForms()
-    {
-        /* ---------------------- FORM 1 : retrieve listed filepaths from directory ---------------------- */
-        //
-        console.log("Listed files  : " + filesList); //debug : show form 1 variables
-        //
-        /* ----------------------       FORM 2 : retrieve chosen algorithms         ---------------------- */
-        //
-        var algos=document.getElementsByClassName("ui label transition visible");
-        var algosTab= new Array();
-        for (var i=0 ; i< document.getElementsByClassName("ui label transition visible").length ; i++)
-        {
-            algosTab[i]=algos[i].getAttribute('data-value');
-        }
-        console.log("Chosen algorithms : " + algosTab); //debug : show form 2 variables
-        //
-        /* ----------------------    FORM 3 : retrieve session name and comments    ---------------------- */
-        //
-        var sessioname = document.getElementsByClassName("field")[2].getElementsByTagName("input")[0].value;
-        var comment = document.getElementsByClassName("field")[3].getElementsByTagName("textarea")[0].value;
-        console.log("Session-name : " + sessioname + " comment : " + comment); //debug : show form 3 variables
-        //
-        /* ----------------------               GO TO THE LOADING PAGE              ---------------------- */
-        //
-        //document.location.href="loading.html";
-        $.redirect("loading.html", filesList);
-    }
-    </script>
 </html>

@@ -1,0 +1,75 @@
+Server running at http://127.0.0.1:3000
+Bonjour !
+Bye bye !
+Yo et See u
+/views/species/salmonella/salmogenomes.html
+{}
+/semantic/dist/semantic.min.css
+{}
+contenu ./../semantic/dist/semantic.min.css chargé
+/semantic/dist/components/icon.min.css
+{}
+contenu ./../semantic/dist/components/icon.min.css chargé
+/css/gamer.effects.datatables.css
+{}
+contenu ./../interface/css/gamer.effects.datatables.css chargé
+/css/dataTables.semanticui.min.css
+{}
+contenu ./../interface/css/dataTables.semanticui.min.css chargé
+/css/select.dataTables.min.css
+{}
+contenu ./../interface/css/select.dataTables.min.css chargé
+/css/buttons.semanticui.min.css
+{}
+contenu ./../interface/css/buttons.semanticui.min.css chargé
+/semantic/dist/semantic.min.js
+{}
+contenu ./../semantic/dist/semantic.min.js chargé
+/js/jquery.min.js
+{}
+contenu ./../interface/js/jquery.min.js chargé
+/js/jquery-1.12.4.js
+{}
+contenu ./../interface/js/jquery-1.12.4.js chargé
+/js/jquery.dataTables.min.js
+{}
+contenu ./../interface/js/jquery.dataTables.min.js chargé
+/js/dataTables.semanticui.min.js
+{}
+contenu ./../interface/js/dataTables.semanticui.min.js chargé
+/js/dataTables.select.min.js
+{}
+contenu ./../interface/js/dataTables.select.min.js chargé
+/js/dataTables.buttons.min.js
+{}
+contenu ./../interface/js/dataTables.buttons.min.js chargé
+/js/buttons.semanticui.min.js
+{}
+contenu ./../interface/js/buttons.semanticui.min.js chargé
+/js/jszip.min.js
+{}
+contenu ./../interface/js/jszip.min.js chargé
+/js/pdfmake.min.js
+{}
+contenu ./../interface/js/pdfmake.min.js chargé
+/js/vfs_fonts.js
+{}
+contenu ./../interface/js/vfs_fonts.js chargé
+/js/buttons.colVis.min.js
+{}
+contenu ./../interface/js/buttons.colVis.min.js chargé
+/js/gamer.effects.js
+{}
+contenu ./../interface/js/gamer.effects.js chargé
+/js/buttons.html5.min.js
+{}
+contenu ./../interface/js/buttons.html5.min.js chargé
+/js/buttons.print.min.js
+{}
+contenu ./../interface/js/buttons.print.min.js chargé
+/img/anseslogomini.png
+{}
+contenu ./../interface/img/anseslogomini.png chargé
+/img/ansesgamer.png
+{}
+contenu ./../interface/img/ansesgamer.png chargé

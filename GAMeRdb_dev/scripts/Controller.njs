@@ -103,7 +103,7 @@ var server = http.createServer(function(req, res)
 
 
 	//
-	// STATIC Files Routing
+	// CSS and JS Files Routing
 	//
 
 	if (urlPath === '/semantic/dist/semantic.min.css')
@@ -122,9 +122,77 @@ var server = http.createServer(function(req, res)
 	{
 		readServerFile('./../interface/js/gamer.effects.js','application/javascript',200);
 	}
-	else if (urlPath === '/css/datatables.css')
+	else if (urlPath === '/semantic/dist/components/icon.min.css')
 	{
-		readServerFile('./../interface/css/datatables.css','application/javascript',200);
+		readServerFile('./../semantic/dist/components/icon.min.css','text/css',200);
+	}
+	else if (urlPath === '/css/gamer.effects.datatables.css')
+	{
+		readServerFile('./../interface/css/gamer.effects.datatables.css','text/css',200);
+	}
+	else if (urlPath === '/css/dataTables.semanticui.min.css')
+	{
+		readServerFile('./../interface/css/dataTables.semanticui.min.css','text/css',200);
+	}
+	else if (urlPath === '/css/select.dataTables.min.css')
+	{
+		readServerFile('./../interface/css/select.dataTables.min.css','text/css',200);
+	}
+	else if (urlPath === '/css/buttons.semanticui.min.css')
+	{
+		readServerFile('./../interface/css/buttons.semanticui.min.css','text/css',200);
+	}
+	else if (urlPath === '/js/jquery.min.js')
+	{
+		readServerFile('./../interface/js/jquery.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/jquery-1.12.4.js')
+	{
+		readServerFile('./../interface/js/jquery-1.12.4.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/jquery.dataTables.min.js')
+	{
+		readServerFile('./../interface/js/jquery.dataTables.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/dataTables.semanticui.min.js')
+	{
+		readServerFile('./../interface/js/dataTables.semanticui.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/dataTables.select.min.js')
+	{
+		readServerFile('./../interface/js/dataTables.select.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/buttons.semanticui.min.js')
+	{
+		readServerFile('./../interface/js/buttons.semanticui.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/dataTables.buttons.min.js')
+	{
+		readServerFile('./../interface/js/dataTables.buttons.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/jszip.min.js')
+	{
+		readServerFile('./../interface/js/jszip.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/pdfmake.min.js')
+	{
+		readServerFile('./../interface/js/pdfmake.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/vfs_fonts.js')
+	{
+		readServerFile('./../interface/js/vfs_fonts.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/buttons.html5.min.js')
+	{
+		readServerFile('./../interface/js/buttons.html5.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/buttons.print.min.js')
+	{
+		readServerFile('./../interface/js/buttons.print.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/buttons.colVis.min.js')
+	{
+		readServerFile('./../interface/js/buttons.colVis.min.js','application/javascript',200);
 	}
 
 	//

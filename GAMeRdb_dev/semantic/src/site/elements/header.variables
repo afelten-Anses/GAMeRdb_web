@@ -2,3 +2,4 @@
     User Variable Overrides
 *******************************/
 @hoverItemTextColor: #18BC9C;
+@activeItemTextColor: #FFFFFF;

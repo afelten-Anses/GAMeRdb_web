@@ -8,3 +8,6 @@
 @hoverItemBackground: #233140;
 @secondaryItemColor: #2C3E50;
 @secondaryHoverItemColor: #233140;
+@activeItemTextColor: #FBBD08;
+@activeHoverItemColor: @activeItemTextColor;
+
