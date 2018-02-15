@@ -40,15 +40,15 @@ const args = process.argv; //basic args parse
 															*******	CONTROLLER code *******
 */////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// if  --dev mode : change localhost ip to server ip
+if(args[2]!= null && args[2]==="--dev")
+{
+	listenIp = '192.168.184.133';
+	listenPort = 3001;
+}
+
 var server = http.createServer(function(req, res) 
 {
-	// if  --dev mode : change localhost ip to server ip
-	if(args[2]!= null && args[2]==="--dev")
-	{
-		listenIp = '192.168.184.133';
-		listenPort = 3001;
-
-	}
 	var urlPath = url.parse(req.url).pathname;
 	var params = querystring.parse(url.parse(req.url).query);
 

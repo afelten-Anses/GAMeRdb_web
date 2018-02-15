@@ -21757,7 +21757,7 @@ ol.ui.horizontal.list li:before,
 
 .ui.menu .active.item {
   background: rgba(0, 0, 0, 0.05);
-  color: #FFFFFF;
+  color: rgba(0, 0, 0, 0.95);
   font-weight: normal;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -21942,7 +21942,7 @@ Floated Menu / Item
 .ui.vertical.menu .item .menu .active.item {
   background-color: transparent;
   font-weight: bold;
-  color: #FFFFFF;
+  color: rgba(0, 0, 0, 0.95);
 }
 
 /*--------------
