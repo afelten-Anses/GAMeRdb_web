@@ -782,6 +782,7 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
   margin: 0;
   padding: 0;
   height: 100%;
+  width: 100%;
 }
 
 /* marge pour que le premier container (id="aftertopmenu")situé après le menu du haut container ne se retrouve pas caché par lui */
@@ -806,7 +807,6 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 
 #centermenu {
   margin-right: 6em;
-  margin-left: 2em;
 }
 
 #rightmenu {
@@ -21757,7 +21757,7 @@ ol.ui.horizontal.list li:before,
 
 .ui.menu .active.item {
   background: rgba(0, 0, 0, 0.05);
-  color: rgba(0, 0, 0, 0.95);
+  color: #FFFFFF;
   font-weight: normal;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -21942,7 +21942,7 @@ Floated Menu / Item
 .ui.vertical.menu .item .menu .active.item {
   background-color: transparent;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0.95);
+  color: #FFFFFF;
 }
 
 /*--------------

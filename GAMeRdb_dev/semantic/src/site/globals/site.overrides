@@ -19,6 +19,7 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 	margin:0;
 	padding:0;
 	height:100%;
+	width:100%;
 }
 
 /* marge pour que le premier container (id="aftertopmenu")situé après le menu du haut container ne se retrouve pas caché par lui */
@@ -39,7 +40,6 @@ https://www.cssreset.com/demos/layouts/how-to-keep-footer-at-bottom-of-page-with
 }
 #centermenu{
 	margin-right:6em;
-	margin-left:2em;
 }
 #rightmenu{
 	margin-top:18em;
