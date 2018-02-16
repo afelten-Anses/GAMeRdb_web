@@ -70,12 +70,16 @@ h4{
 	padding:0;
 }
 //logo Anses du header qui grossit au survol
-#logogrow:hover{
+#logogrow:hover,#helpgrow:hover{
   -moz-transform: scale(1.2);
   -webkit-transform: scale(1.2);
   transform: scale(1.2);
  }
- #centermenu{
+#texthover:hover{
+  color:#00B5AD;
+ }
+ 
+#centermenu{
     display: block;
     margin-left: 5em;
 }

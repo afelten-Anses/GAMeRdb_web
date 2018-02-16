@@ -842,9 +842,14 @@ h4 {
   padding: 0;
 }
 
-#logogrow:hover {
+#logogrow:hover,
+#helpgrow:hover {
   -webkit-transform: scale(1.2);
   transform: scale(1.2);
+}
+
+#texthover:hover {
+  color: #00B5AD;
 }
 
 #centermenu {

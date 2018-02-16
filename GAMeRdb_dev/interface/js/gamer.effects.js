@@ -34,3 +34,20 @@ var filesList=new Array(); //FORM 1 : Nom des fichiers
 $('.ui.dropdown').dropdown(); // activer dropdown effect
 $('.ui.accordion').accordion(); // activer accordion effect
 $('.menu .item').tab(); // activer tab effect
+//activer modal effect au clic
+$("#helpme").click(function(){
+    $('.longer.modal').modal('show');
+});
+//fermer modal effect au clic
+$("#cancel").click(function(){
+    $('.longer.modal').modal('hide');
+});
+//fermer les messages a la demande
+$('.message .close')
+    .on('click', function() {
+    $(this)
+        .closest('.message')
+        .transition('fade')
+    ;
+})
+;
