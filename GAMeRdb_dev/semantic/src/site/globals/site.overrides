@@ -95,4 +95,7 @@ a.paginate_button.item.active,div.paginate_button.item.previous.disabled{
 div.paginate_button.item.previous.disabled,div.paginate_button.item.next.disabled{
     color: darkgrey !important;
 }
-
+/* Colorize tools dropdown item in header_tools */
+#tools_colored{
+                color:#FBBD08;
+            }

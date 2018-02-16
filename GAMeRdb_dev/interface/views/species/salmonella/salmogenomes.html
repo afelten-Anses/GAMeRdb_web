@@ -36,23 +36,7 @@
     <body>    
         <div id="bloc_page"><!-- main wrapper-->
             <header>
-                <div class="ui massive borderless fixed fluid menu">
-                    <a class="disabled item" href="/" title="Back to homepage">
-                        <img src="../../../img/anseslogomini.png" id="logogrow" href="/">
-                    </a>
-                    <a class="item" href="../../views/species/bacillus/bacgenomes.html" title="Bacillus workspace"><i>Bacillus</i></a>
-                    <a class="item" href="../../views/species/clostridium/closgenomes.html" title="Clostridium workspace"><i>Clostridium</i></a>
-                    <a class="item" href="../../views/species/listeria/lisgenomes.html" title="Listeria workspace"><i>Listeria</i></a>
-                    <a class="active item" href="../../views/species/salmonella/salmogenomes.html" title="Salmonella workspace"><i>Salmonella</i></a>
-                    <a class="item" href="../../views/species/staphylococcus/staphgenomes.html" title="Staphylococcus workspace"><i>Staphylococcus</i></a>
-                    <div class="ui right simple dropdown item">
-                    Tools<i class="dropdown icon"></i>
-                        <div class="menu">
-                            <a class="item" href="#">Blast</a>
-                            <a class="disabled item" title="Very soon">QuickPhylo</a>
-                        </div>
-                    </div>
-                </div>
+                <%include ./../interface/views/includes/header_salmo.html%>
             </header>        
             
             <div class="ui stackable grid" id="aftertopmenu"> <!--main grid (grid of grids) -->
@@ -366,58 +350,7 @@
             </div>
             
             <footer class= "sticky">
-                <div class="ui grey inverted  vertical footer segment">
-                    <div class="ui stackable inverted center aligned divided grid" id="gridfooter">
-                        <div class="two wide column">
-                            <h3 class="ui inverted small orange header">Information</h3>
-                            <div class="ui inverted link list">
-                                <a href="../../views/moreinfo/news.html" class="item">News</a>
-                                <a href="http://192.168.4.30/GroupeGenomique/GG.html" class="item" target="_blank" rel="noopener noreferrer">Groupe génomique</a>
-                                <a href="../../views/moreinfo/faq.html" class="item">F.A.Q</a>
-                                <a href="../../views/moreinfo/about.html" class="item">About us</a>
-                            </div>
-                        </div>
-                        <div class="two wide column">
-                            <h3 class="ui inverted small green header">Getting started</h3>
-                            <div class="ui inverted link list">
-                                <a href="../../views/moreinfo/howto_ivarcall2.html" class="item">iVARCall2 tutorial</a>
-                                <a href="../../views/moreinfo/howto_raxml.html" class="item">RAxML tutorial</a>
-                                <a href="http://sas-pp-lscalc1:8081/redmine" class="item" target="_blank" rel="noopener noreferrer">Redmine forum</a>
-                            </div>
-                        </div>
-                        <div class="two wide column">
-                            <h3 class="ui inverted small blue header">Useful links</h3>
-                            <div class="ui inverted link list">
-                                <a href="http://intranet.anses.fr/Pages/accueil.aspx" class="item" target="_blank" rel="noopener noreferrer">Anses' intranet</a>
-                                <a href="https://www.anses.fr/fr" class="item" target="_blank" rel="noopener noreferrer">Anses' website</a>
-                                <a href="https://webmail.anses.fr/" class="item" target="_blank" rel="noopener noreferrer">Anses' webmail</a>
-                                <a href="http://vigilanses.mag.anses.fr/fr" class="item" target="_blank" rel="noopener noreferrer">VigilAnses</a>
-                            </div>
-                        </div>
-                        <div class="four wide column">
-                            <h3 class="ui inverted small violet header">Contact us</h3>
-                            <form class="ui mini form">
-                                <div class="two fields">
-                                    <div class="field">
-                                        <input placeholder="Name" type="text"/>
-                                    </div>
-                                    <div class="field">
-                                        <input placeholder="Mail" type="text"/>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <textarea placeholder="Message" rows=4></textarea>
-                                </div>
-                                <div class="submit">
-                                    <input type="submit" value="Submit" class="ui mini grey button"/>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="ui inverted section divider" id="lignefooter"></div>
-                    <img src="../../../img/ansesgamer.png" id="footerlogo"/>
-                    <h4>2016-2018 GAMeRdb v.beta - Unless otherwise stated, all content on the site is licensed under (Creative Commons BY-SA 2.0+?)</h4>
-                </div>
+                <%include ./../interface/views/includes/footer.html%>
             </footer>
         </div>
     </body>  

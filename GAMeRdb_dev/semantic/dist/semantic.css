@@ -876,6 +876,12 @@ div.paginate_button.item.previous.disabled,
 div.paginate_button.item.next.disabled {
   color: darkgrey !important;
 }
+
+/* Colorize tools dropdown item in header_tools */
+
+#tools_colored {
+  color: #FBBD08;
+}
 /*!
  * # Semantic UI 2.2.13 - Button
  * http://github.com/semantic-org/semantic-ui/
