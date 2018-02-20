@@ -9,6 +9,7 @@
 var http = require('http'); //httpserver
 var fs = require('fs'); //filesystem (file parser)
 var url = require('url'); // url parser
+const path = require('path'); //path parser
 // External modules
 var template = require('templatesjs'); // useful for header and footer "includes"
 var validator = require('validator'); // queries validator and sanitizer
@@ -17,16 +18,43 @@ var querystring = require('querystring') // query parser
 var model = require('./Model.njs') // use Model.js as a NodeJS module
 var views = require('./Views.njs') // use Views.js as a NodeJS module
 // Network configuration
-var listenPort = 3001; //default listening port
-var listenIp = '192.168.184.133'; // default listening ip
+var listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
+var listenPort = process.argv[3] || 3000; //default listening port
 // Args
 const args = process.argv; //basic args parse
+// Used for automatic type MIME attribution in readServerFileAutoMime()
+const mimeType = {
+    '.ico': 'image/x-icon',
+    '.html': 'text/html',
+    '.js': 'text/javascript',
+    '.json': 'application/json',
+    '.css': 'text/css',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.wav': 'audio/wav',
+    '.mp3': 'audio/mpeg',
+    '.svg': 'image/svg+xml',
+    '.pdf': 'application/pdf',
+    '.doc': 'application/msword',
+    '.eot': 'appliaction/vnd.ms-fontobject',
+    '.ttf': 'aplication/font-sfnt',
+    '.gff': 'text/plain',
+    '.log': 'text/plain',
+    '.fasta': 'text/plain',
+    '.vcf': 'text/plain',
+    '.fastq': 'text/plain',
+    '.gff': 'text/plain',
+    '.gbk': 'text/plain',
+    '.gz' : 'application/gzip',
+    '.tsv' : 'text/plain',
+    '.woff2' : 'font/woff2',
+    '.woff' : 'font/woff'
+  };
 
 
 /*A FAIRE AVANT LA MISE EN PRODUCTION :
 	-En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache' (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
-	-Parsing d'arguments pour le mode --dev (commenter)
-	-Tout ce qui est commenté "debug"
+	-COMMENTER Tout ce qui est commenté "debug" et rennomer debug par "trace"
 	-Ecouter sur le port 80°
 	-Changer la ligne var data = template.setSync(contents); par [...] set(contents) pour être en 100% asynchrone dans la gestion des routes
 */
@@ -59,25 +87,45 @@ var server = http.createServer(function(req, res)
 	// Read server files and send it to client
 	function readServerFile(filePath,type,msg) // type : Content-Type / msg : server response code
 	{
-		fs.readFile(filePath, function (errors, contents) 
+		let ext = path.parse(filePath).ext;
+		fs.readFile(filePath, function (errors, contents) {
+			if(errors)
 			{
-				if(errors)
-				{
-			  		console.log(errors);
-			  		throw errors;
-		     		}
-		     		else
-		     		{
-		     			res.writeHead(msg,{'Content-Type': type,'Cache-Control': 'no-cache'});
-			  			res.end(contents); // envoyer le contenu (contents de fonction en parametre de fs.readfile) en réponse
-		     		}
-			});
-		console.log('contenu ' + filePath + ' chargé');
+			  	console.log(errors);
+			  	throw errors;
+		     	}
+		     	else
+		     	{
+		     		res.writeHead(msg,{'Content-Type': type ,'Cache-Control': 'no-cache'});
+			  		res.end(contents); // envoyer le contenu (contents de fonction en parametre de fs.readfile) en réponse
+		     	}
+		});
+		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]);
+	}
+
+	// Read server files and send it to client : automatic MIME type attribution // type : Content-Type / msg : server response code
+	function readServerFileAutoMime(filePath,msg) {
+
+		let ext = path.parse(filePath).ext; //parse file extension from filepah
+		fs.readFile(filePath, function (errors, contents) {
+			if(errors)
+			{
+			  	console.log(errors);
+			  	throw errors;
+		     }
+		     else
+		     {
+		     	res.writeHead(msg,{'Content-Type': mimeType[ext] || 'application/octet-stream' ,'Cache-Control': 'no-cache'}); // type MIME or application/octet-stream if unknown extension
+			  	res.end(contents); // envoyer le contenu (contents de fonction en parametre de fs.readfile) en réponse
+		     }
+		});
+		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]);
 	}
 
 	// Read server files and send it to client + includes
-	function readFileAndInclude(templateFilePath,type,msg) // type : Content-Type / msg : server response code
+	function readFileAndInclude(templateFilePath,msg) // type : Content-Type / msg : server response code
 	{
+		let ext = path.parse(templateFilePath).ext;
 		fs.readFile(templateFilePath, function (errors, contents) 
 		{
 			if(errors)
@@ -88,11 +136,12 @@ var server = http.createServer(function(req, res)
 		     else
 		     {
 		     	var data = template.setSync(contents);
-		     	res.writeHead(msg,{'Content-Type': type,'Cache-Control': 'no-cache'});
+		     	res.writeHead(msg,{'Content-Type': 'text/html','Cache-Control': 'no-cache'});
 				res.end(data);
 		     }
 		});
 	}
+
 
 	/*//////////////////////////////////////////////////////////////////////////////////////////////////////////*
 										ROUTING AND VIEWS PROCESSING
@@ -253,19 +302,19 @@ var server = http.createServer(function(req, res)
 
 	else if(urlPath === '/' ||  urlPath === '/home') //Page d'accueil
 	{
-		readFileAndInclude('./../interface/views/homepage/index.html','text/html',200);
+		readFileAndInclude('./../interface/views/homepage/index.html',200);
 	}
 	else if(urlPath === '/views/species/homepage/index.html') //Page d'accueil
 	{
-		readFileAndInclude('./../interface/views/homepage/index.html','text/html',200);
+		readFileAndInclude('./../interface/views/homepage/index.html',200);
 	}
 	else if(urlPath === '/ffdfsdgdsgs') // test
 	{ 
-		readFileAndInclude('./../interface/views/tmp_tests/testgenomes.html','text/html',200);
+		readFileAndInclude('./../interface/views/tmp_tests/testgenomes.html',200);
 	}
 	else if(urlPath === '/views/species/salmonella/salmogenomes.html') // test
 	{ 
-		readFileAndInclude('./../interface/views/species/salmonella/salmogenomes.html','text/html',200);
+		readFileAndInclude('./../interface/views/species/salmonella/salmogenomes.html',200);
 	}
 
 	//
@@ -273,27 +322,41 @@ var server = http.createServer(function(req, res)
 	//
 	else //Ressource demandée introuvable : erreur 404
 	{ 
-		readFileAndInclude('./../interface/views/404.html','text/html',404);
+		console.log(`${req.method} ${req.url}`);
+		// parse URL
+		const parsedUrl = url.parse(req.url);
+		// extract URL path
+		let pathname = `.${parsedUrl.pathname}`;
+		// maps file extention to MIME types
+		fs.exists(pathname, function (exist) 
+		{
+			if(!exist) // 404 if path doesn't exist
+			{
+			console.log(`File ${pathname} not found!`);
+			readFileAndInclude('./../interface/views/404.html',404);
+			}
+			else // read file from file system
+			{
+				fs.readFile(pathname, function(err, data){
+					if(err)
+					{
+						readFileAndInclude('./../interface/views/500.html',500);
+						console.log(`Error getting the file: ${err}.`);
+					} 
+					else // if the file is found, set Content-type and send data
+					{
+						readServerFileAutoMime(pathname,200);
+					}
+				});
+			}
+		});	
 	}
 })
 
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 													******* START SERVER and show some info  *******
 */////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// server.route({
-//   method: "GET",
-//   path: '/myscripts/{path}',
-//   config: {
-//     auth: false,
-//     cors: { origin: ['*'] },
-//     handler: {
-//       directory: {
-//         path: 'myscripts',
-//         listring: true
-//       }
-//     }
-//   }
-// });
+
 server.listen(listenPort,listenIp);
 console.log('Server running at http://' + listenIp + ':' + listenPort);
 blabla=model.direBonjour(); // model import test
