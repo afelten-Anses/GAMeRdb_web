@@ -42,6 +42,8 @@ const mimeType = {
     '.gff': 'text/plain',
     '.log': 'text/plain',
     '.fasta': 'text/plain',
+    '.fa' : 'text/plain',
+    '.fq' : 'text/plain',
     '.vcf': 'text/plain',
     '.fastq': 'text/plain',
     '.gff': 'text/plain',
@@ -49,7 +51,8 @@ const mimeType = {
     '.gz' : 'application/gzip',
     '.tsv' : 'text/plain',
     '.woff2' : 'font/woff2',
-    '.woff' : 'font/woff'
+    '.woff' : 'font/woff',
+    '.txt' : 'text/plain'
   };
 
 
@@ -79,8 +82,8 @@ if(args[2]!= null && args[2]==="--dev")
 
 var server = http.createServer(function(req, res) 
 {
-	var urlPath = url.parse(req.url).pathname;
-	var params = querystring.parse(url.parse(req.url).query);
+	var urlPath = url.parse(req.url).pathname; // URL without
+	var params = querystring.parse(url.parse(req.url).query); // URL with query
 
 	console.log(req.url); //debug
 	console.log(params); //debug
@@ -103,7 +106,7 @@ var server = http.createServer(function(req, res)
 				res.end(contents); // envoyer le contenu (contents de fonction en parametre de fs.readfile) en réponse
 			}
 		});
-		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]);
+		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug
 	}
 
 	// Read server files and send it to client : automatic MIME type attribution // type : Content-Type / msg : server response code
@@ -124,14 +127,12 @@ var server = http.createServer(function(req, res)
 			  	res.end(contents);
 		     }
 		});
-		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]);
+		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug
 	}
 
 	// Read server files and send it to client WITH Templatejs includes
 	function readFileAndInclude(templateFilePath,msg)
 	{
-		let ext = path.parse(templateFilePath).ext;
-
 		fs.readFile(templateFilePath, function (errors, contents) 
 		{
 			if(errors)
@@ -162,13 +163,14 @@ var server = http.createServer(function(req, res)
 										ROUTING AND VIEWS PROCESSING
 	*///////////////////////////////////////////////////////////////////////////////////////////////////////////*
 
-	//readServerFile('./../semantic/dist/semantic.min.css','text/css',200);
-	// note : routage plus rapide en utilisant switch au lieu de if/else mais aléatoire si on rafraichit 
-	//trop vite les pages
+	
+	//////													   //////							 									
+	///////////////// STATIC FILES : Manual routing /////////////////
+	//////													   //////								     								   
 
 
 	//
-	// CSS and JS Files Routing
+	// CSS and JS 
 	//
 
 	if (urlPath === '/semantic/dist/semantic.min.css')
@@ -265,7 +267,7 @@ var server = http.createServer(function(req, res)
 	}
 
 	//
-	// IMAGES routing
+	// IMAGES
 	//
 
 	else if(urlPath === '/img/anseslogomini.png' || urlPath === '/views/img/anseslogomini.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
@@ -294,7 +296,7 @@ var server = http.createServer(function(req, res)
 	}
 
 	//
-	// FONTS routing
+	// FONTS 
 	//
 
 	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff2') // test
@@ -312,7 +314,7 @@ var server = http.createServer(function(req, res)
 	
 
 	//
-	// TEMPLATES routing and VIEWS PROCESSING
+	// TEMPLATES Views
 	//
 
 	else if(urlPath === '/' ||  urlPath === '/home') //Page d'accueil
@@ -323,36 +325,32 @@ var server = http.createServer(function(req, res)
 	{
 		readFileAndInclude('./../interface/views/homepage/index.html',200);
 	}
-	else if(urlPath === '/ffdfsdgdsgs') // test
-	{ 
-		readFileAndInclude('./../interface/views/tmp_tests/testgenomes.html',200);
-	}
-	else if(urlPath === '/species/salmonella/salmogenomes.html' || urlPath === '/views/views/species/salmonella/salmogenomes.html') // test
-	{ urlPath === '/views/species/salmonella/salmogenomes.html'
+	else if(urlPath === '/species/salmonella/salmogenomes.html') // test
+	{
 		readFileAndInclude('./../interface/views/species/salmonella/salmogenomes.html',200);
 	}
 
-	//
-	// 404 Page
-	//
+	//////																	 	 //////							 									
+	///////////////// DYNAMIC FILES : auto-routing for existing paths /////////////////
+	//////																	    //////	
+
 	else //Ressource demandée introuvable : erreur 404
 	{ 
 		console.log(`${req.method} ${req.url}`);
-		// parse URL
-		const parsedUrl = url.parse(req.url);
-		// extract URL path
-		let pathname = `.${parsedUrl.pathname}`;
+		// add a "." before urlPath in order to use it inside fs.exists()
+		let pathname = `.${urlPath}`;
 		// maps file extention to MIME types
 		fs.exists(pathname, function (exist) 
 		{
-			if(!exist) // 404 if path doesn't exist
+			if(!exist) // send 404 page if path doesn't exist
 			{
 			console.log(`File ${pathname} not found!`);
 			readFileAndInclude('./../interface/views/404.html',404);
 			}
-			else // read file from file system
+			else // read file from file system path
 			{
-				fs.readFile(pathname, function(err, data){
+				fs.readFile(pathname, function(err, data)
+				{
 					if(err)
 					{
 						readFileAndInclude('./../interface/views/500.html',500);
@@ -374,6 +372,7 @@ var server = http.createServer(function(req, res)
 
 server.listen(listenPort,listenIp);
 console.log('Server running at http://' + listenIp + ':' + listenPort);
+//debug
 blabla=model.direBonjour(); // model import test
 bye=model.direByeBye();
 console.log(blabla + " et " + bye);
