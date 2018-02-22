@@ -22,7 +22,6 @@ const views = require('./Views.njs') // use Views.js as a NodeJS module
 var listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
 var listenPort = process.argv[3] || 3000; //default listening port
 // Args
-//const args = process.argv; //basic args parse
 const params = require('commander'); //arguments parser
 // Used for automatic type MIME attribution in readServerFileAutoMime()
 const mimeType = {
@@ -76,23 +75,20 @@ const mimeType = {
 															*******	CONTROLLER code *******
 */////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// if  --dev mode : change localhost ip to server ip
-
-// if(args[2]!= null && args[2]==="--dev")
-// {
-// 	listenIp = '127.0.0.1';
-// 	listenPort = 3000;
-// }
-
-
-
+// --- App usage --- //
 params
   .version('0.1.0')
   .option('-d, --dev', 'dev mode (run app in localhost mode)')
   .parse(process.argv);
 
-console.log('you ordered a pizza with:');
-if (program.peppers) console.log('  - peppers');
+// --- if  --dev mode : change localhost ip to server ip --- //
+if(params.dev) 
+{
+	listenIp = '127.0.0.1';
+	listenPort = 3000;
+}
+
+// --- App : controller (+view engine) --- //
 var server = http.createServer(function(req, res) 
 {
 	var urlPath = url.parse(req.url).pathname; // URL without
@@ -422,7 +418,7 @@ var server = http.createServer(function(req, res)
 
 server.listen(listenPort,listenIp);
 console.log('Server running at http://' + listenIp + ':' + listenPort);
-//debug trace
+//debug
 blabla=model.direBonjour(); // model import test
 bye=model.direByeBye();
 console.log(blabla + " et " + bye);
