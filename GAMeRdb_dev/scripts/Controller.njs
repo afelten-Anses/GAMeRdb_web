@@ -22,7 +22,8 @@ const views = require('./Views.njs') // use Views.js as a NodeJS module
 var listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
 var listenPort = process.argv[3] || 3000; //default listening port
 // Args
-const args = process.argv; //basic args parse
+//const args = process.argv; //basic args parse
+const params = require('commander'); //arguments parser
 // Used for automatic type MIME attribution in readServerFileAutoMime()
 const mimeType = {
     '.ico': 'image/x-icon',
@@ -58,9 +59,11 @@ const mimeType = {
 
 /*A FAIRE AVANT LA MISE EN PRODUCTION :
 	-En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache' (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
-	-COMMENTER Tout ce qui est commenté "debug" et rennomer debug par "trace"
-	-Ecouter sur le port 80°
-	-Changer la ligne var data = template.setSync(contents); par [...] set(contents) pour être en 100% asynchrone dans la gestion des routes
+	-COMMENTER Tout ce qui est commenté "debug trace" et rennomer debug trace par "trace"
+	-Ecouter sur le port 80 + mettre en place reverse proxy : 	https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+																https://eladnava.com/binding-nodejs-port-80-using-nginx/
+	-Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+	-ReVerifier 100% async
 */
 
 /*Rappels :
@@ -74,19 +77,29 @@ const mimeType = {
 */////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // if  --dev mode : change localhost ip to server ip
-if(args[2]!= null && args[2]==="--dev")
-{
-	listenIp = '127.0.0.1';
-	listenPort = 3000;
-}
 
+// if(args[2]!= null && args[2]==="--dev")
+// {
+// 	listenIp = '127.0.0.1';
+// 	listenPort = 3000;
+// }
+
+
+
+params
+  .version('0.1.0')
+  .option('-d, --dev', 'dev mode (run app in localhost mode)')
+  .parse(process.argv);
+
+console.log('you ordered a pizza with:');
+if (program.peppers) console.log('  - peppers');
 var server = http.createServer(function(req, res) 
 {
 	var urlPath = url.parse(req.url).pathname; // URL without
 	var params = querystring.parse(url.parse(req.url).query); // URL with query
 
-	console.log(req.url); //debug
-	console.log(params); //debug
+	console.log(req.url); //debug trace
+	console.log(params); //debug trace
 
 	// Read server files and send it to client
 	function readServerFile(filePath,type,msg) // Filepath : file requested / type : MIME-Type / msg : server response code
@@ -106,7 +119,7 @@ var server = http.createServer(function(req, res)
 				res.end(contents); // envoyer le contenu (contents de fonction en parametre de fs.readfile) en réponse
 			}
 		});
-		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug
+		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
 	}
 
 	// Read server files and send it to client : automatic MIME type attribution // type : Content-Type / msg : server response code
@@ -127,7 +140,7 @@ var server = http.createServer(function(req, res)
 			  	res.end(contents);
 		     }
 		});
-		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug
+		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
 	}
 
 	// Read server files and send it to client WITH Templatejs includes
@@ -156,6 +169,16 @@ var server = http.createServer(function(req, res)
 		     	});
 		     }
 		});
+	}
+
+	// Pseudo dynamic routing for page by species
+	function routeFilesBySpecies(species)
+	{
+		if(urlPath === `/species/${species}/genomes.html`) // test
+		{
+			console.log('routeFilesBySpecies'); //debug trace
+			readFileAndInclude(`./../interface/views/species/${species}/genomes.html`,200);
+		}
 	}
 
 
@@ -325,16 +348,43 @@ var server = http.createServer(function(req, res)
 	{
 		readFileAndInclude('./../interface/views/homepage/index.html',200);
 	}
-	else if(urlPath === '/species/salmonella/salmogenomes.html') // test
+	else if(urlPath.indexOf("/species")>=0) // indexOf returns -1 if the string is not found. It will return 0 if the string start with "views/species"
 	{
-		readFileAndInclude('./../interface/views/species/salmonella/salmogenomes.html',200);
+		console.log('path species'); //debug trace
+		if(urlPath.indexOf("bacillus")>=0)
+		{
+			routeFilesBySpecies('bacillus');
+		}
+		else if(urlPath.indexOf("clostridium")>=0)
+		{
+			routeFilesBySpecies('clostridium');
+		}
+		else if(urlPath.indexOf("listeria")>=0)
+		{
+			routeFilesBySpecies('listeria');
+		}
+		else if(urlPath.indexOf("salmonella")>=0)
+		{
+			routeFilesBySpecies('salmonella');
+		}
+		else if(urlPath.indexOf("staphylococcus")>=0)
+		{
+			routeFilesBySpecies('staphylococcus');
+		}
+		else
+		{
+			console.log('Species not found!'); 
+			readFileAndInclude('./../interface/views/404.html',404);
+		}
 	}
 
 	//////																	 	 //////							 									
-	///////////////// DYNAMIC FILES : auto-routing for existing paths /////////////////
-	//////																	    //////	
+	///////////////// NAS FILES : auto-routing for existing paths /////////////////////
+	//////																	    ///////	
 
-	else //Ressource demandée introuvable : erreur 404
+	//Works only for NAS files or when url request == file path
+
+	else
 	{ 
 		console.log(`${req.method} ${req.url}`);
 		// add a "." before urlPath in order to use it inside fs.exists()
@@ -351,12 +401,12 @@ var server = http.createServer(function(req, res)
 			{
 				fs.readFile(pathname, function(err, data)
 				{
-					if(err)
+					if(err) // this isnt a file or file corrupted or [...]
 					{
 						readFileAndInclude('./../interface/views/500.html',500);
 						console.log(`Error getting the file: ${err}.`);
 					} 
-					else // if the file is found, set Content-type and send data
+					else
 					{
 						readServerFileAutoMime(pathname,200);
 					}
@@ -372,7 +422,7 @@ var server = http.createServer(function(req, res)
 
 server.listen(listenPort,listenIp);
 console.log('Server running at http://' + listenIp + ':' + listenPort);
-//debug
+//debug trace
 blabla=model.direBonjour(); // model import test
 bye=model.direByeBye();
 console.log(blabla + " et " + bye);
