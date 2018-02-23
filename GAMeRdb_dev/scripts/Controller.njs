@@ -8,13 +8,17 @@
 
 // NodeJS modules
 const http = require('http'); //httpserver
+// more sockets per host  (default = 5) ==> increase performance. decrease if case of excessive ressources draining
+var agent = new http.Agent({
+   maxSockets: 25
+});
 const fs = require('fs'); //filesystem (file parser)
 const url = require('url'); // url parser
 const path = require('path'); //path parser
 // External modules
 const template = require('templatesjs'); // useful for header and footer 'includes'
 const validator = require('validator'); // queries validator and sanitizer
-const querystring = require('querystring'); // query parser
+const querystring = require('querystring'); // query parser and stringifyier
 // MVC scripts dependencies
 const model = require('./Model.njs'); // use Model.js as a NodeJS module
 const views = require('./Views.njs'); // use Views.js as a NodeJS module
@@ -65,11 +69,11 @@ const mimeType = {
 /*A FAIRE AVANT LA MISE EN PRODUCTION :
 	-En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache' (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
 	-COMMENTER Tout ce qui est commenté 'debug trace' et rennomer debug trace par 'trace'
-	-Ecouter sur le port 80 + mettre en place reverse proxy : 	https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
-																https://eladnava.com/binding-nodejs-port-80-using-nginx/
-																--> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
-																				ajouter des filtres,module
-																				compression du contenu
+	-Ecouter sur le port 80 + mettre en place reverse proxy (avec compression de reponses http) : 	https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+																									https://eladnava.com/binding-nodejs-port-80-using-nginx/
+																									--> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
+																									ajouter des filtres,module
+																									compression du contenu
 
 	-Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
 	-ReVerifier 100% async
@@ -109,6 +113,47 @@ var server = http.createServer(function(req, res)
 	console.log(req.url); //debug trace
 	console.log("file requested : " + fileName); // debug trace
 	console.log(params); //debug trace
+
+	//process POST requests
+	function processPost(request, response, callback) w²{
+    var queryData = "";
+    if(typeof callback !== 'function') return null;
+
+    if(request.method == 'POST') {
+        request.on('data', function(data) {
+            queryData += data;
+            if(queryData.length > 1e6) {
+                queryData = "";
+                response.writeHead(413, {'Content-Type': 'text/plain'}).end();
+                request.connection.destroy();
+            }
+        });
+
+        request.on('end', function() {
+            request.post = querystring.parse(queryData);
+            callback();
+        });
+
+    } else {
+        response.writeHead(405, {'Content-Type': 'text/plain'});
+        response.end();
+    }
+}
+
+function processpost2(req, res) {
+    if (req.method == 'POST') {
+        var jsonString = '';
+
+        req.on('data', function (data) {
+            jsonString += data;
+        });
+
+        req.on('end', function () {
+            console.log(JSON.parse(jsonString));
+        });
+    }
+}
+
 
 	// Read server files and send it to client
 	function readServerFile(filePath,type,msg) // Filepath : file requested / type : MIME-Type / msg : server response code
@@ -152,7 +197,7 @@ var server = http.createServer(function(req, res)
 		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
 	}
 
-	// Read server files and send it to client WITH Templatejs includes
+	// Read server files and send it to client WITH Templatejs VIEW PROECESSING : includes headers and foooter
 	function readFileAndInclude(templateFilePath,msg)
 	{
 		fs.readFile(templateFilePath, function (errors, contents) 
@@ -165,7 +210,7 @@ var server = http.createServer(function(req, res)
 		    }
 		    else
 		    {
-		    	template.set(contents, function(errors,contents)
+		    	template.set(contents, function(errors,contents) // templatesJS
 		    	{
 		    		if(errors)
 		    		{
@@ -184,39 +229,33 @@ var server = http.createServer(function(req, res)
 	// Pseudo dynamic routing for page by species
 	function routeFilesBySpecies(species)
 	{
+		console.log('routeFilesBySpecies'); //debug trace
 		if(urlPath === `/species/${species}/blast.html`) // blast page
 		{
-			console.log('routeFilesBySpecies'); //debug trace
 			readFileAndInclude(`./../interface/views/species/${species}/blast.html`,200);
 		}
 		else if(urlPath === `/species/${species}/distribution.html`) // distribution page
 		{
-			console.log('routeFilesBySpecies'); //debug trace
 			readFileAndInclude(`./../interface/views/species/${species}/distribution.html`,200);
 		}
 		else if(urlPath === `/species/${species}/genomes.html`) // genomes page
 		{
-			console.log('routeFilesBySpecies'); //debug trace
 			readFileAndInclude(`./../interface/views/species/${species}/genomes.html`,200);
 		}
 		else if(urlPath === `/species/${species}/naura.html`) // Naura tool page
 		{
-			console.log('routeFilesBySpecies'); //debug trace
 			readFileAndInclude(`./../interface/views/species/${species}/naura.html`,200);
 		}
 		else if(urlPath === `/species/${species}/phylogeny.html`) // Phylogeny page
 		{
-			console.log('routeFilesBySpecies'); //debug trace
 			readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`,200);
 		}
 		else if(urlPath === `/species/${species}/quickphylo.html`) // Quickphylo page
 		{
-			console.log('routeFilesBySpecies'); //debug trace
 			readFileAndInclude(`./../interface/views/species/${species}/quickphylo.html`,200);
 		}
 		else if(urlPath === `/species/${species}/refs.html`) // References page
 		{
-			console.log('routeFilesBySpecies'); //debug trace
 			readFileAndInclude(`./../interface/views/species/${species}/refs.html`,200);
 		}
 		else
@@ -256,7 +295,7 @@ var server = http.createServer(function(req, res)
 
 	// CSS and JS 
 	//
-
+	processpost2();
 	if (urlPath === '/semantic/dist/semantic.min.css')
 	{
 		readServerFile('./../semantic/dist/semantic.min.css','text/css',200);

@@ -21,9 +21,7 @@
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "http-server": "^0.11.1",
-    "semantic-ui": "^2.2.13",
-    "semantic-ui-css": "^2.2.12",
-    "templatejs": "^1.0.0",
+    "query-string": "^5.1.0",
     "templatesjs": "^2.0.0",
     "validator": "^9.4.0"
   }
