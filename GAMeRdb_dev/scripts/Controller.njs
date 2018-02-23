@@ -58,9 +58,9 @@ const mimeType = {
     '.woff' : 'font/woff',
     '.txt' : 'text/plain'
   };
-
-  const prohibed = [
-  	'/Controller.njs',
+// Used in order to restrict access to these files
+const prohibed = [
+	'/Controller.njs',
   	'/Model.njs',
   	'/Views.njs'
   	];
@@ -113,46 +113,6 @@ var server = http.createServer(function(req, res)
 	console.log(req.url); //debug trace
 	console.log("file requested : " + fileName); // debug trace
 	console.log(params); //debug trace
-
-	//process POST requests
-	function processPost(request, response, callback) w²{
-    var queryData = "";
-    if(typeof callback !== 'function') return null;
-
-    if(request.method == 'POST') {
-        request.on('data', function(data) {
-            queryData += data;
-            if(queryData.length > 1e6) {
-                queryData = "";
-                response.writeHead(413, {'Content-Type': 'text/plain'}).end();
-                request.connection.destroy();
-            }
-        });
-
-        request.on('end', function() {
-            request.post = querystring.parse(queryData);
-            callback();
-        });
-
-    } else {
-        response.writeHead(405, {'Content-Type': 'text/plain'});
-        response.end();
-    }
-}
-
-function processpost2(req, res) {
-    if (req.method == 'POST') {
-        var jsonString = '';
-
-        req.on('data', function (data) {
-            jsonString += data;
-        });
-
-        req.on('end', function () {
-            console.log(JSON.parse(jsonString));
-        });
-    }
-}
 
 
 	// Read server files and send it to client
@@ -282,6 +242,22 @@ function processpost2(req, res) {
 		readFileAndInclude('./../interface/views/500.html',500);
 	}
 
+	function processpost2(req, res) // put POST request in a JSON file
+	{
+		if (req.method == 'POST')
+		{
+			var jsonString = '';
+			var reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
+	        reqUtf.on('data', function (data) 
+	        {
+	        	jsonString += data;
+	        });
+	        reqUtf.on('end', function () 
+	        {
+	        	console.log(JSON.parse(jsonString));
+	        });
+	    }
+	}
 
 	/*//////////////////////////////////////////////////////////////////////////////////////////////////////////*
 										ROUTING AND VIEWS PROCESSING
@@ -295,7 +271,7 @@ function processpost2(req, res) {
 
 	// CSS and JS 
 	//
-	processpost2();
+	
 	if (urlPath === '/semantic/dist/semantic.min.css')
 	{
 		readServerFile('./../semantic/dist/semantic.min.css','text/css',200);
@@ -444,6 +420,7 @@ function processpost2(req, res) {
 	else if(urlPath === '/' ||  urlPath === '/home') 
 	{
 		readFileAndInclude('./../interface/views/homepage/index.html',200);
+		processpost2(req,res);
 	}
 	//all species page
 	else if(urlPath.indexOf('/species/')>=0) // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
@@ -490,7 +467,7 @@ function processpost2(req, res) {
 	//////																	    ///////	
 
 	// !!! ---> This method works only for NAS files or when url request == file path <--- !!!
-
+	
 	else
 	{ 
 		console.log(`${req.method} ${req.url}`);
