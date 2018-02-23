@@ -12,12 +12,12 @@ const fs = require('fs'); //filesystem (file parser)
 const url = require('url'); // url parser
 const path = require('path'); //path parser
 // External modules
-const template = require('templatesjs'); // useful for header and footer "includes"
+const template = require('templatesjs'); // useful for header and footer 'includes'
 const validator = require('validator'); // queries validator and sanitizer
-const querystring = require('querystring') // query parser
+const querystring = require('querystring'); // query parser
 // MVC scripts dependencies
-const model = require('./Model.njs') // use Model.js as a NodeJS module
-const views = require('./Views.njs') // use Views.js as a NodeJS module
+const model = require('./Model.njs'); // use Model.js as a NodeJS module
+const views = require('./Views.njs'); // use Views.js as a NodeJS module
 // Network configuration
 var listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
 var listenPort = process.argv[3] || 3000; //default listening port
@@ -55,19 +55,30 @@ const mimeType = {
     '.txt' : 'text/plain'
   };
 
+  const prohibed = [
+  	'/Controller.njs',
+  	'/Model.njs',
+  	'/Views.njs'
+  	];
+
 
 /*A FAIRE AVANT LA MISE EN PRODUCTION :
 	-En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache' (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
-	-COMMENTER Tout ce qui est commenté "debug trace" et rennomer debug trace par "trace"
+	-COMMENTER Tout ce qui est commenté 'debug trace' et rennomer debug trace par 'trace'
 	-Ecouter sur le port 80 + mettre en place reverse proxy : 	https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
 																https://eladnava.com/binding-nodejs-port-80-using-nginx/
+																--> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
+																				ajouter des filtres,module
+																				compression du contenu
+
 	-Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
 	-ReVerifier 100% async
+
 */
 
 /*Rappels :
 	-Includes front-end automatisé avec readFileAndInclude()
-	-Includes back-end avec res.render("flag","texte_a_inclure") pour include vite fait les retours du modele (mettre au format directement dans le modele!)
+	-Includes back-end avec res.render('flag','texte_a_inclure') pour include vite fait les retours du modele (mettre au format directement dans le modele!)
 */
 
 
@@ -91,10 +102,12 @@ if(params.dev)
 // --- App : controller (+view engine) --- //
 var server = http.createServer(function(req, res) 
 {
-	var urlPath = url.parse(req.url).pathname; // URL without
+	var urlPath = url.parse(req.url).pathname; // URL without query
 	var params = querystring.parse(url.parse(req.url).query); // URL with query
+	var fileName = urlPath.split("/").pop(-1); // requested filename
 
 	console.log(req.url); //debug trace
+	console.log("file requested : " + fileName); // debug trace
 	console.log(params); //debug trace
 
 	// Read server files and send it to client
@@ -106,7 +119,7 @@ var server = http.createServer(function(req, res)
 		{
 			if(errors)
 			{
-				console.log(errors);
+				send500(`Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
 				throw errors;
 			}
 			else
@@ -127,7 +140,7 @@ var server = http.createServer(function(req, res)
 		{
 			if(errors)
 			{
-			  	console.log(errors);
+			  	send500(`Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
 			  	throw errors;
 		     }
 		     else
@@ -147,6 +160,7 @@ var server = http.createServer(function(req, res)
 			if(errors)
 			{
 			  	console.log(errors);
+			  	send500(`Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
 			  	throw errors;
 		    }
 		    else
@@ -170,11 +184,63 @@ var server = http.createServer(function(req, res)
 	// Pseudo dynamic routing for page by species
 	function routeFilesBySpecies(species)
 	{
-		if(urlPath === `/species/${species}/genomes.html`) // test
+		if(urlPath === `/species/${species}/blast.html`) // blast page
+		{
+			console.log('routeFilesBySpecies'); //debug trace
+			readFileAndInclude(`./../interface/views/species/${species}/blast.html`,200);
+		}
+		else if(urlPath === `/species/${species}/distribution.html`) // distribution page
+		{
+			console.log('routeFilesBySpecies'); //debug trace
+			readFileAndInclude(`./../interface/views/species/${species}/distribution.html`,200);
+		}
+		else if(urlPath === `/species/${species}/genomes.html`) // genomes page
 		{
 			console.log('routeFilesBySpecies'); //debug trace
 			readFileAndInclude(`./../interface/views/species/${species}/genomes.html`,200);
 		}
+		else if(urlPath === `/species/${species}/naura.html`) // Naura tool page
+		{
+			console.log('routeFilesBySpecies'); //debug trace
+			readFileAndInclude(`./../interface/views/species/${species}/naura.html`,200);
+		}
+		else if(urlPath === `/species/${species}/phylogeny.html`) // Phylogeny page
+		{
+			console.log('routeFilesBySpecies'); //debug trace
+			readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`,200);
+		}
+		else if(urlPath === `/species/${species}/quickphylo.html`) // Quickphylo page
+		{
+			console.log('routeFilesBySpecies'); //debug trace
+			readFileAndInclude(`./../interface/views/species/${species}/quickphylo.html`,200);
+		}
+		else if(urlPath === `/species/${species}/refs.html`) // References page
+		{
+			console.log('routeFilesBySpecies'); //debug trace
+			readFileAndInclude(`./../interface/views/species/${species}/refs.html`,200);
+		}
+		else
+		{
+			send404(`routeFilesBySpecies() : File file not found for ${species}`);
+		}
+	}
+
+	function send404(message) // file not found
+	{
+		console.log(message);
+		readFileAndInclude('./../interface/views/404.html',404);
+	}
+
+	function send403(message)
+	{
+		console.log(message);
+		readFileAndInclude('./../interface/views/403.html',403);
+	}
+
+	function send500(message) // internal server error
+	{
+		console.log(message);
+		readFileAndInclude('./../interface/views/500.html',500);
 	}
 
 
@@ -188,7 +254,6 @@ var server = http.createServer(function(req, res)
 	//////													   //////								     								   
 
 
-	//
 	// CSS and JS 
 	//
 
@@ -318,15 +383,15 @@ var server = http.createServer(function(req, res)
 	// FONTS 
 	//
 
-	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff2') // test
+	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff2')
 	{ 
 		readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.woff2','application/x-font-woff',200);
 	}
-	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff') // test
+	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff')
 	{ 
 		readServerFile('./../semantic/dist:themes/default/assets/fonts/icons.woff','application/x-font-woff',200);
 	}
-	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.ttf') // test
+	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.ttf')
 	{ 
 		readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.ttf','application/x-font-ttf',200);
 	}
@@ -336,71 +401,76 @@ var server = http.createServer(function(req, res)
 	// TEMPLATES Views
 	//
 
-	else if(urlPath === '/' ||  urlPath === '/home') //Page d'accueil
+	//Homepage
+	else if(urlPath === '/' ||  urlPath === '/home') 
 	{
 		readFileAndInclude('./../interface/views/homepage/index.html',200);
 	}
-	else if(urlPath === '/species/homepage/index.html') //Page d'accueil
-	{
-		readFileAndInclude('./../interface/views/homepage/index.html',200);
-	}
-	else if(urlPath.indexOf("/species")>=0) // indexOf returns -1 if the string is not found. It will return 0 if the string start with "views/species"
+	//all species page
+	else if(urlPath.indexOf('/species/')>=0) // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
 	{
 		console.log('path species'); //debug trace
-		if(urlPath.indexOf("bacillus")>=0)
+		if(urlPath.indexOf('bacillus')>=0)
 		{
 			routeFilesBySpecies('bacillus');
 		}
-		else if(urlPath.indexOf("clostridium")>=0)
+		else if(urlPath.indexOf('clostridium')>=0)
 		{
 			routeFilesBySpecies('clostridium');
 		}
-		else if(urlPath.indexOf("listeria")>=0)
+		else if(urlPath.indexOf('listeria')>=0)
 		{
 			routeFilesBySpecies('listeria');
 		}
-		else if(urlPath.indexOf("salmonella")>=0)
+		else if(urlPath.indexOf('salmonella')>=0)
 		{
 			routeFilesBySpecies('salmonella');
 		}
-		else if(urlPath.indexOf("staphylococcus")>=0)
+		else if(urlPath.indexOf('staphylococcus')>=0)
 		{
-			routeFilesBySpecies('staphylococcus');
+			routeFilesBySpecies('salmonella');
 		}
 		else
 		{
 			console.log('Species not found!'); 
-			readFileAndInclude('./../interface/views/404.html',404);
+			send404("Species not found or didn't exist");
 		}
+	}
+
+	//
+	// PROHIBED ACCESS
+	//
+
+	else if(prohibed.indexOf(urlPath)>=0)
+	{
+		send403(); // access denied
 	}
 
 	//////																	 	 //////							 									
 	///////////////// NAS FILES : auto-routing for existing paths /////////////////////
 	//////																	    ///////	
 
-	//Works only for NAS files or when url request == file path
+	// !!! ---> This method works only for NAS files or when url request == file path <--- !!!
 
 	else
 	{ 
 		console.log(`${req.method} ${req.url}`);
-		// add a "." before urlPath in order to use it inside fs.exists()
+		// add a '.' before urlPath in order to use it inside fs.exists()
 		let pathname = `.${urlPath}`;
 		// maps file extention to MIME types
 		fs.exists(pathname, function (exist) 
 		{
 			if(!exist) // send 404 page if path doesn't exist
 			{
-			console.log(`File ${pathname} not found!`);
-			readFileAndInclude('./../interface/views/404.html',404);
+			send404(`File ${pathname} not found!`);
 			}
 			else // read file from file system path
 			{
 				fs.readFile(pathname, function(err, data)
 				{
-					if(err) // this isnt a file or file corrupted or [...]
+					if(err) // if this file/path EXISTS cant be reached for any reason
 					{
-						readFileAndInclude('./../interface/views/500.html',500);
-						console.log(`Error getting the file: ${err}.`);
+						send500(`Error getting the file: ${err}.`);
 					} 
 					else
 					{
@@ -421,4 +491,4 @@ console.log('Server running at http://' + listenIp + ':' + listenPort);
 //debug
 blabla=model.direBonjour(); // model import test
 bye=model.direByeBye();
-console.log(blabla + " et " + bye);
+console.log(blabla + ' et ' + bye);
