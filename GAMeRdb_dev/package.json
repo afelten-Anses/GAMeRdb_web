@@ -21,6 +21,7 @@
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "http-server": "^0.11.1",
+    "mongojs": "^2.5.0",
     "query-string": "^5.1.0",
     "templatesjs": "^2.0.0",
     "validator": "^9.4.0"
