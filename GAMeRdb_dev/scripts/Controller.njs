@@ -2,6 +2,27 @@
 // -Goal : Controller script (MVC Scheme)
 // -External depencies : templatesjs,validator
 
+/*A FAIRE AVANT LA MISE EN PRODUCTION :
+	-En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache' (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
+	-COMMENTER Tout ce qui est commenté 'debug trace' et rennomer debug trace par 'trace'
+	-Ecouter sur le port 80 + mettre en place reverse proxy (avec compression de reponses http) : 	https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+																									https://eladnava.com/binding-nodejs-port-80-using-nginx/
+																									--> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
+																									ajouter des filtres,module
+																									compression du contenu
+
+	-Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+	-ReVerifier 100% async, callbacks pour toutes les fonctions
+	-Crypter mot de passe GAMeRdb
+
+*/
+
+/*Rappels :
+	-Includes front-end automatisé avec readFileAndInclude()
+	-Includes back-end avec res.render('flag','texte_a_inclure') pour include vite fait les retours du modele (mettre au format directement dans le modele!)
+*/
+
+
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 												*******	CONTROLLER init : modules, MVC scripts, args *******
 */////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -9,7 +30,7 @@
 // NodeJS modules
 const http = require('http'); //httpserver
 // more sockets per host  (default = 5) ==> increase performance. decrease if case of excessive ressources draining
-var agent = new http.Agent({
+const agent = new http.Agent({
    maxSockets: 25
 });
 const fs = require('fs'); //filesystem (file parser)
@@ -64,26 +85,6 @@ const prohibed = [
   	'/Model.njs',
   	'/Views.njs'
   	];
-
-
-/*A FAIRE AVANT LA MISE EN PRODUCTION :
-	-En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache' (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
-	-COMMENTER Tout ce qui est commenté 'debug trace' et rennomer debug trace par 'trace'
-	-Ecouter sur le port 80 + mettre en place reverse proxy (avec compression de reponses http) : 	https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
-																									https://eladnava.com/binding-nodejs-port-80-using-nginx/
-																									--> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
-																									ajouter des filtres,module
-																									compression du contenu
-
-	-Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
-	-ReVerifier 100% async
-
-*/
-
-/*Rappels :
-	-Includes front-end automatisé avec readFileAndInclude()
-	-Includes back-end avec res.render('flag','texte_a_inclure') pour include vite fait les retours du modele (mettre au format directement dans le modele!)
-*/
 
 
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
