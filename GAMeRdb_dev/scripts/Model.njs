@@ -13,41 +13,45 @@ const mongojs = require('mongojs') // MongoDB driver
 const db = mongojs('mongodb://127.0.0.1:27017/GAMeRdb',['GENOME'])
 //var db = mongojs('Kindle:Amazon@localhost/GAMeRdb',['GENOME'])// Connecting to MongoDB with mongoJS
 
-function findAttribute(attribute,species) // Parse GAMeRdb data by species
+function findAttribute(attribute,value,successCallback) // Parse GAMeRdb data filtered by attribute=value and return only the macthing attribute
 {
-	console.log(`${attribute} for  ${species}`) //dev trace
+	console.log(`${attribute} for  ${value}`) //dev trace
 
-	db.GENOME.find({[attribute]: species},function (err, docs) // <=> var query={} ; query[attribute] = species;
+	db.GENOME.find({[attribute]: value},function (err, docs) // <=> var query={} ; query[attribute] = value;
 	{
 		// docs is an array of all the documents in a collection
 		docs.forEach(
 			function(doc) 
 			{
-			// attributes is an array in order to convert the "attribute arg" from string to a MongoJS request ( arg -->  doc.arg) 
-	        let attributes = 
-	        {
-	        	'_id':doc._id, 														// MongoDB object ID
-	        	'SampleID':doc.SampleID, 											// Anses Sample ID
-	        	'Project':doc.Project, 												// Anses Project name
-		    	'Report': doc.Report, 												// ARTwork text report
-		    	'Reads.FASTQC_pair2':doc.Reads.FASTQC_pair2,						// FastQC html report (reverse reads)
-		    	'Reads.FASTQC_pair1':doc.Reads.FASTQC_pair1,						// FastQC html report (forward reads)
-		    	'Reads.Technology':doc.Reads.Technology,							// Sequencing technology used
-		    	'Reads.Center':doc.Reads.Center,									// Sequencing center name
-		    	'Reads.VCF':doc.Reads.VCF,											// iVARCall2 --noVCF gVCF file path
-		    	'Reads.NbReads':doc.Reads.NbReads,									// Number of reads per paired file estimated by Bbmap in FASTQ_pair 2 and 1  
-		    	'Reads.ReadsLength':doc.Reads.ReadsLength,							// Reads lenght parsed from FASTQC report by ARTwork
-		    	'Reads.FASTQ_pair2':doc.Reads.FASTQ_pair2,							// Normalised reverse reads filepath
-		    	'Reads.FASTQ_pair1':doc.Reads.FASTQ_pair1,							// Normalised forward reads filepath
-		    	'Reads.Phylogeny.Serovar':doc.Reads.Phylogeny.Serovar				// Serovar infered my in-silico MLST
-		    	'Reads.Phylogeny.SequenceType':doc.Reads.Phylogeny.SequenceType		// SequenceType infered after in-silico MLST
-		    	'Reads.Phylogeny.Genus':doc.Reads.Phylogeny.Genus					// Genus retrieved in ARTwork launching parameters
-		    	'Reads.Phylogeny.Species':doc.Phylogeny.Species 					// Species
-
-
-		    	'Phylogeny.Serovar':doc.Phylogeny.Serovar
-	  		};
-	           console.log(attributes[attribute]);
+				// attributes is an array in order to convert the "attribute arg" from string to a MongoJS request ( arg -->  doc.arg) 
+		        let attributes = 
+		        {
+		        	'_id':doc._id, 														// MongoDB object ID
+		        	'SampleID':doc.SampleID, 											// Anses Sample ID
+		        	'Project':doc.Project, 												// Anses Project name
+			    	'Report': doc.Report, 
+			    	'Center':doc.Reads.Center,												// ARTwork text report
+			    	'Reads.FASTQC_pair2':doc.Reads.FASTQC_pair2,						// FastQC html report (reverse reads)
+			    	'Reads.FASTQC_pair1':doc.Reads.FASTQC_pair1,						// FastQC html report (forward reads)
+			    	'Reads.Technology':doc.Reads.Technology,							// Sequencing technology used
+			    	'Reads.Center':doc.Reads.Center,									// Sequencing center name
+			    	'Reads.VCF':doc.Reads.VCF,											// iVARCall2 --noVCF gVCF file path
+			    	'Reads.NbReads':doc.Reads.NbReads,									// Number of reads per paired file estimated by Bbmap in FASTQ_pair 2 and 1  
+			    	'Reads.ReadsLength':doc.Reads.ReadsLength,							// Reads lenght parsed from FASTQC report by ARTwork
+			    	'Reads.FASTQ_pair2':doc.Reads.FASTQ_pair2,							// Normalised reverse reads filepath
+			    	'Reads.FASTQ_pair1':doc.Reads.FASTQ_pair1,							// Normalised forward reads filepath
+			    	'Phylogeny.Serovar':doc.Phylogeny.Serovar,				// Serovar infered my in-silico MLST
+			    	'Phylogeny.SequenceType':doc.Phylogeny.SequenceType,		// SequenceType infered after in-silico MLST
+			    	'Phylogeny.Genus':doc.Phylogeny.Genus,					// Genus retrieved in ARTwork launching parameters
+			    	'Phylogeny.Species':doc.Phylogeny.Species, 					// Species
+			    	'Genome.Contigs':doc.Genome.Contigs,
+			    	'Genome.GFF':doc.Genome.GFF,
+			    	'Genome.Assembly':doc.Genome.Assembly,
+			    	'Genome.GBK':doc.Genome.GBK,
+			    	'Genome.QUAST':doc.Genome.QUAST,
+			    	'Genome.Supplier':doc.Genome.Supplier
+		  		};
+		  		successCallback(attributes[attribute]); // Return the matching attributes as string
 	        },
 	        function(err) 
 	        {
@@ -58,15 +62,26 @@ function findAttribute(attribute,species) // Parse GAMeRdb data by species
 	})
 }
 
-
-function searchAttributeBySpecies(attribute,species) // use findAttribute() in order to retrieve attribute by species
+function filterByAttribute(attribute,value,successCallback) // Parse GAMeRdb data filtered by attribute=value and return all the matching JSON
 {
-	db.GENOME.find({attribute:species},function (err, docs) { // docs is an array of all the documents in mycollection
-	findAttribute(docs,'Phylogeny.Serovar');
-})
+	//console.log(`${attribute} for  ${value}`) //dev trace
+	db.GENOME.find({[attribute]: value},function (err, docs) 
+	{
+		if(err)
+		{
+			console.log("err")
+			return db.close(); //close DB CONNEXION
+		}
+		else
+		{
+	    	successCallback(docs); // return results in callback
+		}	
+	})
 }
 
-findAttribute("Phylogeny.Serovar","Typhimurium"); 
+
+// findAttribute("Phylogeny.Serovar","Typhimurium"); 
+// filterByAttribute("Phylogeny.Serovar","Typhimurium"); 
 
 var direBonjour = function() {
     console.log('Bonjour !');
@@ -78,5 +93,18 @@ exports.direByeBye = function() {
     return "See u"
 }
 
+var direBonjour2 = function(truc) {
+    console.log("log :" +truc);
+    var newtruc="truc" +truc
+    return newtruc;
+}
+
 //Export functions 
 exports.direBonjour = direBonjour;
+exports.direBonjour2 = direBonjour2;
+exports.filterByAttribute = filterByAttribute;
+exports.findAttribute = findAttribute;
+
+// filterByAttribute("Phylogeny.Serovar","Typhimurium", function(result){
+// 	console.log(result)
+// })

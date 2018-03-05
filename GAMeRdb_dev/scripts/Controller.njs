@@ -187,6 +187,57 @@ var server = http.createServer(function(req, res)
 		});
 	}
 
+	// Read server files and send it to client WITH Templatejs VIEW PROECESSING : includes headers and foooter AND MongoDB retrieved variables
+	function readFileAndIncludeAndRender(templateFilePath,msg,MongoAttribute,MongoValue)
+	{
+		console.log('readFileAndIncludeAndRender'); //debug trace
+		fs.readFile(templateFilePath, function (errors, contents) 
+		{
+			if(errors)
+			{
+			  	console.log(errors);
+			  	send500(`Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+			  	throw errors;
+		    }
+		    else
+		    {
+		    	
+		    	model.filterByAttribute(MongoAttribute,MongoValue, function(result)
+		    	{
+		    		template.set(contents, function(errors,contents) // templatesJS
+		    		{
+						if(errors)
+					    {
+					    	throw errors;
+					    }
+					    else
+					    {
+							var JSONstring = result //callback demo Arnaud
+							var list = {
+								datatablesJSON : JSON.stringify(JSONstring),
+								test : "youpi"
+							}
+							console.log(JSONstring)
+							template.renderAll(list, function(err,contents)
+			    			{
+			                	if(err) 
+			                	{
+			                		throw err;
+			                	}
+			                	else
+			                	{
+			                		res.writeHead(msg,{'Content-Type': 'text/html','Cache-Control': 'no-cache'});
+									res.end(contents);
+			                	}
+			     			})
+		     			}
+					})
+		     	});
+		    }
+		});
+	}
+
+
 	// Pseudo dynamic routing for page by species
 	function routeFilesBySpecies(species)
 	{
@@ -201,7 +252,8 @@ var server = http.createServer(function(req, res)
 		}
 		else if(urlPath === `/species/${species}/genomes.html`) // genomes page
 		{
-			readFileAndInclude(`./../interface/views/species/${species}/genomes.html`,200);
+			readFileAndIncludeAndRender(`./../interface/views/species/${species}/genomes.html`,200,"Phylogeny.Genus","Salmonella");
+			// readFileAndInclude(`./../interface/views/species/${species}/genomes.html`,200);
 		}
 		else if(urlPath === `/species/${species}/naura.html`) // Naura tool page
 		{
