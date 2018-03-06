@@ -212,13 +212,12 @@ var server = http.createServer(function(req, res)
 					    }
 					    else
 					    {
-							var JSONstring = result //callback demo Arnaud
-							var list = 
+							var JSONstring = result // from model SucessCallback
+							var list = // list of variables that needed to be rendered dynamically
 							{
 								datatablesJSON : JSON.stringify(JSONstring),
-								test : "youpi"
 							}
-							console.log(JSONstring)
+							//console.log(JSONstring) //dev
 							template.renderAll(list, function(err,contents)
 			    			{
 			                	if(err) 
@@ -588,7 +587,3 @@ var server = http.createServer(function(req, res)
 
 server.listen(listenPort,listenIp);
 console.log('Server running at http://' + listenIp + ':' + listenPort);
-//debug
-blabla=model.direBonjour(); // model import test
-bye=model.direByeBye();
-console.log(blabla + ' et ' + bye);

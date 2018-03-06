@@ -79,32 +79,6 @@ function filterByAttribute(attribute,value,successCallback) // Parse GAMeRdb dat
 	})
 }
 
-
-// findAttribute("Phylogeny.Serovar","Typhimurium"); 
-// filterByAttribute("Phylogeny.Serovar","Typhimurium"); 
-
-var direBonjour = function() {
-    console.log('Bonjour !');
-    return "Yo";
-}
-
-exports.direByeBye = function() {
-    console.log('Bye bye !');
-    return "See u"
-}
-
-var direBonjour2 = function(truc) {
-    console.log("log :" +truc);
-    var newtruc="truc" +truc
-    return newtruc;
-}
-
 //Export functions 
-exports.direBonjour = direBonjour;
-exports.direBonjour2 = direBonjour2;
 exports.filterByAttribute = filterByAttribute;
 exports.findAttribute = findAttribute;
-
-// filterByAttribute("Phylogeny.Serovar","Typhimurium", function(result){
-// 	console.log(result)
-// })
