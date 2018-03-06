@@ -10,7 +10,8 @@
 
 // NodeJS modules
 const mongojs = require('mongojs') // MongoDB driver
-const db = mongojs('mongodb://127.0.0.1:27017/GAMeRdb',['GENOME'])
+// const db = mongojs('mongodb://127.0.0.1:27017/GAMeRdb',['GENOME'])
+const db = mongojs('Kindle:Amazon@localhost/GAMeRdb',['GENOME'])
 //var db = mongojs('Kindle:Amazon@localhost/GAMeRdb',['GENOME'])// Connecting to MongoDB with mongoJS
 
 function findAttribute(attribute,value,successCallback) // Parse GAMeRdb data filtered by attribute=value and return only the macthing attribute
