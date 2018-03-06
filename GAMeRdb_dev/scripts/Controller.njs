@@ -272,6 +272,33 @@ var server = http.createServer(function(req, res)
 		{
 			readFileAndInclude(`./../interface/views/species/${species}/refs.html`,200);
 		}
+		else if(urlPath.indexOf(`/species/${species}/DATA`) != -1) // References page
+		{
+			var trim=`/species/${species}`
+			urlPathTrimmed=urlPath.replace(trim,"") // relative path from Controller script
+
+			fs.exists(`.${urlPathTrimmed}`, function (exist) 
+			{
+				if(!exist) // send 404 page if path doesn't exist
+				{
+					send404(`routeFilesBySpecies()  : File ${urlPathTrimmed} not found!`);
+				}
+				else // read file from file system path
+				{
+					fs.readFile(`.${urlPathTrimmed}`, function(err, data)
+					{
+						if(err) // if this file/path EXISTS cant be reached for any reason
+						{
+							send500(`routeFilesBySpecies() : Error getting the file: ${err}.`);
+						}	 
+						else
+						{
+							readServerFileAutoMime(`.${urlPathTrimmed}`,200);
+						}
+					});
+				}
+			});	
+		}
 		else
 		{
 			send404(`routeFilesBySpecies() : File file not found for ${species}`);
@@ -527,23 +554,15 @@ var server = http.createServer(function(req, res)
 		console.log(`${req.method} ${req.url}`);
 		// add a '.' before urlPath in order to use it inside fs.exists()
 		let pathname = `.${urlPath}`;
+		let SpeciesPathname = `./../../${urlPath}`;
+		console.log("SpeciesPathname : " + SpeciesPathname)
+		console.log("pathname :" + pathname)
 		// maps file extention to MIME types
 		fs.exists(pathname, function (exist) 
 		{
 			if(!exist) // send 404 page if path doesn't exist
 			{
 				send404(`File ${pathname} not found!`);
-				fs.readFile(pathname, function(err, data)
-				{
-					if(err) // if this file/path EXISTS cant be reached for any reason
-					{
-						send500(`Error getting the file: ${err}.`);
-					} 
-					else
-					{
-						readServerFileAutoMime(pathname,200);
-					}
-				});
 			}
 			else // read file from file system path
 			{
