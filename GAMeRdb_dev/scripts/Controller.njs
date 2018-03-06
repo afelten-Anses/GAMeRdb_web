@@ -213,7 +213,8 @@ var server = http.createServer(function(req, res)
 					    else
 					    {
 							var JSONstring = result //callback demo Arnaud
-							var list = {
+							var list = 
+							{
 								datatablesJSON : JSON.stringify(JSONstring),
 								test : "youpi"
 							}
