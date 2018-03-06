@@ -5,19 +5,12 @@
     // Turn on tab effect
     $('.menu .item').tab(); 
     // Turn on closable message boxes and "fade" closing transition
-    $('.message .close')
-    .on('click', function() 
+    $('.message .close').on('click', function() 
     {
         $(this)
         .closest('.message')
         .transition('fade')
-        ;
-    })
-    var filesList=new Array(); //FORM 1 : Nom des fichiers
-    $('.ui.dropdown').dropdown(); // activer dropdown effect
-    $('.ui.accordion').accordion(); // activer accordion effect
-    $('.menu .item').tab(); // activer tab effect
-    //activer modal effect au clic
+    });
     $("#helpme").click(function()
     {
         $('.longer.modal').modal('show');
@@ -35,7 +28,7 @@
         .transition('fade')
     });
 
-//DataTables initialisation
+//DataTables initialisation and behavior settings
 
 $(document).ready(function() {
                     
