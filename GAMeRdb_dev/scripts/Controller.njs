@@ -532,7 +532,18 @@ var server = http.createServer(function(req, res)
 		{
 			if(!exist) // send 404 page if path doesn't exist
 			{
-			send404(`File ${pathname} not found!`);
+				send404(`File ${pathname} not found!`);
+				fs.readFile(pathname, function(err, data)
+				{
+					if(err) // if this file/path EXISTS cant be reached for any reason
+					{
+						send500(`Error getting the file: ${err}.`);
+					} 
+					else
+					{
+						readServerFileAutoMime(pathname,200);
+					}
+				});
 			}
 			else // read file from file system path
 			{
