@@ -60,19 +60,19 @@ $(document).ready(function() {
             {
                 orderable: false,
                 "targets": 3,
-                "data": "download_link",
+                "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" download>R1</a>';
+                    return '<a href="'+data+'">R1</a>';
                 }
             },
             {
     	       orderable: false,
                 "targets":4,
-                "data": "download_link",
+                "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" download>R2</a>';
+                    return '<a href="'+data+'">R2</a>';
                 }
             },
             {
@@ -81,7 +81,7 @@ $(document).ready(function() {
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'">R1</a>';
+                    return '<a href="'+data+' download">R1</a>';
                 }
             },
             {
@@ -90,7 +90,7 @@ $(document).ready(function() {
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
                 {
-                    return '<a href="'+data+'">R2</a>';
+                    return '<a href="'+data+' download">R2</a>';
                 }
             },
             {
@@ -105,25 +105,25 @@ $(document).ready(function() {
             {
                 orderable: false,
                 "targets":8,
-                "data": "download_link",
+                "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" download>Fasta</a>';
+                    return '<a href="'+data+'" >Fasta</a>';
                 }
             },
             {
                 orderable: false,
                 "targets":9,
-                "data": "download_link",
+                "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" download>Fasta</a>';
+                    return '<a href="'+data+'">Fasta</a>';
                 }
             },
             {
                 orderable: false,
                 "targets":10,
-                "data": "download_link",
+                "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
                     return '<a href="'+data+'">Quast</a>';
@@ -132,7 +132,7 @@ $(document).ready(function() {
             {
                 orderable: false,
                 "targets":11,
-                "data": "download_link",
+                "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
                     return '<a href="'+data+'">GFF</a>';
@@ -141,7 +141,7 @@ $(document).ready(function() {
             {
                 orderable: false,
                 "targets":12,
-                "data": "download_link",
+                "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
                     return '<a href="'+data+'">GBK</a>';
@@ -150,19 +150,19 @@ $(document).ready(function() {
             {
                 orderable: false,
                 "targets":13,
-                "data": "download_link",
+                "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'">text</a>';
+                    return '<a href="'+data+'">Txt</a>';
                 }
             },
             {
                 orderable: false,
                 "targets":14,
-                "data": "action_link",
+                "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'.html'+'">view</a>'; //important ==> format txt.html
+                    return '<a href="'+data+'.html'+'">View</a>'; //important ==> format txt.html
                 }
             }
         ],
@@ -171,6 +171,7 @@ $(document).ready(function() {
     	       style: 'os',
             },
         lengthChange: false,
+        colReorder: true,
         buttons: ['selectAll', 'copy', 'excel', 'pdf', 'colvis' , 'pageLength']
     });
 	table.buttons().container().appendTo( $('div.eight.column:eq(0)', table.table().container()));

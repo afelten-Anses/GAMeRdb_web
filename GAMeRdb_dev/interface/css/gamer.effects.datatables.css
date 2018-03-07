@@ -18,3 +18,7 @@ a.paginate_button.item.active,div.paginate_button.item.previous.disabled{
 div.paginate_button.item.previous.disabled,div.paginate_button.item.next.disabled{
     color: darkgrey !important;
 }
+/* datatable selected rows color */
+table.dataTable tbody tr.selected {
+    color: #36BDB2 !important;
+    background-color: #EEEEEE !important; /* optional : rgba(44,62,80,0.9)*/
