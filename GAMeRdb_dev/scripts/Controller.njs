@@ -158,7 +158,7 @@ var server = http.createServer(function(req, res)
 		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
 	}
 
-	// Read server files and send it to client WITH Templatejs VIEW PROECESSING : includes headers and foooter
+	// Routing and "includes" processing (php includes like)
 	function readFileAndInclude(templateFilePath,msg)
 	{
 		fs.readFile(templateFilePath, function (errors, contents) 
@@ -187,8 +187,31 @@ var server = http.createServer(function(req, res)
 		});
 	}
 
-	// Read server files and send it to client WITH Templatejs VIEW PROECESSING : includes headers and foooter AND MongoDB retrieved variables
-	function readFileAndIncludeAndRender(templateFilePath,msg,MongoAttribute,MongoValue)
+	// Same role as readFileAndInclude, plus procssing views from MongoDB data by using Views.js requesting Model.njs scripts
+	function readFileAndIncludeAndRender(templateFilePath,msg,MongoAttribute,MongoValue,species)
+	{
+		console.log('readFileAndIncludeAndRender'); //debug trace
+		fs.readFile(templateFilePath, function (errors, contents) 
+		{
+			if(errors)
+			{
+			  	console.log(errors);
+			  	send500(`Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+			  	throw errors;
+		    }
+		    else
+		    {
+		    	
+		    	views.renderDataTables(species,contents,res,template,msg)
+		    }
+		});
+	}
+
+
+
+
+	// Same function as readFileAndIncludeAndRender but render directly in Controller.njs script (instead of render inside Views.njs script)
+	function readFileAndIncludeAndRenderHere(templateFilePath,msg,MongoAttribute,MongoValue)
 	{
 		console.log('readFileAndIncludeAndRender'); //debug trace
 		fs.readFile(templateFilePath, function (errors, contents) 
@@ -238,7 +261,7 @@ var server = http.createServer(function(req, res)
 	}
 
 
-	// Pseudo dynamic routing for page by species
+	// Dynamic routing for species specific pages
 	function routeFilesBySpecies(species)
 	{
 		console.log('routeFilesBySpecies'); //debug trace
@@ -252,8 +275,7 @@ var server = http.createServer(function(req, res)
 		}
 		else if(urlPath === `/species/${species}/genomes.html`) // genomes page
 		{
-			readFileAndIncludeAndRender(`./../interface/views/species/${species}/genomes.html`,200,"Phylogeny.Genus","Salmonella");
-			// readFileAndInclude(`./../interface/views/species/${species}/genomes.html`,200);
+			readFileAndIncludeAndRender(`./../interface/views/species/${species}/genomes.html`,200,"Phylogeny.Genus",species.capitalize(),species.capitalize()); // Genus = species.capitalize()
 		}
 		else if(urlPath === `/species/${species}/naura.html`) // Naura tool page
 		{
@@ -302,6 +324,11 @@ var server = http.createServer(function(req, res)
 		{
 			send404(`routeFilesBySpecies() : File file not found for ${species}`);
 		}
+	}
+
+	String.prototype.capitalize = function() // capitalize first letter (needed in routeFilesBySpecies())
+	{
+    	return this.charAt(0).toUpperCase() + this.slice(1);
 	}
 
 	function send404(message) // file not found
@@ -443,6 +470,10 @@ var server = http.createServer(function(req, res)
 	else if (urlPath === '/js/buttons.colVis.min.js')
 	{
 		readServerFile('./../interface/js/buttons.colVis.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/dataTables.colReorder.min.js')
+	{
+		readServerFile('./../interface/js/dataTables.colReorder.min.js','application/javascript',200);
 	}
 
 	//

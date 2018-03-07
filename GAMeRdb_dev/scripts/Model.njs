@@ -17,7 +17,7 @@ function findAttribute(attribute,value,successCallback) // Parse GAMeRdb data fi
 {
 	console.log(`${attribute} for  ${value}`) //dev trace
 
-	db.GENOME.find({[attribute]: value},function (err, docs) // <=> var query={} ; query[attribute] = value;
+	db.GENOME.find({[attribute]: value},function (err,  docs) // <=> var query={} ; query[attribute] = value;
 	{
 		// docs is an array of all the documents in a collection
 		docs.forEach(
@@ -74,7 +74,7 @@ function filterByAttribute(attribute,value,successCallback) // Parse GAMeRdb dat
 		}
 		else
 		{
-	    	successCallback(docs); // return results in callback
+	    	successCallback(docs); // return JSON results in callback
 		}	
 	})
 }
