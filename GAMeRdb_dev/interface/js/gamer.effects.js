@@ -30,12 +30,9 @@
 
 //DataTables initialisation and behavior settings
 
-$(document).ready(function() {
-                    
-                    
+$(document).ready(function() { 
 	var table = $('#table_id').DataTable( 
     {
-        
         data: data,
         columns: 
         [   
@@ -57,10 +54,19 @@ $(document).ready(function() {
             { data: 'Report' , "title": "ARTwork HTML report"}
         ],
         columnDefs: 
-        [ 
+        [   
             {
+                "targets": 0,
                 orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<b>'+data+'</b>';
+                }
+            },
+            {
                 "targets": 4,
+                orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -68,8 +74,8 @@ $(document).ready(function() {
                 }
             },
             {
-    	       orderable: false,
                 "targets":5,
+                orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -77,8 +83,8 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":6,
+                orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -86,8 +92,8 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":7,
+                orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
                 {
@@ -95,8 +101,8 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":8,
+                orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -104,8 +110,9 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":9,
+                visible:false,
+                orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -113,8 +120,8 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":10,
+                orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -122,8 +129,8 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":11,
+                orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -131,8 +138,9 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":12,
+                visible:false,
+                orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -140,8 +148,8 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":13,
+                orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -149,8 +157,8 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":14,
+                orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -158,8 +166,9 @@ $(document).ready(function() {
                 }
             },
             {
-                orderable: false,
                 "targets":15,
+                visible:false,
+                orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -177,16 +186,31 @@ $(document).ready(function() {
             [ 10, 25, 50, -1 ],
             [ 'Show 10 rows', 'Show 25 rows', 'Show 50 rows', 'Show all rows' ]
         ],
-        buttons: ['selectAll',
-                  //copy button
-                  { extend: 'copy', text: 'Copy to clipboard'},
-                  //excel button
-                  { extend: 'excel', text: 'Excel'},
-                  //pdf button init and settings
-                  {extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL'},
-                  //column visibility button
-                  {extend:  'colvis' , text: 'Columns to hide'},
-                  'pageLength' ]      
+        buttons:[
+                    //Select all rows button
+                    'selectAll',
+                    //copy button : export only STRAIN ID
+                    { extend: 'copyHtml5', header : false ,text: 'Copy ids',title:'',exportOptions: {columns: 0, orthogonal: 'fullNotes'}},
+                    //excel button : export only colums set to visible
+                    { extend: 'excel', text: 'Excel', exportOptions: {columns: ':visible'}},
+                    //pdf button : export only colums set to visible, at a landscape format (useful in order to do not crop table)
+                    {extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL',exportOptions: {columns: ':visible'}},
+                    //column visibility button
+                    {extend:  'colvis' , text: 'Columns'},
+                    //Show x rows button
+                    'pageLength',
+                    //Download button
+                    {text: 'Donwload',action: function () 
+                        {
+                            var count = table.rows( { selected: true } ).count();
+                            var selectDownload = table.rows( { selected: true } )
+                            console.log(count)
+                            console.log(selectDownload)
+                        }
+                    }
+                ]   
     });
 	table.buttons().container().appendTo( $('div.eight.column:eq(0)', table.table().container()));
+    
+    
 });
