@@ -211,6 +211,4 @@ $(document).ready(function() {
                 ]   
     });
 	table.buttons().container().appendTo( $('div.eight.column:eq(0)', table.table().container()));
-    
-    
 });
