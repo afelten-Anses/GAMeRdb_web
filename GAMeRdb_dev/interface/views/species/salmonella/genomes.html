@@ -150,7 +150,7 @@
                 <!--RIGHT grid : DataTables -->
                 <div class="twelve wide column" id="centermenu">
                     <div class="column">
-                        <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text"><i>Salmonella </i>genomes </span></h1>
+                        <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text"><i>Salmonella </i>genomes </span></h1> 
                     </div>
                     <div class="ui divider"></div>
                     <div class="column">
@@ -171,6 +171,8 @@
         </div>
     </body>
     <script>
-        var data = <%datatablesJSON%> <!--from GAMeRdb JSON and species specific-->
+        <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
+        $('#table_id').append('<caption style="caption-side: bottom"><br/>For a global view files quality, please check the <a href="../../multiqc/Salmonella_multiqc_report.html"> MultiQC report</a></caption>');
+        var data = <%datatablesJSON%> 
     </script>
 </html>
