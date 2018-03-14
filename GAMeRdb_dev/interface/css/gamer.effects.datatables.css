@@ -22,3 +22,13 @@ div.paginate_button.item.previous.disabled,div.paginate_button.item.next.disable
 table.dataTable tbody tr.selected {
     color: #36BDB2 !important;
     background-color: #EEEEEE !important; /* optional : rgba(44,62,80,0.9)*/
+}
+/* MultiQC iframe pop-up */
+#multiQC {
+    width:90%;
+    height:90%;
+    display: block;
+    text-align: center;
+    margin-top: 2% !important;
+    margin-left: 5% !important;
+}
