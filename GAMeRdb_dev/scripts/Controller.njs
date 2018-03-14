@@ -577,7 +577,8 @@ var server = http.createServer(function(req, res)
 	///////////////// NAS FILES : auto-routing for existing paths /////////////////////
 	//////																	    ///////	
 
-	// !!! ---> This method works only for NAS files or when url request == file path <--- !!!
+	// !!! ---> This method works only for when url request == file path <--- !!!
+	// --------> To use files with this method please use symbolic links in the scripts folder
 	
 	else
 	{ 
