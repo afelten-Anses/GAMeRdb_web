@@ -17,6 +17,42 @@ const model = require('./Model.njs'); // use Model.js as a NodeJS module
 const views = require('./Views.njs'); // use Views.js as a NodeJS module
 
 // Render specific dataTables for each species
+// function renderDataTables(species,callback,response,template,msg) // callback : controller script callback, response,template,msg : values required from controller script
+// {
+// 	model.filterByAttribute("Phylogeny.Genus",species, function(result)
+// 	{
+// 		template.set(callback, function(errors,callback) // templatesJS
+// 		{
+// 			if(errors)
+// 			{
+// 				throw errors;
+// 			}
+// 			else
+// 			{
+// 				console.log("lolilol")
+// 				var JSONstring = result // from model SucessCallback
+// 				var list = // list of variables that needed to be rendered dynamically
+// 				{
+// 					datatablesJSON : JSON.stringify(JSONstring),
+// 					JSONlen : Object.keys(JSONstring).length
+// 				}
+// 				template.renderAll(list, function(err,callback)
+// 			    {
+// 			    	if(err) 
+// 			    	{
+// 			    		throw err;
+// 			    	}
+// 			    	else
+// 			    	{
+// 			    		response.writeHead(msg,{'Content-Type': 'text/html','Cache-Control': 'no-cache'});
+// 			    		response.end(callback);
+// 			    	}
+// 			    })
+// 			}
+// 		})
+// 	});
+// }
+
 function renderDataTables(species,callback,response,template,msg) // callback : controller script callback, response,template,msg : values required from controller script
 {
 	model.filterByAttribute("Phylogeny.Genus",species, function(result)
@@ -29,11 +65,11 @@ function renderDataTables(species,callback,response,template,msg) // callback : 
 			}
 			else
 			{
-				console.log("lolilol")
 				var JSONstring = result // from model SucessCallback
 				var list = // list of variables that needed to be rendered dynamically
 				{
-					datatablesJSON : JSON.stringify(JSONstring)
+					datatablesJSON : JSON.stringify(JSONstring),
+					JSONlen : Object.keys(JSONstring).length
 				}
 				//console.log(JSONstring) //dev
 				template.renderAll(list, function(err,callback)

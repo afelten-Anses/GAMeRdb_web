@@ -210,7 +210,7 @@ var server = http.createServer(function(req, res)
 
 
 
-	// Same function as readFileAndIncludeAndRender but render directly in Controller.njs script (instead of render inside Views.njs script)
+	// DEPRECATED !!! Same function as readFileAndIncludeAndRender but render directly in Controller.njs script (instead of render inside Views.njs script)
 	function readFileAndIncludeAndRenderHere(templateFilePath,msg,MongoAttribute,MongoValue)
 	{
 		console.log('readFileAndIncludeAndRender'); //debug trace
@@ -239,8 +239,8 @@ var server = http.createServer(function(req, res)
 							var list = // list of variables that needed to be rendered dynamically
 							{
 								datatablesJSON : JSON.stringify(JSONstring),
+								JSONlen : Object.keys(result).length
 							}
-							//console.log(JSONstring) //dev
 							template.renderAll(list, function(err,contents)
 			    			{
 			                	if(err) 
@@ -475,6 +475,23 @@ var server = http.createServer(function(req, res)
 	{
 		readServerFile('./../interface/js/dataTables.colReorder.min.js','application/javascript',200);
 	}
+	else if (urlPath === '/js/jszip.js')
+	{
+		readServerFile('./../interface/js/jszip.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/Blob.js')
+	{
+		readServerFile('./../interface/js/Blob.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/canvas-toBlob.js')
+	{
+		readServerFile('./../interface/js/canvas-toBlob.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/FileSaver.min.js')
+	{
+		readServerFile('./../interface/js/FileSaver.min.js','application/javascript',200);
+	}
+
 
 	//
 	// IMAGES
