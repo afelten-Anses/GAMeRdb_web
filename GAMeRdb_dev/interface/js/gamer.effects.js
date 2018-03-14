@@ -27,6 +27,12 @@
         .closest('.message')
         .transition('fade')
     });
+    // Preview MultiQC au clic
+    $("#multiqc").click(function()
+    {
+        $('#multiQC').modal('show');
+    });
+    
 
 //DataTables initialisation and behavior settings
 
@@ -202,10 +208,30 @@ $(document).ready(function() {
                     //Download button
                     {text: 'Donwload',action: function () 
                         {
-                            var count = table.rows( { selected: true } ).count();
-                            var selectDownload = table.rows( { selected: true } )
-                            console.log(count)
-                            console.log(selectDownload)
+                            var count = table.rows( { selected: true } ).count(); // number of selected rows
+                            var toDownload=[];
+                            var zip = new JSZip();
+                            // Add an top-level, arbitrary text file with contents
+                            zip.file("DATA/GAMeR_DB/SALMONELLA/02EB13849SAL/02EB13849SAL.gff", "Hello World");  
+                            // Generate a directory within the Zip file structure
+                            var allfiles = zip.folder("allfiles");
+                            for (var i=0 ; i<count ; i ++)
+                            {
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
+                                var dldata=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
+                                var promise = $.get(dldata);
+                                // Add a file to the directory, in this case an image with data URI as contents
+                                allfiles.file(dldata,promise,{base64: false});
+                                console.log(dldata)
+                                
+                            }
+                            // Generate the zip file asynchronously
+zip.generateAsync({type:"blob"})
+.then(function(blob) {
+    // Force down of the Zip file
+    saveAs(blob, "archive.zip");
+});
+                            console.log(toDownload)
                         }
                     }
                 ]   
