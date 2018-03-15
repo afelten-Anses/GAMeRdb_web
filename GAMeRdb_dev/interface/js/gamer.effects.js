@@ -63,7 +63,7 @@ $(document).ready(function() {
         [   
             {
                 "targets": 0,
-                orderable: false,
+                orderable: true,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -196,7 +196,7 @@ $(document).ready(function() {
                     //Select all rows button
                     'selectAll',
                     //copy button : export only STRAIN ID
-                    { extend: 'copyHtml5', header : false ,text: 'Copy ids',title:'',exportOptions: {columns: 0, orthogonal: 'fullNotes'}},
+                    { extend: 'copyHtml5', header : false , messageBottom:false,text: 'Copy ids',title:'',exportOptions: {columns: 0, orthogonal: 'fullNotes'}},
                     //excel button : export only colums set to visible
                     { extend: 'excel', text: 'Excel', exportOptions: {columns: ':visible'}},
                     //pdf button : export only colums set to visible, at a landscape format (useful in order to do not crop table)
@@ -208,30 +208,123 @@ $(document).ready(function() {
                     //Download button
                     {text: 'Donwload',action: function () 
                         {
+                            var currentDate = new Date(Date.now()).toLocaleString();
                             var count = table.rows( { selected: true } ).count(); // number of selected rows
                             var toDownload=[];
                             var zip = new JSZip();
                             // Add an top-level, arbitrary text file with contents
-                            zip.file("DATA/GAMeR_DB/SALMONELLA/02EB13849SAL/02EB13849SAL.gff", "Hello World");  
+                            //zip.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);  
                             // Generate a directory within the Zip file structure
-                            var allfiles = zip.folder("allfiles");
+                            var allfiles = zip.folder("Strains");
+                            allfiles.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);
                             for (var i=0 ; i<count ; i ++)
                             {
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
-                                var dldata=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                            }
+                            
+                            for (var i=0 ; i<count ; i ++)
+                            {
+                                /*function play_next(toDownload)
+                                {
+                                   var song = toDownload.shift(); // Removes the first song and stores it in song
+
+                                   $.get(song, function(ret_data)
+                                    {
+                                        alert('done');
+                                       allfiles.file(song,ret_data)
+                                      if(song.length) play_next(); // Call next song if more songs exist;
+                                    });
+                                }
+                                play_next(toDownload); // Start it off
+                                
+                                /*console.log(toDownload)*/               
+                            }
+                            
+                            for (var i=0 ; i<count ; i ++)
+                            {
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                var dldata=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs
                                 var promise = $.get(dldata);
+                                sleep(300)
                                 // Add a file to the directory, in this case an image with data URI as contents
                                 allfiles.file(dldata,promise,{base64: false});
-                                console.log(dldata)
-                                
+                                console.log(dldata)                
                             }
+                            function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+//                            for (var i=0 ; i<count ; i ++)
+//                            {
+//                                toDownload.push({
+//                                    name : table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1, 
+//                                    data : $.get(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
+//                                                  })
+//                                sleep(52)
+//                                /*console.log(toDownload)*/                
+//                            }
+//                           /* function addzipfile(todl,llfiles,sucessCallback)
+//                            {
+//                                for (var prop in todl) {
+//                                  if (todl.hasOwnProperty(prop)) { 
+//                                  // or if (Object.prototype.hasOwnProperty.call(obj,prop)) for safety...
+//                                      console.log(todl[prop])
+//                                      $.get(todl[prop]).then(function(content)
+//                                        {
+//                                          sucessCallback( llfiles.file(todl[prop],content))
+//                                      });
+//                                        //allfiles.file(toDownload[1],$.get(toDownload[1]),{binary: true});
+//                                      //allfiles.file(toDownload[y],$.get(toDownload[y]),{binary: true});
+//                                  }
+//                                    
+//                                }
+//                                
+//                                
+//                            }*/
+//                            
+//                       /$.each(toDownload,function(index,value)
+//                        {
+//                            $.get(value),function(data)
+//                            {
+//                                allfiles.file(toDownload[index],data)
+//                            }
+//                        })
+//                               
                             // Generate the zip file asynchronously
-zip.generateAsync({type:"blob"})
-.then(function(blob) {
-    // Force down of the Zip file
-    saveAs(blob, "archive.zip");
-});
-                            console.log(toDownload)
+                            console.log("generatesync")
+                            allfiles.generateAsync({
+                                type: "blob",
+                                compression: "DEFLATE",
+                                compressionOptions: {
+                                    level: 1
+                                }
+                            }).then(function(blob) {
+                                // Force down of the Zip file
+                                saveAs(blob, "Strains_data.zip");
+                            });
+                            
+//                            
+//                            function zipFiles(toDl) 
+//                            {
+//                                var zip = new JSZip();
+//                                var i=0;
+//                                deferreds = [];
+//                                toDl.forEach(function(image) {
+//                                    deferreds.push(zip.file(image.name, image.data, { binary: true }));
+//                                    i++;
+//                                });
+//                                $.when.apply($, deferreds).then(function() {
+//                                    zip.generateAsync({ type: "blob" }).then(function(content) {
+//                                        saveAs(content, 'Filename.zip'); //FileSaver.js
+//                                    });
+//                                });
+//                            }
+//                            zipFiles(toDownload)
+//                            
                         }
                     }
                 ]   

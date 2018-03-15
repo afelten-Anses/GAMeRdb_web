@@ -139,7 +139,7 @@
                 <div class="column" id="multiQC">
                     <div class="ui medium message">
                         <span class="ui medium header"> 
-                            MultiQC of the Salmonella</i> strains processed by ARTwork (updated weekly)
+                            MultiQC of the Salmonella</i> strains processed by ARTwork (updated monthly)
                             <br/>
                             Full page available <a href="../../multiqc/Salmonella_multiqc_report.html" target="_blank" rel="noopener noreferrer">here</a>
                         </span>    
@@ -201,7 +201,7 @@
     <script>
         <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
         /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Salmonella_multiqc_report.html"> MultiQC report</a></caption>');*/
-        $('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a> MultiQC report</a></caption>');
+        $('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="#"> MultiQC report</a></caption>');
         var data = <%datatablesJSON%>
     </script>
 </html>
