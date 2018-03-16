@@ -240,24 +240,40 @@ $(document).ready(function() {
                                 /*console.log(toDownload)*/               
                             }
                             
+                            
+                            var dldata=[]
+                            var promise=[]
                             for (var i=0 ; i<count ; i ++)
                             {
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
-                                var dldata=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs
-                                var promise = $.get(dldata);
-                                sleep(300)
+                                var fileTypeList=[
+                                'Reads.FASTQC_pair1',
+                                'Reads.FASTQC_pair2',
+                                'Reads.VCF',
+                                'Genome.Contigs',
+                                'Genome.Assembly',
+                                'Genome.QUAST',
+                                'Genome.GFF',
+                                'Genome.GBK',
+                                'Report']
+                                
+                                dldata[i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF
+                                //Force synchronous Download 
+                                promise[i] = $.get({url: dldata[i],
+                                                    async:false}
+                                                   );
+                                //sleep(300)
                                 // Add a file to the directory, in this case an image with data URI as contents
-                                allfiles.file(dldata,promise,{base64: false});
-                                console.log(dldata)                
+                                allfiles.file(dldata[i],promise[i]);
+                                console.log(dldata[i])                
                             }
-                            function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
-      break;
-    }
-  }
-}
+/*                            function sleep(milliseconds) {
+                              var start = new Date().getTime();
+                              for (var i = 0; i < 1e7; i++) {
+                                if ((new Date().getTime() - start) > milliseconds){
+                                  break;
+                                }
+                              }
+                            }*/
 //                            for (var i=0 ; i<count ; i ++)
 //                            {
 //                                toDownload.push({
