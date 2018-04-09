@@ -48,7 +48,8 @@ var listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
 var listenPort = process.argv[3] || 3000; //default listening port
 // Args
 const params = require('commander'); //arguments parser
-var sleep = require('sleep'); // sleep
+var sleep = require('sleep'); // sleep : dev tests
+var shell = require('shelljs'); // run bash scripts from NodeJS
 // Used for automatic type MIME attribution in readServerFileAutoMime()
 const mimeType = {
     '.ico': 'image/x-icon',
@@ -192,6 +193,7 @@ var server = http.createServer(function(req, res)
 	function readFileAndIncludeAndRender(templateFilePath,msg,MongoAttribute,MongoValue,species)
 	{
 		console.log('readFileAndIncludeAndRender'); //debug trace
+		//debud test
 		fs.readFile(templateFilePath, function (errors, contents) 
 		{
 			if(errors)
@@ -204,6 +206,8 @@ var server = http.createServer(function(req, res)
 		    {
 		    	// sleep.sleep(1)
 		    	views.renderDataTables(species,contents,res,template,msg)
+		    	unpackFiles("testtt")
+		    	
 		    }
 		});
 	}
@@ -350,6 +354,14 @@ var server = http.createServer(function(req, res)
 		readFileAndInclude('./../interface/views/500.html',500);
 	}
 
+	function unpackFiles(files){
+		var child = shell.exec("sh Unpack.sh "+files, {async:true});
+				child.stdout.on('data', function(data) {
+				  //console.log(data)
+				  console.log("test arg :"+files)
+				});
+	}
+
 	function processpost2(req, res) // put POST request in a JSON file
 	{
 		if (req.method == 'POST')
@@ -383,10 +395,6 @@ var server = http.createServer(function(req, res)
 	if (urlPath === '/semantic/dist/semantic.min.css')
 	{
 		readServerFile('./../semantic/dist/semantic.min.css','text/css',200);
-	}
-	else if (urlPath === '/DATA/GAMeR_DB/SALMONELLA/11CEB4447SAL/11CEB4447SAL.gff')
-	{
-		readServerFile('/media/NAS/DATA/GAMeR_DB/SALMONELLA/11CEB4447SAL/11CEB4447SAL.gff','text/plain',200);
 	}
 	else if (urlPath === '/semantic/dist/semantic.min.js')
 	{
