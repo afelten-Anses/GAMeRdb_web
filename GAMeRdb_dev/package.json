@@ -25,6 +25,8 @@
     "query-string": "^5.1.0",
     "templatesjs": "^2.0.0",
     "validator": "^9.4.0"
+  },
+  "devDependencies": {
+    "sleep": "^5.1.1"
   }
 }
- 
