@@ -48,6 +48,7 @@ var listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
 var listenPort = process.argv[3] || 3000; //default listening port
 // Args
 const params = require('commander'); //arguments parser
+var sleep = require('sleep'); // sleep
 // Used for automatic type MIME attribution in readServerFileAutoMime()
 const mimeType = {
     '.ico': 'image/x-icon',
@@ -201,7 +202,7 @@ var server = http.createServer(function(req, res)
 		    }
 		    else
 		    {
-		    	
+		    	// sleep.sleep(1)
 		    	views.renderDataTables(species,contents,res,template,msg)
 		    }
 		});
