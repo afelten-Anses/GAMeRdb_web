@@ -94,7 +94,7 @@ $(document).ready(function() {
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+' download">R1</a>';
+                    return '<a href="'+data+'" download>R1</a>';
                 }
             },
             {
@@ -103,7 +103,7 @@ $(document).ready(function() {
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
                 {
-                    return '<a href="'+data+' download">R2</a>';
+                    return '<a href="'+data+'" download>R2</a>';
                 }
             },
             {

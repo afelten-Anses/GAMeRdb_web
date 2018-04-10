@@ -215,8 +215,6 @@ var server = http.createServer(function(req, res)
 	}
 
 
-
-
 	// DEPRECATED !!! Same function as readFileAndIncludeAndRender but render directly in Controller.njs script (instead of render inside Views.njs script)
 	function readFileAndIncludeAndRenderHere(templateFilePath,msg,MongoAttribute,MongoValue)
 	{
@@ -362,8 +360,10 @@ var server = http.createServer(function(req, res)
 
 	function unpackFiles(uniqueId,filesList){
 		var child = shell.exec("sh ZipAndCall.sh "+ uniqueId + " " + filesList, {async:true});
-				child.stdout.on('data', function(data) {
-				  console.log("processing files listed in tmp/"+ filesList)
+				// Say something on when child process stdout is active
+				child.stdout.on('data', function(data) 
+				{
+				  console.log("processing files listed in tmp"+ filesList)
 				});
 	}
 
