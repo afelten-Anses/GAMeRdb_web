@@ -50,6 +50,7 @@ var listenPort = process.argv[3] || 3000; //default listening port
 const params = require('commander'); //arguments parser
 var sleep = require('sleep'); // sleep : dev tests
 var shell = require('shelljs'); // run bash scripts from NodeJS
+const crypto = require("crypto"); // used for generating uuids
 // Used for automatic type MIME attribution in readServerFileAutoMime()
 const mimeType = {
     '.ico': 'image/x-icon',
@@ -206,7 +207,8 @@ var server = http.createServer(function(req, res)
 		    {
 		    	// sleep.sleep(1)
 		    	views.renderDataTables(species,contents,res,template,msg)
-		    	unpackFiles("testtt")
+		    	uuid=crypto.randomBytes(16).toString("hex")
+		    	unpackFiles(uuid,"/mnt/20To-vol/tmp/nothere.txt") //nothere.txt devra être recu avec un uuid dans son filename
 		    	
 		    }
 		});
@@ -325,6 +327,10 @@ var server = http.createServer(function(req, res)
 				}
 			});	
 		}
+		else if(req.method == "POST")
+        {
+            console.log("received POST request.");
+        }
 		else
 		{
 			send404(`routeFilesBySpecies() : File file not found for ${species}`);
@@ -354,11 +360,10 @@ var server = http.createServer(function(req, res)
 		readFileAndInclude('./../interface/views/500.html',500);
 	}
 
-	function unpackFiles(files){
-		var child = shell.exec("sh Unpack.sh "+files, {async:true});
+	function unpackFiles(uniqueId,filesList){
+		var child = shell.exec("sh ZipAndCall.sh "+ uniqueId + " " + filesList, {async:true});
 				child.stdout.on('data', function(data) {
-				  //console.log(data)
-				  console.log("test arg :"+files)
+				  console.log("processing files listed in tmp/"+ filesList)
 				});
 	}
 
