@@ -177,20 +177,34 @@
                         </table>
                         
                     </div>
-                    <div class="column" id="helpme">
-                        <i class="circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>      
-                    </div>
                     <div class="ui divider">
                     </div>
                     <div class="column" id="dlcheckbox">
+                        <div class="field">
+                            <i class="cloud download icon" id="helpgrow"></i><span class="ui small header" id="texthover">Which files you want to donwload?</span>
+                        </div>
                         <div class="ui form">
                             <div class="inline multiple fields">
                                 <div class="field">
                                     <div class="ui slider checkbox">
                                         <input id="dlAll" type="checkbox">
-                                        <label>Select all</label>
+                                        <label>All</label>
                                     </div>
                                 </div>
+                                <div class="field">
+                                    <div class="ui slider checkbox">
+                                        <input id="dlAll" type="checkbox">
+                                        <label>All reports</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui slider checkbox">
+                                        <input id="dlAll" type="checkbox">
+                                        <label>All WGS data</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="inline multiple fields">
                                 <div class="field">
                                     <div class="ui radio checkbox">
                                         <input name="frequency" checked="checked" type="checkbox">
@@ -224,7 +238,7 @@
                                 <div class="field">
                                     <div class="ui radio checkbox">
                                         <input name="frequency" type="checkbox">
-                                        <label>Annotation(GFF/GBK)</label>
+                                        <label>Annotation (GFF/GBK)</label>
                                     </div>
                                 </div>
                                 <div class="field">
@@ -234,7 +248,18 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            <div class="field" id="dlbuttonfield">
+                                <button class="ui primary right aligned button" id="dlbutton">
+                                    Download
+                                </button>
+                            </div>
                         </div>
+                    </div>
+                    <div class="column" id="helpme">
+                        <center>
+                            <i class="circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
+                        </center>   
                     </div>
                 </div>
             </div>

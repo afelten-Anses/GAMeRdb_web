@@ -32,3 +32,13 @@ table.dataTable tbody tr.selected {
     margin-top: 2% !important;
     margin-left: 5% !important;
 }
+#dlbutton{
+    margin: 0 auto;
+    padding: 0 auto;
+    background-color:#2C3E50;
+}
+#dlbutton:hover{
+    margin: 0 auto;
+    padding: 0 auto;
+    color:#00FFFF;
+}
