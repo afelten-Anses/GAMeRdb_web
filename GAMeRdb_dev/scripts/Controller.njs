@@ -80,7 +80,8 @@ const mimeType = {
     '.tsv' : 'text/plain',
     '.woff2' : 'font/woff2',
     '.woff' : 'font/woff',
-    '.txt' : 'text/plain'
+    '.txt' : 'text/plain',
+    '.zip' : 'application/zip'
   };
 // Used in order to restrict access to these files
 const prohibed = [
@@ -207,8 +208,8 @@ var server = http.createServer(function(req, res)
 		    {
 		    	// sleep.sleep(1)
 		    	views.renderDataTables(species,contents,res,template,msg)
-		    	uuid=crypto.randomBytes(16).toString("hex")
-		    	unpackFiles(uuid,"/mnt/20To-vol/tmp/nothere.txt") //nothere.txt devra être recu avec un uuid dans son filename
+		    	//uuid=crypto.randomBytes(16).toString("hex")
+		    	//unpackFiles(uuid,"/mnt/20To-vol/tmp/nothere.txt") //nothere.txt devra être recu avec un uuid dans son filename
 		    	
 		    }
 		});
@@ -328,6 +329,61 @@ var server = http.createServer(function(req, res)
 		else if(req.method == "POST")
         {
             console.log("received POST request.");
+            var body = '';
+
+	        req.on('data', function (data) {
+	            body += data;
+	            console.log("req url:") // req.url contains uuidv4() from client-side
+	            console.log(req.url)
+	            // Too much POST data, kill the connection!
+	            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+	            if (body.length > 1e6)
+	            {
+	                req.connection.destroy();
+	            }
+	        });
+
+	        req.on('end', function () {
+	            var post = querystring.parse(body);
+	            // use post['blah'], etc.
+	            console.log("req content:")
+	            console.log(JSON.stringify(post))
+	            console.log("and")
+	            console.log(post.FASTQC_pair1_0)
+	            var clientuid=req.url.split('/').pop()
+	            shell.exec("mkdir -p /mnt/20To-vol/tmp/"+clientuid, {async:false}) // async=false --> do it here
+	            console.log("uuuid : "+clientuid)
+	            // create tmp file stream
+	            var stream = fs.createWriteStream("/mnt/20To-vol/tmp/"+clientuid+"/filestozip_"+clientuid+".txt");	// req.url = client uuid
+	            var zipfilesList = "/mnt/20To-vol/tmp/"+clientuid+"/filestozip_"+clientuid+".txt"
+	            var zipOutput = "/mnt/20To-vol/tmp/"+clientuid+"/wgsdata_"+clientuid+".zip"
+	            var zipOutputPathToSend = "tmp/"+clientuid+"/wgsdata_"+clientuid+".zip"
+	            //var zipOutputToRead = "./tmp/"+clientuid+"/wgsdata_"+clientuid+".zip"	
+	            //iterate over JSON structure
+	            console.log("and also")
+	            stream.once('open', function(fd) {
+		            for (i in post)
+					{
+					  console.log(post[i]+"__n: "+i);
+					  stream.write(post[i]+"\n")
+					}
+				});
+				//stream.end();
+				var child = shell.exec("sh ZipAndCall.sh "+ clientuid + " " + zipfilesList, {async:true}); // async=true --> do it when callback
+				// Serve files when child process ended
+				child.stdout.on('end', function(data) 
+				{
+				  console.log("unpackfinished, now serving files...")
+				  //readServerFile(zipOutputToRead,'application/octet-stream/',200)
+
+				  // fs.readFile(zipOutputToSend, function (err,data){
+             		res.writeHead(200,{'Content-Type': 'text/plain' ,'Cache-Control': 'no-cache'}); // type MIME or application/octet-stream if unknown extension
+			  	 	res.end(zipOutputPathToSend);
+			  	 	console.log("sended: "+zipOutputPathToSend)
+      //   			});
+				});
+				
+	        });
         }
 		else
 		{

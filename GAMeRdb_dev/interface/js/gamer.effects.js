@@ -33,7 +33,13 @@
         $('#multiQC').modal('show');
     });
     
-
+//Generate uuids
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
 //DataTables initialisation and behavior settings
 
 $(document).ready(function() { 
@@ -192,23 +198,105 @@ $(document).ready(function() {
             [ 10, 25, 50, -1 ],
             [ 'Show 10 rows', 'Show 25 rows', 'Show 50 rows', 'Show all rows' ]
         ],
+        language: {
+            search: 'Search: <span class="ui input">_INPUT_</span>'
+            },
         buttons:[
                     //Select all rows button
                     'selectAll',
                     //copy button : export only STRAIN ID
-                    { extend: 'copyHtml5', header : false , messageBottom:false,text: 'Copy ids',title:'',exportOptions: {columns: 0, orthogonal: 'fullNotes'}},
+                    { 
+                        extend: 'copyHtml5', header : false , messageBottom:false,text: 'Copy ids',title:'',exportOptions: {columns: 0, orthogonal: 'fullNotes'}
+                    },
                     //excel button : export only colums set to visible
-                    { extend: 'excel', text: 'Excel', exportOptions: {columns: ':visible'}},
+                    { 
+                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: ':visible'}
+                    },
                     //pdf button : export only colums set to visible, at a landscape format (useful in order to do not crop table)
-                    {extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL',exportOptions: {columns: ':visible'}},
+                    {
+                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: ':visible'}
+                    },
                     //column visibility button
-                    {extend:  'colvis' , text: 'Columns'},
+                    {
+                        extend:  'colvis' , text: 'Columns'
+                    },
                     //Show x rows button
                     'pageLength',
-                    //Download button
-                    {text: 'Donwload',action: function () 
+                    {
+                        text: 'Download',action: function () 
                         {
+                            //SERVER SIDE zip and download
                             var currentDate = new Date(Date.now()).toLocaleString();
+                            var count = table.rows( { selected: true } ).count(); // number of selected rows
+                            var toDownload={};
+                            for (var i=0 ; i<count ; i ++)
+                            {
+                                toDownload["FASTQC_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair1
+                                toDownload["FASTQC_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2
+                                toDownload["FASTQ_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
+                                toDownload["FASTQC_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2
+                                toDownload["VCF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF
+                                toDownload["Contigs_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs
+                                toDownload["Assembly_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly
+                                toDownload["QUAST_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST
+                                toDownload["GFF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF
+                                toDownload["GBK_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK
+                                toDownload["Report_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Report
+                                /*toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair1)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Report)*/
+     /*                           toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Report)*/
+                                /*toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair1)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Report)*/
+                                
+                            }
+                            console.log("get : \n"+JSON.stringify(toDownload))
+                            $.ajax({
+                                url: document.URL+"/"+uuidv4(), 
+                                type: 'POST', 
+                                contentType: 'application/json', 
+                                data:toDownload,
+                                success: function(msg){
+                                console.log('form submitted. Response payload: '+ msg);
+                                window.open('../../'+msg);
+                                console.log('File download launched')
+                                },
+                                error : function(){
+                                    console.log('something bad happened')
+                                }
+                            }
+                            )
+                            //CLIENT SIDE zip and download
+                            /*var currentDate = new Date(Date.now()).toLocaleString();
                             var count = table.rows( { selected: true } ).count(); // number of selected rows
                             var toDownload=[];
                             var zip = new JSZip();
@@ -221,26 +309,6 @@ $(document).ready(function() {
                             {
                                 toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
                             }
-                            
-                            for (var i=0 ; i<count ; i ++)
-                            {
-                                /*function play_next(toDownload)
-                                {
-                                   var song = toDownload.shift(); // Removes the first song and stores it in song
-
-                                   $.get(song, function(ret_data)
-                                    {
-                                        alert('done');
-                                       allfiles.file(song,ret_data)
-                                      if(song.length) play_next(); // Call next song if more songs exist;
-                                    });
-                                }
-                                play_next(toDownload); // Start it off
-                                
-                                /*console.log(toDownload)*/               
-                            }
-                            
-                            
                             var dldata=[]
                             var promise=[]
                             for (var i=0 ; i<count ; i ++)
@@ -265,85 +333,24 @@ $(document).ready(function() {
                                 // Add a file to the directory, in this case an image with data URI as contents
                                 allfiles.file(dldata[i],promise[i]);
                                 console.log(dldata[i])                
-                            }
-/*                            function sleep(milliseconds) {
-                              var start = new Date().getTime();
-                              for (var i = 0; i < 1e7; i++) {
-                                if ((new Date().getTime() - start) > milliseconds){
-                                  break;
-                                }
-                              }
-                            }*/
-//                            for (var i=0 ; i<count ; i ++)
-//                            {
-//                                toDownload.push({
-//                                    name : table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1, 
-//                                    data : $.get(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
-//                                                  })
-//                                sleep(52)
-//                                /*console.log(toDownload)*/                
-//                            }
-//                           /* function addzipfile(todl,llfiles,sucessCallback)
-//                            {
-//                                for (var prop in todl) {
-//                                  if (todl.hasOwnProperty(prop)) { 
-//                                  // or if (Object.prototype.hasOwnProperty.call(obj,prop)) for safety...
-//                                      console.log(todl[prop])
-//                                      $.get(todl[prop]).then(function(content)
-//                                        {
-//                                          sucessCallback( llfiles.file(todl[prop],content))
-//                                      });
-//                                        //allfiles.file(toDownload[1],$.get(toDownload[1]),{binary: true});
-//                                      //allfiles.file(toDownload[y],$.get(toDownload[y]),{binary: true});
-//                                  }
-//                                    
-//                                }
-//                                
-//                                
-//                            }*/
-//                            
-//                       /$.each(toDownload,function(index,value)
-//                        {
-//                            $.get(value),function(data)
-//                            {
-//                                allfiles.file(toDownload[index],data)
-//                            }
-//                        })
-//                               
+                            }                
                             // Generate the zip file asynchronously
                             console.log("generatesync")
                             allfiles.generateAsync({
                                 type: "blob",
-                                compression: "DEFLATE",
-                                compressionOptions: {
-                                    level: 1
-                                }
+                                compression: "STORE",
+                                streamFiles:true,
+                                //compressionOptions: {
+                                //    level: 1
+                                //}
                             }).then(function(blob) {
                                 // Force down of the Zip file
                                 saveAs(blob, "Strains_data.zip");
-                            });
-                            
-//                            
-//                            function zipFiles(toDl) 
-//                            {
-//                                var zip = new JSZip();
-//                                var i=0;
-//                                deferreds = [];
-//                                toDl.forEach(function(image) {
-//                                    deferreds.push(zip.file(image.name, image.data, { binary: true }));
-//                                    i++;
-//                                });
-//                                $.when.apply($, deferreds).then(function() {
-//                                    zip.generateAsync({ type: "blob" }).then(function(content) {
-//                                        saveAs(content, 'Filename.zip'); //FileSaver.js
-//                                    });
-//                                });
-//                            }
-//                            zipFiles(toDownload)
-//                            
+                            });*/                   
                         }
                     }
                 ]   
     });
 	table.buttons().container().appendTo( $('div.eight.column:eq(0)', table.table().container()));
+    // generate
 });
