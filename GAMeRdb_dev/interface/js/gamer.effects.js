@@ -33,6 +33,7 @@
         $('#multiQC').modal('show');
     });
     
+
 //Generate uuids
 function uuidv4() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -40,9 +41,53 @@ function uuidv4() {
     return v.toString(16);
   });
 }
+// Parse download settings
+function donwloadSettings()
+{
+    var settings=""
+    
+    return settings
+}
 //DataTables initialisation and behavior settings
 
 $(document).ready(function() { 
+    // Checkboxes
+    /*$('.ui.checkbox')
+        .checkbox()
+    ;*/
+    //Checkbox and sliders ("download settings section")
+    /*$(".ui.slider.checkbox.all").click(function()
+    {
+        $(".ui.radio.checkbox").checkbox('check')
+        $(".ui.slider.checkbox.all").prop('class','ui slider checkbox alls checked')
+    });
+    $(".ui.slider.checkbox.alls.checked").click(function()
+    {
+        $(".ui.radio.checkbox.report.checked").checkbox('uncheck')
+        $(".ui.radio.checkbox.wgs.checked").checkbox('uncheck')
+        $(".ui.slider.checkbox.alls.checked").prop('class','ui slider checkbox all')
+    })
+    $(".ui.slider.checkbox.report").click(function()
+    {
+        $(".ui.radio.checkbox.report").checkbox('check')
+    })
+    $(".ui.slider.checkbox.report.checked").click(function()
+    {
+        $(".ui.radio.checkbox.report.checked").checkbox('uncheck')
+    })
+    $(".ui.slider.checkbox.wgs").click(function()
+    {
+        $(".ui.radio.checkbox.wgs").checkbox('check')
+    })
+    $(".ui.slider.checkbox.wgs.checked").click(function()
+    {
+        $(".ui.radio.checkbox.wgs.checked").checkbox('uncheck')
+    })*/
+    $('.ui.radio.checkbox').checkbox('attach events','.ui.slider.checkbox.all', 'checked'); //"onBeforeChecked" = invert (check) status. More useful than "check"
+    $('.ui.radio.checkbox.wgs').checkbox('attach events','.ui.slider.checkbox.wgs', 'onBeforeChecked')
+    $('.ui.radio.checkbox.report').checkbox('attach events','.ui.slider.checkbox.report', 'onBeforeChecked')
+    //$('.ui.radio.checkbox.wgs.checked').checkbox('attach events','.ui.slider.checkbox', 'onBeforeChecked');
+    //$('.test.checkbox').checkbox('attach events', '.uncheck.button', 'uncheck');
 	var table = $('#table_id').DataTable( 
     {
         data: data,
