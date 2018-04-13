@@ -83,11 +83,9 @@ $(document).ready(function() {
     {
         $(".ui.radio.checkbox.wgs.checked").checkbox('uncheck')
     })*/
-    $('.ui.radio.checkbox').checkbox('attach events','.ui.slider.checkbox.all', 'checked'); //"onBeforeChecked" = invert (check) status. More useful than "check"
-    $('.ui.radio.checkbox.wgs').checkbox('attach events','.ui.slider.checkbox.wgs', 'onBeforeChecked')
-    $('.ui.radio.checkbox.report').checkbox('attach events','.ui.slider.checkbox.report', 'onBeforeChecked')
-    //$('.ui.radio.checkbox.wgs.checked').checkbox('attach events','.ui.slider.checkbox', 'onBeforeChecked');
-    //$('.test.checkbox').checkbox('attach events', '.uncheck.button', 'uncheck');
+    $('.ui.radio.checkbox').checkbox('attach events','.ui.slider.checkbox', 'onBeforeChecked'); //"onBeforeChecked" = invert (check) status. More useful than "check"
+    /*$('.ui.radio.checkbox.wgs').checkbox('attach events','.ui.slider.checkbox.wgs', 'onBeforeChecked')
+    $('.ui.radio.checkbox.report').checkbox('attach events','.ui.slider.checkbox.report', 'onBeforeChecked')*/
 	var table = $('#table_id').DataTable( 
     {
         data: data,
@@ -99,8 +97,8 @@ $(document).ready(function() {
             { data: 'Phylogeny.Serovar' , "title": "Predicted Serovar"},
             { data: 'Reads.FASTQC_pair1', "title": " Fastqc R1"},
             { data: 'Reads.FASTQC_pair2' , "title": "Fastqc R2"},
-            { data: 'Reads.FASTQ_pair1' , "title": "Fastq R1"},
-            { data: 'Reads.FASTQ_pair2' , "title": "Fastq R2"},
+            { data: 'Reads.FASTQ_pair1' , "title": "Normalized reads R1"},
+            { data: 'Reads.FASTQ_pair2' , "title": "Normalized reads R2"},
             { data: 'Reads.VCF' , "title": "Variants"},
             { data: 'Genome.Contigs' , "title": "Contigs"},
             { data: 'Genome.Assembly' , "title": "Assembly"},
@@ -253,13 +251,13 @@ $(document).ready(function() {
                     { 
                         extend: 'copyHtml5', header : false , messageBottom:false,text: 'Copy ids',title:'',exportOptions: {columns: 0, orthogonal: 'fullNotes'}
                     },
-                    //excel button : export only colums set to visible
+                    //excel button : export only colums containing text metadatas (not links to files)
                     { 
-                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: ':visible'}
+                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3]}
                     },
-                    //pdf button : export only colums set to visible, at a landscape format (useful in order to do not crop table)
+                    //pdf button : eexport only colums containing text metadatas (not links to files), at a landscape format (useful in order to do not crop table)
                     {
-                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: ':visible'}
+                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3]}
                     },
                     //column visibility button
                     {
@@ -273,56 +271,88 @@ $(document).ready(function() {
                             //SERVER SIDE zip and download
                             var currentDate = new Date(Date.now()).toLocaleString();
                             var count = table.rows( { selected: true } ).count(); // number of selected rows
-                            var toDownload={};
-                            for (var i=0 ; i<count ; i ++)
+                            var toDownload={}; 
+                            var formatToDownload=[];
+                            var selectedRadios=$('.ui.radio.checkbox.checked label') // contains <labels> from selected radio checkboxes
+                            if (selectedRadios.length===0)
                             {
-                                toDownload["FASTQC_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair1
-                                toDownload["FASTQC_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2
-                                toDownload["FASTQ_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
-                                toDownload["FASTQC_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2
-                                toDownload["VCF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF
-                                toDownload["Contigs_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs
-                                toDownload["Assembly_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly
-                                toDownload["QUAST_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST
-                                toDownload["GFF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF
-                                toDownload["GBK_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK
-                                toDownload["Report_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Report
-                                /*toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair1)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Report)*/
-     /*                           toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Report)*/
-                                /*toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair1)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Report)*/
-                                
+                                alert('Please select which kind of files you want to download (bottom section : download settings)')
+                            }
+                            else // launch file compression only if file format is selected
+                            {
+                                for (var i=0;i<selectedRadios.length;i++)
+                                {
+                                    formatToDownload.push(selectedRadios[i].innerHTML) //add <labels> (Normalised reads, Variants...) content to formatToDownload[]
+                                }
+
+                                for (var i=0 ; i<count ; i ++) // Create a JSON containing href links to download
+                                {    
+                                    // Generates a JSON including all files that meets the formats included in formatToDownload[]
+                                    if(formatToDownload.includes('Normalized reads')) // add Fastq if Normalized reads selected
+                                    {
+                                        toDownload["FASTQ_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
+                                        toDownload["FASTQ_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2
+                                    }
+                                    if(formatToDownload.includes('Variants')) // add Fastq if Normalized reads selected
+                                    {
+                                        toDownload["VCF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF
+                                    }
+                                    if(formatToDownload.includes('Contigs')) // add Fastq if Normalized reads selected
+                                    {
+                                        toDownload["Contigs_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs
+                                    }
+                                    if(formatToDownload.includes('Assembly')) // add Fastq if Normalized reads selected
+                                    {
+                                        toDownload["Assembly_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly
+                                    }
+                                    if(formatToDownload.includes('GFF')) // add Fastq if Normalized reads selected
+                                    {
+                                        toDownload["GFF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF
+                                    }
+                                    if(formatToDownload.includes('GBK')) // add Fastq if Normalized reads selected
+                                    {
+                                        toDownload["GBK_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK
+                                    }
+                                    if(formatToDownload.includes('ARTwork report')) // add Fastq if Normalized reads selected
+                                    {
+                                        toDownload["Report_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Report
+                                    }
+                                    /*toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair1)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Report)*/
+         /*                           toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Report)*/
+                                    /*toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair1)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQC_pair2)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.QUAST)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+                                    toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Report)*/
+                                }
                             }
                             console.log("get : \n"+JSON.stringify(toDownload))
                             $.ajax({
