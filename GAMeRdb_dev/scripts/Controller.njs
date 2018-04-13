@@ -129,7 +129,7 @@ var server = http.createServer(function(req, res)
 		{
 			if(errors)
 			{
-				send500(`Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
+				send500(`readServerFile: Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
 				throw errors;
 			}
 			else
@@ -146,20 +146,37 @@ var server = http.createServer(function(req, res)
 	{
 		let ext = path.parse(filePath).ext; // Parse file requested to retrieve file extension (ext)
 
-		fs.readFile(filePath, function (errors, contents) 
+		if(mimeType[ext]==='application/zip')
 		{
-			if(errors)
+			fs.createReadStream(filePath, function (errors, contents) 
 			{
-			  	send500(`Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
-			  	throw errors;
-		     }
-		     else
-		     {
-		     	res.writeHead(msg,{'Content-Type': mimeType[ext] || 'application/octet-stream' ,'Cache-Control': 'no-cache'}); // type MIME or application/octet-stream if unknown extension
-			  	res.end(contents);
-		     }
-		});
-		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
+				if(errors)
+				{
+				  	send500(`readServerFileAutoMime : Error streaming the zip file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
+				  	throw errors;
+			     }
+
+			}).pipe(res);
+			console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
+		}
+		else
+		{
+			fs.readFile(filePath, function (errors, contents) 
+			{
+				if(errors)
+				{
+				  	send500(`readServerFileAutoMime : Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
+				  	throw errors;
+			     }
+			     else
+			     {
+			     	res.writeHead(msg,{'Content-Type': mimeType[ext] || 'application/octet-stream' ,'Cache-Control': 'no-cache'}); // type MIME or application/octet-stream if unknown extension
+				  	res.end(contents);
+			     }
+			});
+			console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
+		}
+		
 	}
 
 	// Routing and "includes" processing (php includes like)
@@ -170,7 +187,7 @@ var server = http.createServer(function(req, res)
 			if(errors)
 			{
 			  	console.log(errors);
-			  	send500(`Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+			  	send500(`readFileAndInclude : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
 			  	throw errors;
 		    }
 		    else
@@ -201,7 +218,7 @@ var server = http.createServer(function(req, res)
 			if(errors)
 			{
 			  	console.log(errors);
-			  	send500(`Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+			  	send500(`readFileAndIncludeAndRender : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
 			  	throw errors;
 		    }
 		    else
@@ -225,7 +242,7 @@ var server = http.createServer(function(req, res)
 			if(errors)
 			{
 			  	console.log(errors);
-			  	send500(`Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+			  	send500(`readFileAndIncludeAndRenderHere : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
 			  	throw errors;
 		    }
 		    else
@@ -691,7 +708,7 @@ var server = http.createServer(function(req, res)
 			}
 			else // read file from file system path
 			{
-				fs.readFile(pathname, function(err, data)
+				fs.createReadStream(pathname, function(err, data)
 				{
 					if(err) // if this file/path EXISTS cant be reached for any reason
 					{
@@ -701,7 +718,7 @@ var server = http.createServer(function(req, res)
 					{
 						readServerFileAutoMime(pathname,200);
 					}
-				});
+				}).pipe(res);
 			}
 		});	
 	}
