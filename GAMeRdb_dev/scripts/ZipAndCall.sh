@@ -18,6 +18,6 @@ filesList=$2 #$2 = file path : tmp/uuid/filename
 
 #currentDate=$(date +"%Y%m%d_%Hh%Mm%Ss")
 zipName="wgsdata_"$1
-zip -0 $currentDir/$zipName -@ < $filesList
+zip -0 -j $currentDir/$zipName -@ < $filesList
 
 #Then, zip file is availaible until they are deleted (weekly)
