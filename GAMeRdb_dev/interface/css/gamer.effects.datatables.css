@@ -42,9 +42,6 @@ table.dataTable tbody tr.selected {
     padding: 0 auto;
     color:#00FFFF;
 }
-#helpme{
-    display: inline-block;
-}
 #texthover{
     text-align: center !important;
 }
@@ -52,4 +49,17 @@ table.dataTable tbody tr.selected {
 #helpme{
     margin-bottom: 0;
     margin-top: auto;
+}
+.dimmable.dimmed{
+    background-color: rgba(0, 0, 0, 0.1);
+}
+.ui.sticky + div {
+  margin-top: 139px;
+}
+/* Video responsive width */
+video { 
+    display: block;
+    margin: 0 auto;
+    width:100%;
+    height:auto;
 }
