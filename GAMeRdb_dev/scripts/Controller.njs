@@ -62,6 +62,7 @@ const mimeType = {
     '.jpg': 'image/jpeg',
     '.wav': 'audio/wav',
     '.mp3': 'audio/mpeg',
+    '.mp4': 'video/mpeg',
     '.svg': 'image/svg+xml',
     '.pdf': 'application/pdf',
     '.doc': 'application/msword',
@@ -146,7 +147,7 @@ var server = http.createServer(function(req, res)
 	{
 		let ext = path.parse(filePath).ext; // Parse file requested to retrieve file extension (ext)
 
-		if(mimeType[ext]==='application/zip')
+		if(mimeType[ext]==='application/zip') // Stream zip files in place of read (our zip files are supposed to be huge and not handable by fs.readfile metho)
 		{
 			fs.createReadStream(filePath, function (errors, contents) 
 			{
@@ -156,7 +157,8 @@ var server = http.createServer(function(req, res)
 				  	throw errors;
 			     }
 
-			}).pipe(res);
+			}).pipe(res.writeHead(msg,{'Content-Type': mimeType[ext] || 'application/octet-stream' ,'Cache-Control': 'no-cache'})
+			.pipe(res.end()));
 			console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
 		}
 		else
@@ -489,9 +491,21 @@ var server = http.createServer(function(req, res)
 	{
 		readServerFile('./../interface/js/jquery.min.js','application/javascript',200);
 	}
-	else if (urlPath === '/js/gamer.effects.js')
+	else if (urlPath === '/js/gamer.datatables.salmonella.js')
 	{
-		readServerFile('./../interface/js/gamer.effects.js','application/javascript',200);
+		readServerFile('./../interface/js/gamer.datatables.salmonella.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/gamer.datatables.listeria.js')
+	{
+		readServerFile('./../interface/js/gamer.datatables.listeria.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/gamer.datatables.staphylococcus.js')
+	{
+		readServerFile('./../interface/js/gamer.datatables.staphylococcus.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/gamer.datatables.clostridium.js')
+	{
+		readServerFile('./../interface/js/gamer.datatables.clostridium.js','application/javascript',200);
 	}
 	else if (urlPath === '/semantic/dist/components/icon.min.css')
 	{
@@ -615,6 +629,10 @@ var server = http.createServer(function(req, res)
 	{ 
 	 	readServerFile('./../interface/img/favicon.ico','image/x-icon',200);
 	}
+	else if(urlPath === '/img/dna.png' || urlPath === '/views/img/dna.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
+	{ 
+		readServerFile('./../interface/img/dna.png','image/png',200);
+	}
 
 	//
 	// FONTS 
@@ -666,7 +684,7 @@ var server = http.createServer(function(req, res)
 		}
 		else if(urlPath.indexOf('staphylococcus')>=0)
 		{
-			routeFilesBySpecies('salmonella');
+			routeFilesBySpecies('staphylococcus');
 		}
 		else
 		{
