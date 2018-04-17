@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>GAMeRdb - Genomes </title>
+        <meta name="description" content="GAMeR genomic database - Listeria genomes"/>
+        <link rel="shortcut icon" type="image/x-icon" href="../../../img/favicon.ico" />
+        <!-- SEMANTIC UI main styles-->
+        <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/semantic.min.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/components/icon.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/components/icon.min.css"/> <!--Use CDN in case of icons issues-->
+        <link rel="alternate" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/components/icon.css"/> <!--Use CDN in case of icons issues-->
+        <!--DataTables css-->
+        <link rel="stylesheet" type="text/css" href="../../../css/gamer.effects.datatables.css"/> <!--DataTables custom CSS overrides-->    
+        <link rel="stylesheet" type="text/css" href="../../../css/dataTables.semanticui.min.css"/> <!--SemanticUI integration for DataTables-->
+        <link rel="stylesheet" type="text/css" href="../../../css/select.dataTables.min.css"> <!--SemanticUI styling for DataTables selected rows -->
+        <link rel="stylesheet" type="text/css" href="../../../css/buttons.semanticui.min.css"/> <!--SemanticUI styling for DataTables buttons-->       
+        <!--jQuery JS-->
+        <script src="../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery-1.12.4.js"></script><!--jQuery version adapted to DataTables-->
+        <!-- SEMANTIC UI main JS-->
+        <script src="../../../../semantic/dist/semantic.min.js"></script>
+        <!--DataTables JS-->
+        <script type="text/javascript" charset="utf8" src="../../../js/gamer.datatables.listeria.js" defer></script><!--Setting Semantic UI custom JS effects settings + DataTables settings-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery.dataTables.min.js"></script><!--Main jQuery for Datatables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.semanticui.min.js"></script><!--SemanticUI integration for DataTables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.select.min.js"></script><!--SemanticUI integration for DataTables selected rows-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.buttons.min.js"></script><!--SemanticUI integration for DataTables selected buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.semanticui.min.js"></script><!--SemanticUI integration for DataTables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jszip.min.js"></script><!--JS class for generating or read zip files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jszip.js"></script><!--JS class for generating or read zip files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/pdfmake.min.js"></script><!--JS class for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/vfs_fonts.js"></script><!--PdfMake dependency for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.html5.min.js" defer></script><!--JS class for generating Datatables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.print.min.js" defer></script><!--JS class for copying/priting the DataTable-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.colVis.min.js"></script><!--JS class for handling DataTables columns visibility-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.colReorder.min.js"></script>
+        <script async="" type="text/javascript" charset="utf8" src="../../../js/Blob.js"></script>
+        <script async="" type="text/javascript" charset="utf8" src="../../../js/canvas-toBlob.js"></script>
+        <script async="" type="text/javascript" charset="utf8" src="../../../js/FileSaver.min.js"></script>
+        
+    </head>
+    <body>    
+        <div id="bloc_page"><!-- main wrapper-->
+            <header>
+                <%include ./../interface/views/includes/header_lis.html%></%include>
+            </header> 
+            <!-- Visible modal when "download" was clicked : start -->
+            <div class="ui basic modal preparing">
+                <div class="ui indeterminate big text loader">We are preparing your files</div>
+            </div>
+            <!-- Visible modal when "download" was clicked : end -->
+            <div class="ui small modal pleaseselect">
+                <i class="close icon"></i>
+                <div class="header">
+                    No download settings
+                </div>
+                <div class="image content">
+                    <div class="image">
+                        <img class="ui tiny image" src="../../../img/dna.png">
+                    </div>
+                    <div class="description">
+                        <i class="hand point right icon"></i><span class="ui small header"><b>Please select which kind of files you want to download:</b></span>
+                        <ol>
+                            <li>Select strains from the table (left click or CTRL+left click or SHIFT+left click)</li>
+                            <li>Then, go to bottom section: <i class="small cloud download icon"></i>download settings</li>
+                            <li>Then, click download</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- Visible modal when "need help?" was clicked : start -->
+            <%include ./../interface/views/includes/genomes_help.html%></%include>
+            <!-- Visible modal when "need help?" was clicked : end -->
+            <!-- Visible EMBED MultiQC when "MultiQC report was clicked: start-->
+            <div class="ui massive modal scrolling vontent transition" >
+                <div class="column" id="multiQC">
+                    <div class="ui medium message">
+                        <span class="ui medium header"> 
+                            MultiQC of <i>the Listeria</i> strains processed by ARTwork (updated monthly)
+                            <br/>
+                            Full page available <a href="../../multiqc/Listeria_multiqc_report.html" target="_blank" rel="noopener noreferrer">here</a>
+                        </span>    
+                    </div>
+                    <iframe src="../../multiqc/Listeria_multiqc_report.html" id="MultiQC_preview"></iframe> 
+                </div>
+            </div>
+            <!-- Visible EMBED MultiQC when "MultiQC report was clicked: start-->
+            <!------------------------------------------------------------------>
+            <!-- MAIN PAGE -->
+            <!------------------------------------------------------------------>
+            <div class="ui stackable grid" id="aftertopmenu"> 
+                <!--LEFT GRID : vertical menu -->
+                <div class="two wide column" id="leftmenu">
+                    <div class="ui sticky vertical menu">
+                        <a class="active yellow item" data-tooltip="Browse and download Listeria data generated by ARTwork" data-position="right center" data-variation="wide" data-inverted="">
+                            Genomes (<%JSONlen%></%JSONlen%>)
+                        </a>
+                        <a class="item" data-tooltip="Browse and download WGS data about Listeria reference genomes" data-position="right center" data-variation="wide" data-inverted="">
+                            References
+                        </a>
+                        <a class="item" data-tooltip="Global CC distribution overview of the Listeria strains processed by ARTwork" data-position="right center" data-variation="wide" data-inverted="">
+                            CC distribution
+                        </a>
+                        <a class="item" data-tooltip="Global ST distribution overview of the Listeria strains processed by ARTwork" data-position="right center" data-variation="wide" data-inverted="">
+                            ST distribution
+                        </a>
+                        <a class="item" data-tooltip="Global phylogeny of the Listeria processed by ARTwork" data-position="right center" data-variation="huge" data-inverted="">
+                            Phylogeny
+                        </a>
+                    </div>
+                </div>     
+                <!--RIGHT grid : DataTables -->
+                <div class="twelve wide column" id="centermenu">
+                    <div class="ui grid">
+                        <div class="eight wide column">
+                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text"><i>Listeria </i>genomes </span></h1>
+                        </div>
+                        <div class="eight wide right aligned column" id="helpme">
+                            <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
+                        </div>
+                    </div>
+                    <div class="ui divider"></div>
+                    <div class="column">
+                        <table id="table_id" class="ui selectable striped celled blue padded table center aligned">
+                        </table>
+                        
+                    </div>
+                    <div class="ui divider">
+                    </div>
+                    <div class="column" id="dlcheckbox">
+                        <div class="field">
+                            <i class="large cloud download icon"></i><span class="ui small header"> Download settings</span>
+                        </div>
+                        <div class="ui form">
+                            <br/>
+                            <div class="inline multiple fields">
+                                <div class="field">
+                                    <div class="ui slider checkbox">
+                                        <input id="All" type="checkbox">
+                                        <label>Download all</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="inline multiple fields"><!--custom classes : ui radio checkbox {report;wgs} in order to enable check all by groupe-->
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="fastq" type="checkbox">
+                                        <label>Normalized reads</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>Variants</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>Contigs</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>Assembly</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>GBK</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>GFF</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>ARTwork report</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class= "sticky">
+                <%include ./../interface/views/includes/footer.html%></%include>
+            </footer>
+        </div>
+    </body>
+            <style>
+            #MultiQC_preview {
+  width:90%;
+  height:90%;
+   margin-top: 2% !important;
+}
+            </style>
+    <script>
+        <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
+        /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Listeria_multiqc_report.html"> MultiQC report</a></caption>');*/
+        $('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global overview of files quality, please check the <a href="#"> MultiQC report</a></caption>');
+        var data = <%datatablesJSON%>
+    </script>
+</html>
