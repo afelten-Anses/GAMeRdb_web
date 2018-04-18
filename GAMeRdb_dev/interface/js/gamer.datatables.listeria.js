@@ -313,7 +313,7 @@ $(document).ready(function() {
                                         $('.basic.modal.preparing').modal('hide')
                                     },
                                     error : function(){
-                                        console.log('something bad happened')
+                                        console.error('something bad happened with donwload process')
                                     }
                                 })
                             }      
