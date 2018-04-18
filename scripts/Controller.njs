@@ -302,6 +302,10 @@ var server = http.createServer(function(req, res)
 		{
 			readFileAndIncludeAndRender(`./../interface/views/species/${species}/genomes.html`,200,"Phylogeny.Genus",species.capitalize(),species.capitalize()); // Genus = species.capitalize()
 		}
+		else if(urlPath === `/species/${species}/genomes_tutorial.html`) // genomes page
+		{
+			readFileAndIncludeAndRender(`./../interface/views/species/${species}/genomes_tutorial.html`,200,"Phylogeny.Genus",species.capitalize(),species.capitalize()); // Genus = species.capitalize()
+		}
 		else if(urlPath === `/species/${species}/naura.html`) // Naura tool page
 		{
 			readFileAndInclude(`./../interface/views/species/${species}/naura.html`,200);
@@ -527,6 +531,10 @@ var server = http.createServer(function(req, res)
 	{
 		readServerFile('./../interface/css/buttons.semanticui.min.css','text/css',200);
 	}
+	else if (urlPath === '/css/driver.min.css')
+	{
+		readServerFile('./../interface/css/driver.min.css','text/css',200);
+	}
 	else if (urlPath === '/js/jquery.min.js')
 	{
 		readServerFile('./../interface/js/jquery.min.js','application/javascript',200);
@@ -598,6 +606,10 @@ var server = http.createServer(function(req, res)
 	else if (urlPath === '/js/FileSaver.min.js')
 	{
 		readServerFile('./../interface/js/FileSaver.min.js','application/javascript',200);
+	}
+	else if (urlPath === '/js/driver.min.js')
+	{
+		readServerFile('./../interface/js/driver.min.js','application/javascript',200);
 	}
 
 
