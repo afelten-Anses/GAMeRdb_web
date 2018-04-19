@@ -224,8 +224,16 @@ $(document).ready(function() {
             search: 'Search: <span class="ui input">_INPUT_</span>'
             },
         buttons:[
-                    //Select all rows button: no config --> no {'extend',..}
-                    'selectAll',
+                    //Redefine selectAll in order to be able to select all after a table filtration
+                    {
+                        extend: 'selectAll',
+                        className: 'selectall',
+                        action : function(e) {
+                            e.preventDefault();
+                            table.rows({ search: 'applied'}).deselect();
+                            table.rows({ search: 'applied'}).select();
+                        }
+                    },
                     //copy button : export only STRAIN ID
                     { 
                         extend: 'copyHtml5', header : false , messageBottom:false,text: 'Copy ids',title:'',exportOptions: {columns: 0, orthogonal: 'fullNotes'}
