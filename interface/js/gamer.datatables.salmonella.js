@@ -542,9 +542,9 @@ $(document).ready(function() {
             popover: {
                 title: 'Let\'s get a try',
                 description: "<b>Please select some strains ids.</b>You can use <b>various selection modes:</b> \
-                <br\><br\>-Left click: simple selection \
-                <br\><br\>-CTRL+left click: one per one incremental selection \
-                <br\><br\>-CTRL+letf click : multiple selection \
+                <br\><br\> <b>Left click</b>: simple selection \
+                <br\><br\> <b>CTRL</b> + <b>left click</b>: one per one incremental selection \
+                <br\><br\> <b>CTRL</b> + <b>shift</b> + <b>left click</b> : multiple selection \
                 <br\><br\><br\>You can mix these 3 selections modes. \
                 <br/>Please notice <b>you can also</b> \
                 <br\>-See or download these files one per one by click on the clickable links \
@@ -557,7 +557,7 @@ $(document).ready(function() {
             element: '#paginationtutorial',
             popover: {
                 title: 'Table pages',
-                description: "Notice you can also browse dynamincally this table, page per page. Click next to continue." ,
+                description: "Notice you can also browse dynamically this table, page per page. Click next to continue." ,
                 position: 'left'
             }
         },
