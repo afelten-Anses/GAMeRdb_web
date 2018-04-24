@@ -1,13 +1,15 @@
-// -Author : Kevin Durimel 
+// -Author : Kevin Durimel
 // -Goal : Controller script (MVC Scheme)
 // -External depencies : templatesjs,validator
 
-/*A FAIRE AVANT LA MISE EN PRODUCTION :
-	-En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache' (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
-	-COMMENTER Tout ce qui est commenté 'debug trace' et rennomer debug trace par 'trace'
-	-Ecouter sur le port 80 + mettre en place reverse proxy (avec compression de reponses http) : 	https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
-																									https://eladnava.com/binding-nodejs-port-80-using-nginx/
-																									--> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
+/* A FAIRE AVANT LA MISE EN PRODUCTION :
+-En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache'
+(interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
+ -COMMENTER Tout ce qui est commenté 'debug trace' et rennomer debug trace par 'trace'
+ -Ecouter sur le port 80 + mettre en place reverse proxy (avec compression de reponses http) :
+   https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+   https://eladnava.com/binding-nodejs-port-80-using-nginx/
+   --> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
 																									ajouter des filtres,module
 																									compression du contenu
 
@@ -371,12 +373,11 @@ var server = http.createServer(function(req, res)
 		        });
 
 		        req.on('end', function () {
-		            var post = querystring.parse(body);
+					var post = querystring.parse(body,null,null,{ maxKeys: 0 });
 		            // use post['blah'], etc.
 		            console.log("req content:")
 		            console.log(JSON.stringify(post))
 		            console.log("and")
-		            console.log(post.FASTQC_pair1_0)
 		            var clientuid=req.url.split('/').pop()
 		            shell.exec("mkdir -p /mnt/20To-vol/tmp/"+clientuid, {async:false}) // async=false --> do it here
 		            console.log("uuuid : "+clientuid)
@@ -401,6 +402,7 @@ var server = http.createServer(function(req, res)
 					// Serve files when child process ended
 					child.stdout.on('end', function(data) 
 					{
+						console.log(data)
 					  	console.log("compression ended, now serving files...")
 	             		res.writeHead(200,{'Content-Type': 'text/plain' ,'Cache-Control': 'no-cache'}); // type MIME or application/octet-stream if unknown extension
 				  	 	res.end(zipOutputPathToSend);
