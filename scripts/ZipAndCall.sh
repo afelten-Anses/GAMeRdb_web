@@ -8,6 +8,7 @@
 #
 
 # init and create currentir : zip directory (tmp/uuid/)
+sleep 6 #async file creation support quickfix
 currentDir=/mnt/20To-vol/tmp/$1 #arg $1 = uuid
 mkdir -p $currentDir 
 
