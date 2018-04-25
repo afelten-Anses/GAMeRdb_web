@@ -501,6 +501,10 @@ var server = http.createServer(function(req, res)
 	{
 		readServerFile('./../interface/js/gamer.datatables.salmonella.js','application/javascript',200);
 	}
+	else if (urlPath === '/js/gamer.datatables.salmonellatuto.js')
+	{
+		readServerFile('./../interface/js/gamer.datatables.salmonellatuto.js','application/javascript',200);
+	}
 	else if (urlPath === '/js/gamer.datatables.listeria.js')
 	{
 		readServerFile('./../interface/js/gamer.datatables.listeria.js','application/javascript',200);
