@@ -276,7 +276,7 @@ $(document).ready(function() {
                                 for (var i=0 ; i<count ; i ++) // Create a JSON containing href links to download
                                 {    
                                     // Generates a JSON including all files that meets the formats included in formatToDownload[]
-                                    if(formatToDownload.includes('Normalized reads')) // add Fastq if Normalized reads selected
+                                    if(formatToDownload.includes('Normalized reads (fastq)')) // add Fastq if Normalized reads selected
                                     {
                                         toDownload["FASTQ_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
                                         toDownload["FASTQ_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2
@@ -306,20 +306,31 @@ $(document).ready(function() {
                                         toDownload["Report_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Report
                                     }
                                 }
-                                console.log("get : \n"+JSON.stringify(toDownload))
+                                let clientuuid=uuidv4()
                                 $.ajax({
-                                    url: document.URL+"/"+uuidv4(), 
+                                    url: document.URL+"/"+clientuuid, 
+                                    timeout: 0, //secs
                                     type: 'POST', 
                                     contentType: 'application/json', 
-                                    data:toDownload,
-                                    success: function(msg){
-                                    console.log('form submitted. Response payload: '+ msg);
-                                    window.location="../../"+msg // change window.location in order to launch dl;
-                                    console.log('POST response payload');
-                                        $('.basic.modal.preparing').modal('hide')
-                                    },
-                                    error : function(){
-                                        console.error('something bad happened with donwload process')
+                                    data:toDownload
+                                })
+                                .done(function(msg){
+                                console.log('form submitted. Response payload: '+ msg);
+                                window.location="../../"+msg // change window.location in order to launch dl;
+                                console.log('POST response payload');
+                                $('.basic.modal.preparing').modal('hide')
+                                console.log("got : \n"+JSON.stringify(toDownload))
+                                }).fail(function(request, status, err) {
+                                    if (status == "timeout") {
+                                        // timeout -> reload the page and try again
+                                        console.warn("timeout");
+                                        //window.location.reload();
+                                    } 
+                                    else {
+                                        // another error occured  
+                                        $('.ui.indeterminate.big.text.loader').html('It seems like you requested a lot of files. \
+                                        <br/>You\'ll be able to retrieve them under 5-10 minutes by clicking <a href="http://192.168.184.133:3000/tmp/'+clientuuid+'/wgsdata_'+clientuuid+'.zip'+'">here</a>');
+                                        console.warn('file maybe available in tmp/'+clientuuid)
                                     }
                                 })
                             }      

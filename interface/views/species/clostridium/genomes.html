@@ -8,8 +8,6 @@
         <!-- SEMANTIC UI main styles-->
         <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/semantic.min.css"/>
         <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/components/icon.min.css"/>
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/components/icon.min.css"/> <!--Use CDN in case of icons issues-->
-        <link rel="alternate" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/components/icon.css"/> <!--Use CDN in case of icons issues-->
         <!--DataTables css-->
         <link rel="stylesheet" type="text/css" href="../../../css/gamer.effects.datatables.css"/> <!--DataTables custom CSS overrides-->    
         <link rel="stylesheet" type="text/css" href="../../../css/dataTables.semanticui.min.css"/> <!--SemanticUI integration for DataTables-->
@@ -28,16 +26,15 @@
         <script type="text/javascript" charset="utf8" src="../../../js/dataTables.buttons.min.js"></script><!--SemanticUI integration for DataTables selected buttons-->
         <script type="text/javascript" charset="utf8" src="../../../js/buttons.semanticui.min.js"></script><!--SemanticUI integration for DataTables buttons-->
         <script type="text/javascript" charset="utf8" src="../../../js/jszip.min.js"></script><!--JS class for generating or read zip files-->
-        <script type="text/javascript" charset="utf8" src="../../../js/jszip.js"></script><!--JS class for generating or read zip files-->
         <script type="text/javascript" charset="utf8" src="../../../js/pdfmake.min.js"></script><!--JS class for generating pdf files-->
         <script type="text/javascript" charset="utf8" src="../../../js/vfs_fonts.js"></script><!--PdfMake dependency for generating pdf files-->
         <script type="text/javascript" charset="utf8" src="../../../js/buttons.html5.min.js" defer></script><!--JS class for generating Datatables buttons-->
         <script type="text/javascript" charset="utf8" src="../../../js/buttons.print.min.js" defer></script><!--JS class for copying/priting the DataTable-->
         <script type="text/javascript" charset="utf8" src="../../../js/buttons.colVis.min.js"></script><!--JS class for handling DataTables columns visibility-->
         <script type="text/javascript" charset="utf8" src="../../../js/dataTables.colReorder.min.js"></script>
-        <script async="" type="text/javascript" charset="utf8" src="../../../js/Blob.js"></script>
+        <!--<script async="" type="text/javascript" charset="utf8" src="../../../js/Blob.js"></script>
         <script async="" type="text/javascript" charset="utf8" src="../../../js/canvas-toBlob.js"></script>
-        <script async="" type="text/javascript" charset="utf8" src="../../../js/FileSaver.min.js"></script>
+        <script async="" type="text/javascript" charset="utf8" src="../../../js/FileSaver.min.js"></script>-->
         
     </head>
     <body>    
@@ -189,13 +186,6 @@
             </footer>
         </div>
     </body>
-            <style>
-            #MultiQC_preview {
-  width:90%;
-  height:90%;
-   margin-top: 2% !important;
-}
-            </style>
     <script>
         <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
         /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Clostridium_multiqc_report.html"> MultiQC report</a></caption>');*/

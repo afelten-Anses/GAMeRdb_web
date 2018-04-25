@@ -230,8 +230,8 @@ $(document).ready(function() {
                         className: 'selectall',
                         action : function(e) {
                             e.preventDefault();
-                            table.rows({ search: 'applied'}).deselect();
-                            table.rows({ search: 'applied'}).select();
+                            table.rows({page:'current'}).deselect();
+                            table.rows({page:'current'}).select();
                         }
                     },
                     //copy button : export only STRAIN ID
@@ -278,7 +278,7 @@ $(document).ready(function() {
                                 for (var i=0 ; i<count ; i ++) // Create a JSON containing href links to download
                                 {    
                                     // Generates a JSON including all files that meets the formats included in formatToDownload[]
-                                    if(formatToDownload.includes('Normalized reads')) // add Fastq if Normalized reads selected
+                                    if(formatToDownload.includes('Normalized reads (fastq)')) // add Fastq if Normalized reads selected
                                     {
                                         toDownload["FASTQ_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
                                         toDownload["FASTQ_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2
@@ -308,23 +308,34 @@ $(document).ready(function() {
                                         toDownload["Report_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Report
                                     }
                                 }
-                                console.log("get : \n"+JSON.stringify(toDownload))
+                                let clientuuid=uuidv4()
                                 $.ajax({
-                                    url: document.URL+"/"+uuidv4(), 
+                                    url: document.URL+"/"+clientuuid, 
+                                    timeout: 0, //secs
                                     type: 'POST', 
                                     contentType: 'application/json', 
-                                    data:toDownload,
-                                    success: function(msg){
-                                    console.log('form submitted. Response payload: '+ msg);
-                                    window.location="../../"+msg // change window.location in order to launch dl;
-                                    console.log('POST response payload');
-                                        $('.basic.modal.preparing').modal('hide')
-                                    },
-                                    error : function(){
-                                        console.error('something bad happened with donwload process')
-                                    }
+                                    data:toDownload
                                 })
-                            }      
+                                .done(function(msg){
+                                console.log('form submitted. Response payload: '+ msg);
+                                window.location="../../"+msg // change window.location in order to launch dl;
+                                console.log('POST response payload');
+                                $('.basic.modal.preparing').modal('hide')
+                                console.log("got : \n"+JSON.stringify(toDownload))
+                                }).fail(function(request, status, err) {
+                                    if (status == "timeout") {
+                                        // timeout -> reload the page and try again
+                                        console.warn("timeout");
+                                        //window.location.reload();
+                                    } 
+                                    else {
+                                        // another error occured  
+                                        $('.ui.indeterminate.big.text.loader').html('It seems like you requested a lot of files. \
+                                        <br/>You\'ll be able to retrieve them under 5-10 minutes by clicking <a href="http://192.168.184.133:3000/tmp/'+clientuuid+'/wgsdata_'+clientuuid+'.zip'+'">here</a>');
+                                        console.warn('file maybe available in tmp/'+clientuuid)
+                                    }
+                                })       
+                            }
                             //CLIENT SIDE zip and download
                             /*var currentDate = new Date(Date.now()).toLocaleString();
                             var count = table.rows( { selected: true } ).count(); // number of selected rows
@@ -390,12 +401,4 @@ $(document).ready(function() {
     
     // Add download settings checkbox event listeners
     $('.ui.radio.checkbox').checkbox('attach events','.ui.slider.checkbox', 'onBeforeChecked'); //"onBeforeChecked" = invert (check) status. More useful than "check"
-    // Réinit "ui sticky" menu if the DataTables length is modified by the client. Then sticky menu can stay sticky by considering the new page length.
-    $('.ui.button.button-page-length').on('click', function()
-    {
-        $('.ui.sticky').sticky({
-        offset : 80, // adjust all values so that content does not overlap any content between the top of the browser and the specified value
-        observeChanges:true
-        });
-    })
 });

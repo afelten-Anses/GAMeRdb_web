@@ -63,3 +63,8 @@ video {
     width:100%;
     height:auto;
 }
+#MultiQC_preview {
+  width:90%;
+  height:90%;
+   margin-top: 2% !important;
+}

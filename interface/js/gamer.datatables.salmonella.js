@@ -279,7 +279,7 @@ $(document).ready(function() {
                                 for (var i=0 ; i<count ; i ++) // Create a JSON containing href links to download
                                 {    
                                     // Generates a JSON including all files that meets the formats included in formatToDownload[]
-                                    if(formatToDownload.includes('Normalized reads')) // add Fastq if Normalized reads selected
+                                    if(formatToDownload.includes('Normalized reads (fastq)')) // add Fastq if Normalized reads selected
                                     {
                                         toDownload["FASTQ_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
                                         toDownload["FASTQ_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2
@@ -309,20 +309,31 @@ $(document).ready(function() {
                                         toDownload["Report_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Report
                                     }
                                 }
-                                console.log("get : \n"+JSON.stringify(toDownload))
+                                let clientuuid=uuidv4()
                                 $.ajax({
-                                    url: document.URL+"/"+uuidv4(), 
+                                    url: document.URL+"/"+clientuuid, 
+                                    timeout: 0, //secs
                                     type: 'POST', 
                                     contentType: 'application/json', 
-                                    data:toDownload,
-                                    success: function(msg){
-                                    console.log('form submitted. Response payload: '+ msg);
-                                    window.location="../../"+msg // change window.location in order to launch dl;
-                                    console.log('POST response payload');
-                                        $('.basic.modal.preparing').modal('hide')
-                                    },
-                                    error : function(){
-                                        console.error('something bad happened with donwload process')
+                                    data:toDownload
+                                })
+                                .done(function(msg){
+                                console.log('form submitted. Response payload: '+ msg);
+                                window.location="../../"+msg // change window.location in order to launch dl;
+                                console.log('POST response payload');
+                                $('.basic.modal.preparing').modal('hide')
+                                console.log("got : \n"+JSON.stringify(toDownload))
+                                }).fail(function(request, status, err) {
+                                    if (status == "timeout") {
+                                        // timeout -> reload the page and try again
+                                        console.warn("timeout");
+                                        //window.location.reload();
+                                    } 
+                                    else {
+                                        // another error occured  
+                                        $('.ui.indeterminate.big.text.loader').html('It seems like you requested a lot of files. \
+                                        <br/>You\'ll be able to retrieve them under 5-10 minutes by clicking <a href="http://192.168.184.133:3000/tmp/'+clientuuid+'/wgsdata_'+clientuuid+'.zip'+'">here</a>');
+                                        console.warn('file maybe available in tmp/'+clientuuid)
                                     }
                                 })
                             }      
@@ -391,203 +402,4 @@ $(document).ready(function() {
     
     // Add download settings checkbox event listeners
     $('.ui.radio.checkbox').checkbox('attach events','.ui.slider.checkbox', 'onBeforeChecked'); //"onBeforeChecked" = invert (check) status. More useful than "check"
-    // Réinit "ui sticky" menu if the DataTables length is modified by the client. Then sticky menu can stay sticky by considering the new page length.
-    $('#table_id').on('length.dt', function()
-    {
-        $('.ui.sticky').sticky({
-        offset : 80, // adjust all values so that content does not overlap any content between the top of the browser and the specified value
-        bottomOffset:-1 // same for the bottom of the browser
-        });
-    });
-    //Driver.js: used for tutorials
-    const driver = new Driver();
-    // add ids to class that need to be handled by Driver.js
-    $('.dt-buttons.ui.basic.buttons').attr('id','rowtutorial')
-    $('.ui.stackable.pagination.menu').attr('id','paginationtutorial')
-    $('.ui.massive.borderless.fixed.fluid.menu').attr('id','headertutorial')
-    //Driver.js: define the steps for introduction
-    driver.defineSteps([
-        {
-            element: '#texthover',
-            popover: {
-                title: 'Ready for a fast tutorial?',
-                description: "If you want to see more about this page features, you can also click on this help button. Its also a nice reminder. \
-                <ul> \
-                <li><b>Click \"next\" if you are ready to start the tutorial</b></li> \
-                <li><b>Click \"previous\" to see the previous tips</b></li> \
-                <li><b>Click \"quit\" to exit the tutorial</b></li>",
-                position: 'left'
-            }
-        },
-        {
-            element: '#datatables_header',
-            popover: {
-                title: 'You are currently in the <i>Salmonella</i> genomes workspace',
-                description: 'I\'ll show you how to take full advantadge of all its features. Step by step.',
-                position: 'bottom'
-            }
-        },
-        {
-            element: '#headertutorial',
-            popover: {
-                title: 'Other workspaces?',
-                description: 'You can access to other species workspaces at any moment by clicking on this header \
-                <br/>Notice the workspace you are currently in is highlighted',
-                position: 'bottom'
-            }
-        },
-        {
-            element: '#menu_tutorial',
-            popover: {
-                title: 'Workspace menu',
-                description: "From this page, you can access to the following features: \
-                <br/><b>Genomes</b> \
-                <br/><img src=\"../../../videos/genomesDLtutorial.png\" width=\"250px\"> \
-                <br/>Browse and download the data generated by ARTwork for a species. (You are here, e.g <i>Salmonella</i>) \
-                <br/><b>References (very soon)</b> \
-                <br/>Browse and download WGS data about references genomes for a species (In our case, <i>Salmonella</i> reference genomes) \
-                <br/><b>Serovars(very soon)</b> \
-                <br/>Global overview of the serovars distribution for all the species processed by ARTwork \
-                <br/><b>Phylogeny(very soon)</b> \
-                <br/>Global overview of the serovars distribution for all the species processed by ARTwork \
-                <br/><b>CC and ST distribution(very soon)</b> \
-                <br/>Global overview of the CC/ST distribution for all the species (not available for <i>Salmonella</i>)",
-                position: 'right'
-            }
-        },
-        {
-            element: '#multiqc',
-            popover: {
-                title: 'WGS data quality',
-                description: "You can also access to a global overview of the WGS data quality by clicking on \"MultiQC report\"",
-                position: 'top'
-            }
-        },
-        {
-            element: '#footertutorial',
-            popover: {
-                title: 'Any bug? Mispelling? Or some requests?',
-                description: "Dont forget to contact us using this form (or directly by email), we'll reply as soon as possible",
-                position: 'top'
-            }
-        },
-        {
-            element: '#table_id_wrapper',
-            popover: {
-                title: 'Now let me tell you more about this dynamic table',
-                description: "Click next to continue, you'll be able to try the table!",
-                position: 'left'
-            }
-        },
-        {
-            element: '#rowtutorial',
-            popover: {
-                title: 'Dynamic tables tools',
-                description: "<b>With this toolbox, you can:</b> \
-                <br\><br\>-Select all strains ids contained in the table \
-                <br\><br\>-Copy the selected ids to your clipboard \
-                <br\><br\>-Export their metatada in a Excel or a Pdf file \
-                <br\><br\>-Show or hide specific colums \
-                <br\><br\>-Set the number of rows per page \
-                <br\><br\>-Download the WGS files about the selected strains ids." ,
-                position: 'right'
-            }
-        },
-        {
-            element: '#table_id_filter',
-            popover: {
-                title: 'Search box',
-                description: "In order to be able to search information about every columns of this table. \
-                Every search dynamically filters the table. <br\> \
-                <b>You can try it now<b/>, then click \"next\" when you filtered something!" ,
-                position: 'left'
-            }
-        },
-        
-        /*{
-            element: '#menu_genomes_tutorial',
-            popover: {
-                title: 'Genomes',
-                description: "<img src=\"../../../videos/genomesDLtutorial.png\" width=\"250px\"> \
-                <br/>Browse and download the data generated by ARTwork for a species. (You are here, e.g <i>Salmonella</i>)",
-                position: 'right'
-            }
-        },
-        {
-            element: '#menu_references_tutorial',
-            popover: {
-                title: 'References',
-                description: "Browse and download WGS data about references genomes for a species (In our case, Salmonella reference genomes)",
-                position: 'right'
-            }
-        },
-        {
-            element: '#menu_serovars_tutorial',
-            popover: {
-                title: 'Serovars',
-                description: "Global overview of the serovars distribution for all the species processed by ARTwork",
-                position: 'right'
-        }
-        },
-        {
-            element: '#menu_phylogeny_tutorial',
-            popover: {
-                title: 'Phylogeny',
-                description: "Phylogeny: Global overview of the serovars distribution for all the species processed by ARTwork",
-                position: 'right'
-            }
-        },*/  
-        {
-            element: '#table_id',
-            popover: {
-                title: 'Let\'s get a try',
-                description: "<b>Please select some strains ids.</b>You can use <b>various selection modes:</b> \
-                <br\><br\> <b>Left click</b>: simple selection \
-                <br\><br\> <b>CTRL</b> + <b>left click</b>: one per one incremental selection \
-                <br\><br\> <b>CTRL</b> + <b>shift</b> + <b>left click</b> : multiple selection \
-                <br\><br\><br\>You can mix these 3 selections modes. \
-                <br/>Please notice <b>you can also</b> \
-                <br\>-See or download these files one per one by click on the clickable links \
-                <br\>-Sort the rows alphanumerically by clicking on its headers \
-                <br/><b>Click \"next\" when you finished to select</b>" ,
-                position: 'left'
-            }
-        },
-        {
-            element: '#paginationtutorial',
-            popover: {
-                title: 'Table pages',
-                description: "Notice you can also browse dynamically this table, page per page. Click next to continue." ,
-                position: 'left'
-            }
-        },
-        {
-        element: '#dlcheckbox',
-            popover: {
-                title: 'Download data about the selected strains',
-                description: "If you correctly followed the tutorial, you have now some strains (rows) selected.\
-                Let's download the WGS data about these strains: \
-                <br/><br/>-You can download all the WGS files for these strains by clicking the \"Download all\" button \
-                <br/><b>or</b> \
-                <br/>-Download specific files by checking the desired file formats \
-                <br/><br/><b>Click \"next\" when you finished to check</b>",
-                position: 'top'
-            }
-        },
-        {
-            element: '#rowtutorial',
-            popover: {
-                title: 'You\'re now able to start a download',
-                description: "You can <b>also</b>: \
-                <br\><br\>-Copy the selected ids to your clipboard \
-                <br\><br\>-Export them in a Excel or a Pdf file \
-                <br\><br\>-Show or hide colums \
-                <br\><br\>-Set the number of shown rows per page \
-                <br\><br\><h2>Voila,</h2><b>you can now download your files, test the other features, or just close this tutorial :-)</b>" ,
-                position: 'right'
-            }
-        }
-    ]);
-    // Driver.js: Start the introduction
-    driver.start();
 });
