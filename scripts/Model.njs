@@ -78,7 +78,19 @@ function filterByAttribute(attribute,value,successCallback) // Parse GAMeRdb dat
 		}	
 	})
 }
-
-//Export functions 
+// find everything in the database
+function sendAllJson(successCallback) {
+  db.GENOME.find((err, docs) => {
+    if (err) {
+      console.log('err');
+      db.close(); // close DB CONNEXION
+    } else {
+      return successCallback(docs); // return JSON results in callback
+    }
+    return 'ok';
+  });
+}
+// Export functions
 exports.filterByAttribute = filterByAttribute;
 exports.findAttribute = findAttribute;
+exports.sendAllJson = sendAllJson;

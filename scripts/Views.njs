@@ -89,7 +89,39 @@ function renderDataTables(species,callback,response,template,msg) // callback : 
 	});
 }
 
+function renderFullJson(callback, response, template, msg) // callback : controller script callback, response,template,msg : values required from controller script
+{
+	model.sendAllJson(function (result) {
+		template.set(callback, function (errors, callback) // templatesJS
+		{
+			if (errors) {
+				throw errors;
+			}
+			else {
+				var JSONstring = result // from model SucessCallback
+				var list = // list of variables that needed to be rendered dynamically
+					{
+						fullJSON: JSON.stringify(JSONstring),
+						JSONlen: Object.keys(JSONstring).length
+					}
+				//console.log(JSONstring) //dev
+				template.renderAll(list, function (err, callback) {
+					if (err) {
+						throw err;
+					}
+					else {
+						response.writeHead(msg, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
+						response.end(callback);
+					}
+				})
+			}
+		})
+	});
+}
+
 exports.renderDataTables = renderDataTables;
+exports.renderFullJson = renderFullJson;
+
 
 // model.filterByAttribute(MongoAttribute,MongoValue, function(result)
 // 		    	{

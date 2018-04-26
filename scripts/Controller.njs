@@ -213,16 +213,16 @@ var server = http.createServer(function(req, res)
 	}
 
 	// Same role as readFileAndInclude, plus procssing views from MongoDB data by using Views.js requesting Model.njs scripts
-	function readFileAndIncludeAndRender(templateFilePath,msg,MongoAttribute,MongoValue,species)
+	function readFileAndIncludeAndRenderBySpecies(templateFilePath,msg,MongoAttribute,MongoValue,species)
 	{
-		console.log('readFileAndIncludeAndRender'); //debug trace
+		console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
 		//debud test
 		fs.readFile(templateFilePath, function (errors, contents) 
 		{
 			if(errors)
 			{
 			  	console.log(errors);
-			  	send500(`readFileAndIncludeAndRender : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+			  	send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
 			  	throw errors;
 		    }
 		    else
@@ -236,17 +236,36 @@ var server = http.createServer(function(req, res)
 		});
 	}
 
+	function readFileAndIncludeAndRender(templateFilePath, msg) {
+		console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
+		//debud test
+		fs.readFile(templateFilePath, function (errors, contents) {
+			if (errors) {
+				console.log(errors);
+				send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+				throw errors;
+			}
+			else {
+				// sleep.sleep(1)
+				views.renderFullJson(contents, res, template, msg)
+				//uuid=crypto.randomBytes(16).toString("hex")
+				//unpackFiles(uuid,"/mnt/20To-vol/tmp/nothere.txt") //nothere.txt devra être recu avec un uuid dans son filename
 
-	// DEPRECATED !!! Same function as readFileAndIncludeAndRender but render directly in Controller.njs script (instead of render inside Views.njs script)
-	function readFileAndIncludeAndRenderHere(templateFilePath,msg,MongoAttribute,MongoValue)
+			}
+		});
+	}
+
+
+	// DEPRECATED !!! Same function as readFileAndIncludeAndRenderBySpecies but render directly in Controller.njs script (instead of render inside Views.njs script)
+	function readFileAndIncludeAndRenderBySpeciesHere(templateFilePath,msg,MongoAttribute,MongoValue)
 	{
-		console.log('readFileAndIncludeAndRender'); //debug trace
+		console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
 		fs.readFile(templateFilePath, function (errors, contents) 
 		{
 			if(errors)
 			{
 			  	console.log(errors);
-			  	send500(`readFileAndIncludeAndRenderHere : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+			  	send500(`readFileAndIncludeAndRenderBySpeciesHere : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
 			  	throw errors;
 		    }
 		    else
@@ -302,11 +321,11 @@ var server = http.createServer(function(req, res)
 		}
 		else if(urlPath === `/species/${species}/genomes.html`) // genomes page
 		{
-			readFileAndIncludeAndRender(`./../interface/views/species/${species}/genomes.html`,200,"Phylogeny.Genus",species.capitalize(),species.capitalize()); // Genus = species.capitalize()
+			readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`,200,"Phylogeny.Genus",species.capitalize(),species.capitalize()); // Genus = species.capitalize()
 		}
 		else if(urlPath === `/species/${species}/genomes_tutorial.html`) // genomes page
 		{
-			readFileAndIncludeAndRender(`./../interface/views/species/${species}/genomes_tutorial.html`,200,"Phylogeny.Genus",species.capitalize(),species.capitalize()); // Genus = species.capitalize()
+			readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes_tutorial.html`,200,"Phylogeny.Genus",species.capitalize(),species.capitalize()); // Genus = species.capitalize()
 		}
 		else if(urlPath === `/species/${species}/naura.html`) // Naura tool page
 		{
@@ -456,6 +475,7 @@ var server = http.createServer(function(req, res)
 		{
 			var jsonString = '';
 			var reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
+			console.log("there is a post")
 	        reqUtf.on('data', function (data) 
 	        {
 	        	jsonString += data;
@@ -517,6 +537,9 @@ var server = http.createServer(function(req, res)
 	{
 		readServerFile('./../interface/js/gamer.datatables.clostridium.js','application/javascript',200);
 	}
+	else if (urlPath === '/js/gamer.home.js') {
+		readServerFile('./../interface/js/gamer.home.js', 'application/javascript', 200);
+	}
 	else if (urlPath === '/semantic/dist/components/icon.min.css')
 	{
 		readServerFile('./../semantic/dist/components/icon.min.css','text/css',200);
@@ -524,6 +547,10 @@ var server = http.createServer(function(req, res)
 	else if (urlPath === '/css/gamer.effects.datatables.css')
 	{
 		readServerFile('./../interface/css/gamer.effects.datatables.css','text/css',200);
+	}
+	else if (urlPath === '/css/gamer.common.css') 
+	{
+		readServerFile('./../interface/css/gamer.common.css', 'text/css', 200);
 	}
 	else if (urlPath === '/css/dataTables.semanticui.min.css')
 	{
@@ -677,7 +704,7 @@ var server = http.createServer(function(req, res)
 	//Homepage
 	else if(urlPath === '/' ||  urlPath === '/home') 
 	{
-		readFileAndInclude('./../interface/views/homepage/index.html',200);
+		readFileAndIncludeAndRender('./../interface/views/homepage/index.html', 200)
 		processpost2(req,res);
 	}
 	//all species page
