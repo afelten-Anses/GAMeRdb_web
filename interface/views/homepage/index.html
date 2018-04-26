@@ -9,15 +9,20 @@
         -->
         <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico" />
         <link rel="stylesheet" type="text/css" href="../../../semantic/dist/semantic.min.css"/>
+        <link rel="stylesheet" type="text/css" href="../../css/gamer.common.css"/>
         <script src="../../js/jquery.min.js"></script>
         <script src="../../../semantic/dist/semantic.min.js"></script>
-        <script src="../../js/gamer.effects.js" defer></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/data.js"></script>
+        <script src="https://code.highcharts.com/modules/drilldown.js"></script>
+        <script src="http://underscorejs.org/underscore-min.js"></script>
+        
     </head>
     <body>
         <!-- main wrapper "bloc_page". Englobe tout le site pour la mise en page globale-->
         <div id="bloc_page">
             <header>
-                <%include ./../interface/views/includes/header.html%>
+                <%include ./../interface/views/includes/header.html%></%include>
             </header>        
             <div class="ui stackable grid" id="aftertopmenu"> <!--grid principal (grids de grids) -->
                 <!--GRID du de gauche-->
@@ -31,22 +36,25 @@
                             <div class="column">
                                 <br/>
                                 <img class="ui centered original image" src="../../img/gamergenomicdblogo.png"/>
-                                <div class="ui info large message">
-                                    <i class="close icon"></i>
+                                <div class="ui info large justifed message">
                                     <div class="messageinfo">
                                         <h1 class="ui medium header">Welcome to the GAMeRdb genomic interface database</h1>
                                     </div>
-                                    Explications sur le fonctionnement du site, des fonctionnalitées intégrées et à venir. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Fonctionnalités suivantes :
+                                    <br/>
+                                    This website is currently a opened beta.  In the final version, you'll find any information about all genomes saved in the GAMeRdb database, and you'll be able to screen the database by running some tools to making fast bioinformatics analyses as Blast and phylogenies (k-mers based)
+                                    The following pages are currently available:
                                     <ul class="list">
-                                        <li>Lorem ipsum is life</li>
-                                        <li>Blabla et surtout blabla</li>
+                                        <br/>
+                                        <li>"Genomes Workspace" pages (Clostridium,Listeria,Salmonella,Staphylococcus) : In these pages, you'll find any information whe have about all genomes processed by ARTwork and saved in the GAMeRdb database</li>
+                                        <li>"Genomes Workspaces" tutorial : a quick interactive guide showing how to fully exploit functionalities included in the genomes workspaces pages</li>
+                                        <br/>
                                     </ul>
-                                    <p>Explications sur le fonctionnement du site, des fonctionnalitées intégrées et à venir. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                                    <p>You can access to the tutorials and some external links on each footer of the website.</p>
                                 </div>
                             </div>
                         </div> 
                         <div class="two column row">               
-                            <div class=" column">
+                            <div class="seven wide column">
                                 <div class="ui large message">
                                     <h2 class="ui medium header">Newsfeed</h2>
                                     <ul class="list">
@@ -58,11 +66,12 @@
                                     </ul>
                                 </div>
                             </div>              
-                            <div class="column">
+                            <div class="nine wide column">
                                 <div class="ui large message">
-                                    <h2 class="ui medium header">Database statistics</h2>
+                                    <h2 class="ui medium header">GAMeRdb statistics (n=<%JSONlen%></%JSONlen%>strains)</h2>
+                                    <span class="reallytiny">Click on the species to see more information about their taxonomy</span>
                                     <br/>
-                                    <img src="../../img/statistics.png" class="ui centered original image"/>
+                                    <div id="HighchartsContainer" style="min-width: 410px; max-width: 1000px; max-height: 800px; margin: 0 auto"></div>
                                 </div>
                             </div>     
                         </div>
@@ -75,8 +84,15 @@
             </div>
             <!-- ex classe sticky-->
             <footer>
-                <%include ./../interface/views/includes/footer.html%>
+                <%include ./../interface/views/includes/footer.html%></%include>
             </footer>       
         </div>
-    </body>       
+    </body>
+    <script>
+        // ------------ Retrieve GAMeRdb info in JSON files ------------ //
+        var JSONlength = <%JSONlen%> // GAMeRdb length (number of entries)
+        var JSONstring = <%fullJSON%> // GAMeRdb content
+        // these JSON are used gamer.home.js script
+    </script>
+    <script src="../../js/gamer.home.js" defer></script><!-- very last script to load -->
 </html>
