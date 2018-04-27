@@ -1,3 +1,8 @@
+// Turn-on semanticUI modules
+$('.ui.accordion')
+  .accordion()
+;
+
 // Rounds a float value at n decimals precision : used in highcharts percentages computation
         function round(value, decimals) 
         {
