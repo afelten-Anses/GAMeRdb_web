@@ -15,12 +15,12 @@
         <!-- SemanticUI JS -->
         <script src="../../../semantic/dist/semantic.min.js"></script>
         <!-- Highcharts JS -->
-        <script src="https://code.highcharts.com/highcharts.js"></script>
-        <script src="https://code.highcharts.com/modules/data.js"></script>
-        <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-        <script src="http://underscorejs.org/underscore-min.js"></script>
+        <script src="../../js/highcharts.js"></script><!-- base -->
+        <script src="../../js/drilldown.js"></script><!-- chart browsing levels -->
+        <!-- Underscore JS -->
+        <script src="../../js/underscore-min.js"></script><!-- JSON requests algorithms client side -->
         <!-- common JS -->
-        <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js"></script> 
+        <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js"></script> <!-- used in almost every page of this website -->
     </head>
     <body>
         <!-- main wrapper "bloc_page". Englobe tout le site pour la mise en page globale-->
@@ -49,31 +49,37 @@
                                     The following pages are currently available:
                                     <ul class="list">
                                         <br/>
-                                        <li>"Genomes Workspace" pages (Clostridium,Listeria,Salmonella,Staphylococcus) : In these pages, you'll find any information whe have about all genomes processed by ARTwork and saved in the GAMeRdb database</li>
-                                        <li>"Genomes Workspaces" tutorial : a quick interactive guide showing how to fully exploit functionalities included in the genomes workspaces pages</li>
+                                        <li>
+                                            "Genomes Workspace" pages (Clostridium,Listeria,Salmonella,Staphylococcus): In these pages, you'll find any information whe have about all genomes processed by ARTwork and saved in the GAMeRdb database
+                                        </li>
+                                        <li>
+                                            "Genomes Workspaces" tutorial: a quick interactive guide showing how to fully exploit functionalities included in the genomes workspaces pages
+                                        </li>
+                                        <li>
+                                            Homepage: A quick resume of the GAMeRdb database statistics (Species/CC/ST/Serovar distribution) , newsfeeds, and more.
+                                        </li>
                                         <br/>
                                     </ul>
-                                    <p>You can access to the tutorials and some external links on each footer of the website.</p>
+                                    <p>You can access to the tutorials and some external links on each footer of the website. Please contact us for any suggestion or bug report.</p>
                                 </div>
                             </div>
                         </div> 
                         <div class="two column row">               
                             <div class="seven wide column">
-                                <div class="ui large message">
-                                    <h2 class="ui medium header">Newsfeed</h2>
-                                    <ul class="list">
-                                        <li><b>MM-DD-YYYY</b> new feature added, <a href="#">see more...</a></li>
-                                        <li><b>MM-DD-YYYY</b> new feature added, <a href="#">see more...</a></li>
-                                        <li><b>MM-DD-YYYY</b> new version of the website (X.X beta), <a href="#">see more...</a></li>
-                                        <li><b>MM-DD-YYYY</b> new version of the website (X.X beta), <a href="#">see more...</a></li>
-                                        <li><b>MM-DD-YYYY</b> welcome to the first version of GAMeR's genomic database interface! <a href="#">see more...</a></li>
-                                    </ul>
+                                <div class="ui large yellow message">
+                                    <h3 class="ui massive header">What's new?</h3>
+                                    <div class="ui fluid accordion">
+                                        <!-- add the latest news HERE -->
+                                        <%include ./../interface/views/includes/news_latest.html%></%include>
+                                        <!-- add old news HERE -->
+                                        <%include ./../interface/views/includes/news_old.html%></%include>
+                                    </div>
                                 </div>
                             </div>              
                             <div class="nine wide column">
                                 <div class="ui large message">
                                     <h2 class="ui medium header">GAMeRdb statistics (n=<%JSONlen%></%JSONlen%>strains)</h2>
-                                    <span class="reallytiny">Click on the species to see more information about their taxonomy</span>
+                                    <span class="reallytiny">Click on the species to see more information about their taxonomy (CC, ST, serovar distribution)</span>
                                     <br/>
                                     <div id="HighchartsContainer" style="min-width: 410px; max-width: 1000px; max-height: 800px; margin: 0 auto"></div>
                                 </div>
