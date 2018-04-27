@@ -540,6 +540,10 @@ var server = http.createServer(function(req, res)
 	else if (urlPath === '/js/gamer.home.js') {
 		readServerFile('./../interface/js/gamer.home.js', 'application/javascript', 200);
 	}
+	else if (urlPath === '/js/gamer.common.js') 
+	{
+		readServerFile('./../interface/js/gamer.common.js', 'application/javascript', 200);
+	}
 	else if (urlPath === '/semantic/dist/components/icon.min.css')
 	{
 		readServerFile('./../semantic/dist/components/icon.min.css','text/css',200);
