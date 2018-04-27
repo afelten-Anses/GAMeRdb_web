@@ -537,6 +537,15 @@ var server = http.createServer(function(req, res)
 	{
 		readServerFile('./../interface/js/gamer.datatables.clostridium.js','application/javascript',200);
 	}
+	else if (urlPath === '/js/highcharts.js') {
+		readServerFile('./../interface/js/highcharts.js', 'application/javascript', 200);
+	}
+	else if (urlPath === '/js/drilldown.js') {
+		readServerFile('./../interface/js/drilldown.js', 'application/javascript', 200);
+	}
+	else if (urlPath === '/js/underscore-min.js') {
+		readServerFile('./../interface/js/underscore-min.js', 'application/javascript', 200);
+	}
 	else if (urlPath === '/js/gamer.home.js') {
 		readServerFile('./../interface/js/gamer.home.js', 'application/javascript', 200);
 	}
