@@ -27,92 +27,84 @@
  ///////////////////////////////////////////////////////////////// */
 
 // ------------- NodeJS modules ------------- //
-
 const http = require('http'); // httpserver
 const fs = require('fs'); // filesystem (file parser)
 const url = require('url'); // url parser
 const path = require('path'); // path parser
 
-// ------------- External modules ------------- //
+// ------------- MVC dependencies ------------- //
+const model = require('./Model.njs'); // use Model.js as a NodeJS module
+const views = require('./Views.njs'); // use Views.js as a NodeJS module
 
+// ------------- External modules ------------- //
 const template = require('templatesjs'); // useful for header and footer 'includes'
 const validator = require('validator'); // queries validator and sanitizer
 const querystring = require('querystring'); // query parser and stringifyier
-// MVC scripts dependencies
-const model = require('./Model.njs'); // use Model.js as a NodeJS module
-const views = require('./Views.njs'); // use Views.js as a NodeJS module
-// Network configuration
-var listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
-var listenPort = process.argv[3] || 3000; //default listening port
-// Args
-const args = require('commander'); //arguments parser
-var sleep = require('sleep'); // sleep : dev tests
-var shell = require('shelljs'); // run bash scripts from NodeJS
-const crypto = require("crypto"); // used for generating uuids
-// Used for automatic type MIME attribution in readServerFileAutoMime()
-const mimeType = {
-    '.ico': 'image/x-icon',
-    '.html': 'text/html',
-    '.js': 'text/javascript',
-    '.json': 'application/json',
-    '.css': 'text/css',
-    '.png': 'image/png',
-    '.jpg': 'image/jpeg',
-    '.wav': 'audio/wav',
-    '.mp3': 'audio/mpeg',
-    '.mp4': 'video/mpeg',
-    '.svg': 'image/svg+xml',
-    '.pdf': 'application/pdf',
-    '.doc': 'application/msword',
-    '.eot': 'appliaction/vnd.ms-fontobject',
-    '.ttf': 'aplication/font-sfnt',
-    '.gff': 'text/plain',
-    '.log': 'text/plain',
-    '.fasta': 'text/plain',
-    '.fa' : 'text/plain',
-    '.fq' : 'text/plain',
-    '.vcf': 'text/plain',
-    '.fastq': 'text/plain',
-    '.gff': 'text/plain',
-    '.gbk': 'text/plain',
-    '.gz' : 'application/gzip',
-    '.tsv' : 'text/plain',
-    '.woff2' : 'font/woff2',
-    '.woff' : 'font/woff',
-    '.txt' : 'text/plain',
-    '.zip' : 'application/zip'
-  };
-// Used in order to restrict access to these files
-const prohibed = [
-	'/Controller.njs',
-  	'/Model.njs',
-  	'/Views.njs'
-  	];
+const args = require('commander'); // arguments parser
+const shell = require('shelljs'); // run bash scripts from NodeJS
+// const crypto = require("crypto"); // used for generating uuids --> now generated on client-side
 
+// ------------- Configuration ------------- //
+let listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
+let listenPort = process.argv[3] || 3000; // default listening port
 
-/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-															*******	CONTROLLER code *******
-*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// --- App usage --- //
-args
+args // App usage (help)
   .version('0.99')
   .option('-d, --dev', 'dev mode (run app in localhost mode)')
   .parse(process.argv);
 
-// --- if  --dev mode : change localhost ip to server ip --- //
-if(args.dev) 
-{
-	listenIp = '192.168.184.133';
-	listenPort = 3001;
+// if  --dev mode: change localhost ip to server ip
+if (args.dev) {
+  listenIp = '192.168.184.133';
+  listenPort = 3001;
 }
-
 /* More sockets per host  (default = 5) ==> increase performance.
 decrease if case of excessive ressources draining */
 http.globalAgent.maxSockets = 15;
-// --- App : controller (+view engine) --- //
-var server = http.createServer(function(req, res) 
-{
+
+const mimeType = { // Used for automatic type MIME attribution in readServerFileAutoMime()
+  '.ico': 'image/x-icon',
+  '.html': 'text/html',
+  '.js': 'text/javascript',
+  '.json': 'application/json',
+  '.css': 'text/css',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.wav': 'audio/wav',
+  '.mp3': 'audio/mpeg',
+  '.mp4': 'video/mpeg',
+  '.svg': 'image/svg+xml',
+  '.pdf': 'application/pdf',
+  '.doc': 'application/msword',
+  '.eot': 'appliaction/vnd.ms-fontobject',
+  '.ttf': 'aplication/font-sfnt',
+  '.gff': 'text/plain',
+  '.log': 'text/plain',
+  '.fasta': 'text/plain',
+  '.fa': 'text/plain',
+  '.fq': 'text/plain',
+  '.vcf': 'text/plain',
+  '.fastq': 'text/plain',
+  '.gbk': 'text/plain',
+  '.gz': 'application/gzip',
+  '.tsv': 'text/plain',
+  '.woff2': 'font/woff2',
+  '.woff': 'font/woff',
+  '.txt': 'text/plain',
+  '.zip': 'application/zip',
+};
+const prohibed = [ // Restricted files access list
+  '/Controller.njs',
+  '/Model.njs',
+  '/Views.njs'
+];
+
+
+/* ///////////////////////////////////////////////////////////////////
+                    ----- APP starts here -----
+ ///////////////////////////////////////////////////////////////// */
+
+var server = http.createServer(function(req, res) {
 	var urlPath = url.parse(req.url).pathname; // URL without query
 	var params = querystring.parse(url.parse(req.url).query); // URL with query
 	var fileName = urlPath.split("/").pop(-1); // requested filename
@@ -405,11 +397,14 @@ var server = http.createServer(function(req, res)
 		            console.log("and also")
 		            stream.once('open', function(fd) 
 		            {
-			            for (i in post)
-						{
-						  console.log(post[i]+"__n: "+i);
-						  stream.write(post[i]+"\n")
-						}
+                        if (validator.isJSON(JSON.stringify(post)))
+                        {
+			                for (i in post)
+						    {
+						        console.log(post[i]+"__n: "+i);
+						        stream.write(post[i]+"\n")
+                            }
+                        }   
 					});
 					//stream.end();
 					var child = shell.exec("sh ZipAndCall.sh "+ clientuid + " " + zipfilesList, {async:true}); // async=true --> do it when callback
