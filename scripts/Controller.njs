@@ -10,35 +10,31 @@
    https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
    https://eladnava.com/binding-nodejs-port-80-using-nginx/
    --> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
-																									ajouter des filtres,module
-																									compression du contenu
-
-	-Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
-	-ReVerifier 100% async, callbacks pour toutes les fonctions
-	-Crypter mot de passe GAMeRdb
-
+   -Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+   -ReVerifier 100% async, callbacks pour toutes les fonctions
+   -Crypter mot de passe GAMeRdb
 */
 
-/*Rappels :
-	-Includes front-end automatisé avec readFileAndInclude()
-	-Includes back-end avec res.render('flag','texte_a_inclure') pour include vite fait les retours du modele (mettre au format directement dans le modele!)
+/* Rappels :
+    -Includes front-end automatisé avec readFileAndInclude()
+    -Includes back-end avec res.render('flag','texte_a_inclure') pour include vite fait les retours
+     du modele (mettre au format directement dans le modele!)
 */
 
 
-/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-												*******	CONTROLLER init : modules, MVC scripts, args *******
-*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* ///////////////////////////////////////////////////////////////////
+            ----- CONTROLLER init : modules, MVC scripts, args -----
+ ///////////////////////////////////////////////////////////////// */
 
-// NodeJS modules
-const http = require('http'); //httpserver
-// more sockets per host  (default = 5) ==> increase performance. decrease if case of excessive ressources draining
-const agent = new http.Agent({
-   maxSockets: 25
-});
-const fs = require('fs'); //filesystem (file parser)
+// ------------- NodeJS modules ------------- //
+
+const http = require('http'); // httpserver
+const fs = require('fs'); // filesystem (file parser)
 const url = require('url'); // url parser
-const path = require('path'); //path parser
-// External modules
+const path = require('path'); // path parser
+
+// ------------- External modules ------------- //
+
 const template = require('templatesjs'); // useful for header and footer 'includes'
 const validator = require('validator'); // queries validator and sanitizer
 const querystring = require('querystring'); // query parser and stringifyier
@@ -49,7 +45,7 @@ const views = require('./Views.njs'); // use Views.js as a NodeJS module
 var listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
 var listenPort = process.argv[3] || 3000; //default listening port
 // Args
-const params = require('commander'); //arguments parser
+const args = require('commander'); //arguments parser
 var sleep = require('sleep'); // sleep : dev tests
 var shell = require('shelljs'); // run bash scripts from NodeJS
 const crypto = require("crypto"); // used for generating uuids
@@ -99,18 +95,21 @@ const prohibed = [
 */////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // --- App usage --- //
-params
-  .version('0.1.0')
+args
+  .version('0.99')
   .option('-d, --dev', 'dev mode (run app in localhost mode)')
   .parse(process.argv);
 
 // --- if  --dev mode : change localhost ip to server ip --- //
-if(params.dev) 
+if(args.dev) 
 {
-	listenIp = '127.0.0.1';
-	listenPort = 3000;
+	listenIp = '192.168.184.133';
+	listenPort = 3001;
 }
 
+/* More sockets per host  (default = 5) ==> increase performance.
+decrease if case of excessive ressources draining */
+http.globalAgent.maxSockets = 15;
 // --- App : controller (+view engine) --- //
 var server = http.createServer(function(req, res) 
 {
@@ -313,7 +312,7 @@ var server = http.createServer(function(req, res)
 		console.log('routeFilesBySpecies'); //debug trace
 		if(urlPath === `/species/${species}/blast.html`) // blast page
 		{
-			readFileAndInclude(`./../interface/views/species/${species}/blast.html`,200);
+			readFileAndInclude(`./../interface/views/../interface/views/species/${species}/blast.html`,200);
 		}
 		else if(urlPath === `/species/${species}/distribution.html`) // distribution page
 		{
@@ -334,10 +333,6 @@ var server = http.createServer(function(req, res)
 		else if(urlPath === `/species/${species}/phylogeny.html`) // Phylogeny page
 		{
 			readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`,200);
-		}
-		else if(urlPath === `/species/${species}/quickphylo.html`) // Quickphylo page
-		{
-			readFileAndInclude(`./../interface/views/species/${species}/quickphylo.html`,200);
 		}
 		else if(urlPath === `/species/${species}/refs.html`) // References page
 		{
@@ -719,7 +714,12 @@ var server = http.createServer(function(req, res)
 	{
 		readFileAndIncludeAndRender('./../interface/views/homepage/index.html', 200)
 		processpost2(req,res);
-	}
+    }
+    //tools pages
+    else if (urlPath === `/views/tools/fastosh.html`) // Quickphylo page
+    {
+        readFileAndInclude(`./../interface/views/tools/fastosh.html`, 200);
+    }
 	//all species page
 	else if(urlPath.indexOf('/species/')>=0) // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
 	{
