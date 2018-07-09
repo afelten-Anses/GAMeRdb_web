@@ -91,7 +91,7 @@ const mimeType = { // Used for automatic type MIME attribution in readServerFile
   '.woff2': 'font/woff2',
   '.woff': 'font/woff',
   '.txt': 'text/plain',
-  '.zip': 'application/zip',
+  '.zip': 'application/zip'
 };
 const prohibed = [ // Restricted files access list
   '/Controller.njs',
@@ -104,32 +104,55 @@ const prohibed = [ // Restricted files access list
                     ----- APP starts here -----
  ///////////////////////////////////////////////////////////////// */
 
-var server = http.createServer(function(req, res) {
-	var urlPath = url.parse(req.url).pathname; // URL without query
-	var params = querystring.parse(url.parse(req.url).query); // URL with query
-	var fileName = urlPath.split("/").pop(-1); // requested filename
+const server = http.createServer(function (req, res) {
+  const urlPath = url.parse(req.url).pathname; // URL without query
+  const params = querystring.parse(url.parse(req.url).query); // URL with query
+  const fileName = urlPath.split('/').pop(-1); // requested filename
+  console.log(req.url); // trace
+  console.log('file requested : ', fileName); // trace
+  console.log(params); // trace
 
-	console.log(req.url); //debug trace
-	console.log("file requested : " + fileName); // debug trace
-	console.log(params); //debug trace
+  // Deprecated function
+  /* function unpackFiles(uniqueId, filesList) {
+    var child = shell.exec("sh ZipAndCall.sh " + uniqueId + " " + filesList, { async: true });
+    // Say something on when child process stdout is active
+    child.stdout.on('data', function (data) {
+      console.log("processing files listed in tmp" + filesList)
+    });
+  } */
 
+  /* handle POST request with JSON data */
+  function processpost2(req, res) {
+    if (req.method === 'POST') {
+      let jsonString = '';
+      let reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
+      console.log("processpost2 started")
+      reqUtf.on('data', function (data) {
+        jsonString += data;
+      });
+      reqUtf.on('end', function () {
+        console.log(JSON.parse(jsonString));
+      });
+    }
+  }
 
-	// Read server files and send it to client
-	function readServerFile(filePath,type,msg) // Filepath : file requested / type : MIME-Type / msg : server response code
-	{
-		let ext = path.parse(filePath).ext; // Parse file requested to retrieve file extension (ext)
+  /* Returns true if a full string (word) (not a substring) is contained
+   in a other string(sentence) */
+  function wordInString(sentence, word) {
+    return new RegExp('\\b' + word + '\\b', 'i').test(sentence);
+  }
 
-		fs.readFile(filePath, function (errors, contents) 
-		{
-			if(errors)
-			{
-				send500(`readServerFile: Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
-				throw errors;
-			}
-			else
-			{
-				res.writeHead(msg,{'Content-Type': type ,'Cache-Control': 'no-cache'});
-				res.end(contents); // envoyer le contenu (contents de fonction en parametre de fs.readfile) en réponse
+  /* Read files from NAS and send it to client.
+  filePath : file path, type ; file extension, msg: response code */
+  function readServerFile(filePath, type, msg) {
+    const ext = path.parse(filePath).ext; // Parse file requested to retrieve file extension (ext)
+    fs.readFile(filePath, function (errors, contents) {
+      if (errors) {
+        send500(`readServerFile: Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
+        throw errors;
+      } else {
+        res.writeHead(msg, { 'Content-Type': type, 'Cache-Control': 'no-cache' });
+        res.end(contents);
 			}
 		});
 		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
@@ -450,37 +473,7 @@ var server = http.createServer(function(req, res) {
 		readFileAndInclude('./../interface/views/500.html',500);
 	}
 
-	function unpackFiles(uniqueId,filesList){
-		var child = shell.exec("sh ZipAndCall.sh "+ uniqueId + " " + filesList, {async:true});
-				// Say something on when child process stdout is active
-				child.stdout.on('data', function(data) 
-				{
-				  console.log("processing files listed in tmp"+ filesList)
-				});
-	}
-
-	function processpost2(req, res) // put POST request in a JSON file
-	{
-		if (req.method == 'POST')
-		{
-			var jsonString = '';
-			var reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
-			console.log("there is a post")
-	        reqUtf.on('data', function (data) 
-	        {
-	        	jsonString += data;
-	        });
-	        reqUtf.on('end', function () 
-	        {
-	        	console.log(JSON.parse(jsonString));
-	        });
-	    }
-	}
-
-	function wordInString(sentence, word) // return true if a full string (word) (not a substring) is contained in a other string(sentence)
-	{
-  		return new RegExp( '\\b' + word + '\\b', 'i').test(sentence);
-	}
+	
 
 	/*//////////////////////////////////////////////////////////////////////////////////////////////////////////*
 										ROUTING AND VIEWS PROCESSING
