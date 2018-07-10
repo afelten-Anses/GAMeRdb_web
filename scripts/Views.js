@@ -13,8 +13,8 @@ const template = require('templatesjs'); // useful for header and footer 'includ
 const validator = require('validator'); // queries validator and sanitizer
 const querystring = require('querystring'); // query parser and stringifyier
 // MVC scripts dependencies
-const model = require('./Model.njs'); // use Model.js as a NodeJS module
-const views = require('./Views.njs'); // use Views.js as a NodeJS module
+const model = require('./Model'); // use Model.js as a NodeJS module
+const views = require('./Views'); // use Views.js as a NodeJS module
 
 // Render specific dataTables for each species
 // function renderDataTables(species,callback,response,template,msg) // callback : controller script callback, response,template,msg : values required from controller script

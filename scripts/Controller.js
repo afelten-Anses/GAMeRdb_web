@@ -33,8 +33,8 @@ const url = require('url'); // url parser
 const path = require('path'); // path parser
 
 // ------------- MVC dependencies ------------- //
-const model = require('./Model.njs'); // use Model.js as a NodeJS module
-const views = require('./Views.njs'); // use Views.js as a NodeJS module
+const model = require('./Model'); // use Model.js as a NodeJS module
+const views = require('./Views'); // use Views.js as a NodeJS module
 
 // ------------- External modules ------------- //
 const template = require('templatesjs'); // useful for header and footer 'includes'
