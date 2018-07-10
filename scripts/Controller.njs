@@ -50,13 +50,18 @@ let listenPort = process.argv[3] || 3000; // default listening port
 
 args // App usage (help)
   .version('0.99')
-  .option('-d, --dev', 'dev mode (run app in localhost mode)')
+  .option('--dev', 'dev mode (run app in dev port)')
+  .option('--local', 'run app in localhost')
   .parse(process.argv);
 
 // if  --dev mode: change localhost ip to server ip
 if (args.dev) {
   listenIp = '192.168.184.133';
   listenPort = 3001;
+}
+if (args.local) {
+  listenIp = '127.0.0.1';
+  listenPort = 3000;
 }
 /* More sockets per host  (default = 5) ==> increase performance.
 decrease if case of excessive ressources draining */
