@@ -127,6 +127,12 @@ const server = http.createServer(function (req, res) {
   } */
 
   /* handle POST request with JSON data */
+  /**
+             * Repeat <tt>str</tt> several times.
+             * @param {string} str The string to repeat.
+             * @param {number} [times=1] How many times to repeat the string.
+             * @returns {string}
+             */
   function processpost2(req, res) {
     if (req.method === 'POST') {
       let jsonString = '';
