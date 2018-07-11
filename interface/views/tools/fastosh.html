@@ -18,7 +18,7 @@
         <script type="text/javascript" src="http://www.jsphylosvg.com/js/raphael/raphael-min.js" ></script> 
 	    <script type="text/javascript" src="http://www.jsphylosvg.com/js/jsphylosvg-min.js?1.29"></script> 
 	    <script type="text/javascript">
-	    window.onload = function(){
+	    /*window.onload = function(){
 			var dataObject = { newick: '(((Espresso:2,(Milk Foam:2,Espresso Macchiato:5,((Steamed Milk:2,Cappucino:2,(Whipped Cream:1,Chocolate Syrup:1,Cafe Mocha:3):5):5,Flat White:2):5):5):1,Coffee arabica:0.1,(Columbian:1.5,((Medium Roast:1,Viennese Roast:3,American Roast:5,Instant Coffee:9):2,Heavy Roast:0.1,French Roast:0.2,European Roast:1):5,Brazilian:0.1):1):1,Americano:10,Water:1);' };
 			phylocanvas = new Smits.PhyloCanvas(
 				dataObject,
@@ -28,6 +28,7 @@
                 'circular'
 			);
 	    };
+        */
 	    </script>
         <!-- common JS -->
         <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script><!-- exec when document loaded -->
@@ -55,25 +56,55 @@
                             <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
                         </div>
                     </div>
+
                     <div class="ui divider"></div>
-                    <div class="column" id="svgCanvas">
-                       <!-- tree visualisation or input -->
-                    </div>
-                    <div class="ui divider">
-                    </div>
-                    <div class="column" id="dlcheckbox">
-                        <div class="field">
-                            <i class="large cloud download icon"></i><span class="ui small header"> Download settings</span>
+                    
+
+                    <div class="ui grid">
+                    <div class="ten wide column">
+                    <div class="ui accordion">
+                        <div class="title active">
+                            <i class="dropdown icon"></i>
+                            What is a dog?
                         </div>
+                        <div class="content active">
+                            <p class="transition visible" style="display: block !important;">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+
+
+                    <div class="ui grid">
+                    <form class="ui form seven wide column centered">
+                        <div class="inline field">
+                            <label>Strains ID list:</label>
+                            <textarea rows="5" placeholder="Please enter a list of strains ID"></textarea>
+                        </div>
+
+                        <div class="field">
+                            <label for='tfile'> Or upload strain list file: </label>
+                            <input type="file" class="form-control"  name="tfile" />
+                        </div>
+
+                    <button class="ui button" type="submit">Run</button>
+                    </form>
+                    </div>
+                    
+                   
                         <!-- download tree -->
                     </div>
                 </div>
             </div>
+        
             <footer class= "sticky">
                 <%include ./../interface/views/includes/footer.html%></%include>
             </footer>
         </div>
     </body>
+    <script>
+       $('.ui.accordion').accordion();
+    </script>
     <script>
         <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
         /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Clostridium_multiqc_report.html"> MultiQC report</a></caption>');*/
