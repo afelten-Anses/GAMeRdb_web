@@ -33,8 +33,8 @@ const url = require('url'); // url parser
 const path = require('path'); // path parser
 
 // ------------- MVC dependencies ------------- //
-const model = require('./Model.njs'); // use Model.js as a NodeJS module
-const views = require('./Views.njs'); // use Views.js as a NodeJS module
+const model = require('./Model'); // use Model.js as a NodeJS module
+const views = require('./Views'); // use Views.js as a NodeJS module
 
 // ------------- External modules ------------- //
 const template = require('templatesjs'); // useful for header and footer 'includes'
@@ -127,13 +127,14 @@ const server = http.createServer(function (req, res) {
   } */
 
   /* handle POST request with JSON data */
-  /**
+  
+  function processpost2(req, res) {
+    /**
              * Repeat <tt>str</tt> several times.
              * @param {string} str The string to repeat.
              * @param {number} [times=1] How many times to repeat the string.
              * @returns {string}
              */
-  function processpost2(req, res) {
     if (req.method === 'POST') {
       let jsonString = '';
       let reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request

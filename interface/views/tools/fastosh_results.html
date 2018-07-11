@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- GAMeRdbi V2 views : WORK IN PROGRESS -->
+    <head>
+        <meta charset="utf-8"/>
+        <title>GAMeRdb - Genomes </title>
+        <meta name="description" content="GAMeR genomic database - Clostridium genomes"/>
+        <link rel="shortcut icon" type="image/x-icon" href="../../../img/favicon.ico" />
+        <!-- SEMANTIC UI main styles-->
+        <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/semantic.min.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/components/icon.min.css"/>
+        <!--jQuery JS-->
+        <script src="../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery-1.12.4.js"></script><!--jQuery version adapted to DataTables-->
+        <!-- SEMANTIC UI main JS-->
+        <script src="../../../../semantic/dist/semantic.min.js"></script>
+        <!-- JS Phylo -->
+        <script type="text/javascript" src="http://www.jsphylosvg.com/js/raphael/raphael-min.js" ></script> 
+	    <script type="text/javascript" src="http://www.jsphylosvg.com/js/jsphylosvg-min.js?1.29"></script> 
+	    <script type="text/javascript">
+	    window.onload = function(){
+			var dataObject = { newick: '(((Espresso:2,(Milk Foam:2,Espresso Macchiato:5,((Steamed Milk:2,Cappucino:2,(Whipped Cream:1,Chocolate Syrup:1,Cafe Mocha:3):5):5,Flat White:2):5):5):1,Coffee arabica:0.1,(Columbian:1.5,((Medium Roast:1,Viennese Roast:3,American Roast:5,Instant Coffee:9):2,Heavy Roast:0.1,French Roast:0.2,European Roast:1):5,Brazilian:0.1):1):1,Americano:10,Water:1);' };
+			phylocanvas = new Smits.PhyloCanvas(
+				dataObject,
+				'svgCanvas', 
+				800, 
+				800,
+                'circular'
+			);
+	    };
+	    </script>
+        <!-- common JS -->
+        <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script><!-- exec when document loaded -->
+    </head>
+    <body>    
+        <div id="bloc_page"><!-- main wrapper-->
+            <header>
+                <%include ./../interface/views/includes/header.html%></%include>
+            </header> 
+            <!------------------------------------------------------------------>
+            <!-- MAIN PAGE -->
+            <!------------------------------------------------------------------>
+            <div class="ui stackable grid" id="aftertopmenu"> 
+                <!--LEFT GRID : vertical menu -->
+                <div class="two wide column" id="leftmenu">
+                        <!-- Menu de gauche -->
+                </div>     
+                <!--RIGHT grid : DataTables -->
+                <div class="ten wide column" id="centermenu">
+                    <div class="ui grid">
+                        <div class="eight wide column">
+                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text">FasTosh (W.I.P)</span></h1>
+                        </div>
+                        <div class="eight wide right aligned column" id="helpme">
+                            <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
+                        </div>
+                    </div>
+                    <div class="ui divider"></div>
+                    <div class="column" id="svgCanvas">
+                       <!-- tree visualisation or input -->
+                    </div>
+                    <div class="ui divider">
+                    </div>
+                    <div class="column" id="dlcheckbox">
+                        <div class="field">
+                            <i class="large cloud download icon"></i><span class="ui small header"> Download settings</span>
+                        </div>
+                        <!-- download tree -->
+                    </div>
+                </div>
+            </div>
+            <footer class= "sticky">
+                <%include ./../interface/views/includes/footer.html%></%include>
+            </footer>
+        </div>
+    </body>
+    <script>
+        <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
+        /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Clostridium_multiqc_report.html"> MultiQC report</a></caption>');*/
+        $('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global overview of files quality, please check the <a href="#"> MultiQC report</a></caption>');
+        var data = <%datatablesJSON%>
+    </script>
+</html>
