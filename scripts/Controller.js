@@ -1,8 +1,10 @@
-// -Author : Kevin Durimel
-// -Goal : Controller script (MVC Scheme)
-// -External depencies : templatesjs,validator
+/**
+     * @fileOverview GAMeRdbi Controller module. Main script of the NodeJS webapp.
+     * @author Kévin Durimel <k.durimel@gmail.com>
+     * @version 0.99
+     */
 
-/* A FAIRE AVANT LA MISE EN PRODUCTION :
+/* A FAIRE AVANT LA MISE EN PRODUCTION de la V2:
 -En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache'
 (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
  -COMMENTER Tout ce qui est commenté 'debug trace' et rennomer debug trace par 'trace'
@@ -13,13 +15,6 @@
    -Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
    -ReVerifier 100% async, callbacks pour toutes les fonctions
    -Crypter mot de passe GAMeRdb
-*/
-
-/* Rappels :
-    -Includes front-end automatisé avec readFileAndInclude()
-    -Includes back-end avec res.render('flag','texte_a_inclure') pour include vite fait les retours
-     du modele (mettre au format directement dans le modele!)
-*/
 
 
 /* ///////////////////////////////////////////////////////////////////
@@ -109,6 +104,11 @@ const prohibed = [ // Restricted files access list
                     ----- APP starts here -----
  ///////////////////////////////////////////////////////////////// */
 
+/**
+     * NodeJS server code. Routing requests and converts it to commands for the model or view.
+     * @exports src/Controller.js
+     * @namespace Controller
+     */
 const server = http.createServer(function (req, res) {
   const urlPath = url.parse(req.url).pathname; // URL without query
   const params = querystring.parse(url.parse(req.url).query); // URL with query
@@ -127,17 +127,20 @@ const server = http.createServer(function (req, res) {
   } */
 
   /* handle POST request with JSON data */
-  
+  /**
+         * A method in first level, just for test
+         * @memberof controller
+         * @method testFirstLvl
+         * Repeat <tt>str</tt> several times.
+         * @param {string} str The string to repeat.
+         * @param {number} [times=1] How many times to repeat the string.
+         * @returns {string}
+         */
   function processpost2(req, res) {
-    /**
-             * Repeat <tt>str</tt> several times.
-             * @param {string} str The string to repeat.
-             * @param {number} [times=1] How many times to repeat the string.
-             * @returns {string}
-             */
+
     if (req.method === 'POST') {
       let jsonString = '';
-      let reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
+      const reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
       console.log("processpost2 started")
       reqUtf.on('data', function (data) {
         jsonString += data;
@@ -148,8 +151,6 @@ const server = http.createServer(function (req, res) {
     }
   }
 
-  /* Returns true if a full string (word) (not a substring) is contained
-   in a other string(sentence) */
   function wordInString(sentence, word) {
     return new RegExp('\\b' + word + '\\b', 'i').test(sentence);
   }
@@ -165,123 +166,500 @@ const server = http.createServer(function (req, res) {
       } else {
         res.writeHead(msg, { 'Content-Type': type, 'Cache-Control': 'no-cache' });
         res.end(contents);
-			}
-		});
-		console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
-	}
+      }
+    });
+    console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); // debug trace
+  }
 
-	// Read server files and send it to client : automatic MIME type attribution // type : Content-Type / msg : server response code
-	function readServerFileAutoMime(filePath,msg) 
-	{
-		let ext = path.parse(filePath).ext; // Parse file requested to retrieve file extension (ext)
+  /* Read server files and send it to client : automatic MIME type attribution
+  type : Content-Type / msg : server response code */
+  function readServerFileAutoMime(filePath, msg) {
+    const ext = path.parse(filePath).ext; // Parse file requested to retrieve file extension (ext)
 
-		if(mimeType[ext]==='application/zip') // Stream zip files in place of read (our zip files are supposed to be huge and not handable by fs.readfile metho)
-		{
-			fs.createReadStream(filePath, function (errors, contents) 
-			{
-				if(errors)
-				{
-				  	send500(`readServerFileAutoMime : Error streaming the zip file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
-				  	throw errors;
-			     }
+    // If file is a zip file stream it because it may be huge (nodeJS buffer limitations)
+    if (mimeType[ext] === 'application/zip') {
+      fs.createReadStream(filePath, function (errors, contents) {
+        if (errors) {
+          send500(`readServerFileAutoMime : Error streaming the zip file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
+          throw errors;
+        }
+      }).pipe(res.writeHead(msg, { 'Content-Type': mimeType[ext] || 'application/octet-stream', 'Cache-Control': 'no-cache' })
+        .pipe(res.end()));
+      console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
+    } else {
+      fs.readFile(filePath, function (errors, contents) {
+        if (errors) {
+          send500(`readServerFileAutoMime : Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
+          throw errors;
+        }
+        else {
+          res.writeHead(msg, { 'Content-Type': mimeType[ext] || 'application/octet-stream', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
+          res.end(contents);
+        }
+      });
+      console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
+    }
 
-			}).pipe(res.writeHead(msg,{'Content-Type': mimeType[ext] || 'application/octet-stream' ,'Cache-Control': 'no-cache'})
-			.pipe(res.end()));
-			console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
-		}
-		else
-		{
-			fs.readFile(filePath, function (errors, contents) 
-			{
-				if(errors)
-				{
-				  	send500(`readServerFileAutoMime : Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
-				  	throw errors;
-			     }
-			     else
-			     {
-			     	res.writeHead(msg,{'Content-Type': mimeType[ext] || 'application/octet-stream' ,'Cache-Control': 'no-cache'}); // type MIME or application/octet-stream if unknown extension
-				  	res.end(contents);
-			     }
-			});
-			console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
-		}
-		
-	}
+  }
 
-	// Routing and "includes" processing (php includes like)
-	function readFileAndInclude(templateFilePath,msg)
-	{
-		fs.readFile(templateFilePath, function (errors, contents) 
-		{
-			if(errors)
-			{
-			  	console.log(errors);
-			  	send500(`readFileAndInclude : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
-			  	throw errors;
-		    }
-		    else
-		    {
-		    	template.set(contents, function(errors,contents) // templatesJS
-		    	{
-		    		if(errors)
-		    		{
-		    			throw errors;
-		    		}
-		    		else
-		    		{
-		    			res.writeHead(msg,{'Content-Type': 'text/html','Cache-Control': 'no-cache'});
-						res.end(contents);
-		     		}
-		     	});
-		     }
-		});
-	}
+  // Routing and "includes" processing (php includes like)
+  function readFileAndInclude(templateFilePath, msg) {
+    fs.readFile(templateFilePath, function (errors, contents) {
+      if (errors) {
+        console.log(errors);
+        send500(`readFileAndInclude : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+        throw errors;
+      }
+      else {
+        template.set(contents, function (errors, contents) // templatesJS
+        {
+          if (errors) {
+            throw errors;
+          }
+          else {
+            res.writeHead(msg, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
+            res.end(contents);
+          }
+        });
+      }
+    });
+  }
+  // Same as readFileAndInclude, but include (php like) functionnality added
+  function readFileAndIncludeAndRender(templateFilePath, msg) {
+    console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
+    //debud test
+    fs.readFile(templateFilePath, function (errors, contents) {
+      if (errors) {
+        console.log(errors);
+        send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+        throw errors;
+      }
+      else {
+        // sleep.sleep(1)
+        views.renderFullJson(contents, res, template, msg)
 
-	// Same role as readFileAndInclude, plus procssing views from MongoDB data by using Views.js requesting Model.njs scripts
-	function readFileAndIncludeAndRenderBySpecies(templateFilePath,msg,MongoAttribute,MongoValue,species)
-	{
-		console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
-		//debud test
-		fs.readFile(templateFilePath, function (errors, contents) 
-		{
-			if(errors)
-			{
-			  	console.log(errors);
-			  	send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
-			  	throw errors;
-		    }
-		    else
-		    {
-		    	// sleep.sleep(1)
-		    	views.renderDataTables(species,contents,res,template,msg)
-		    	//uuid=crypto.randomBytes(16).toString("hex")
-		    	//unpackFiles(uuid,"/mnt/20To-vol/tmp/nothere.txt") //nothere.txt devra être recu avec un uuid dans son filename
-		    	
-		    }
-		});
-	}
+      }
+    });
+  }
 
-	function readFileAndIncludeAndRender(templateFilePath, msg) {
-		console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
-		//debud test
-		fs.readFile(templateFilePath, function (errors, contents) {
-			if (errors) {
-				console.log(errors);
-				send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
-				throw errors;
-			}
-			else {
-				// sleep.sleep(1)
-				views.renderFullJson(contents, res, template, msg)
-				//uuid=crypto.randomBytes(16).toString("hex")
-				//unpackFiles(uuid,"/mnt/20To-vol/tmp/nothere.txt") //nothere.txt devra être recu avec un uuid dans son filename
+  // Same role as readFileAndIncludeAndRender, plus procssing views from MongoDB using view and model scripts
+  function readFileAndIncludeAndRenderBySpecies(templateFilePath, msg, MongoAttribute, MongoValue, species) {
+    console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
+    //debud test
+    fs.readFile(templateFilePath, function (errors, contents) {
+      if (errors) {
+        console.log(errors);
+        send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+        throw errors;
+      }
+      else {
+        // sleep.sleep(1)
+        views.renderDataTables(species, contents, res, template, msg)
 
-			}
-		});
-	}
+      }
+    });
+  }
+
+  // Dynamic routing for species workspaces (genomes,references) and rendering using readFileAndInclude...() functions
+  function routeFilesBySpecies(species) {
+    console.log('routeFilesBySpecies'); //debug trace
+    if (urlPath === `/species/${species}/blast.html`) // blast page
+    {
+      readFileAndInclude(`./../interface/views/../interface/views/species/${species}/blast.html`, 200);
+    }
+    else if (urlPath === `/species/${species}/distribution.html`) // distribution page
+    {
+      readFileAndInclude(`./../interface/views/species/${species}/distribution.html`, 200);
+    }
+    else if (urlPath === `/species/${species}/genomes.html`) // genomes page
+    {
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`, 200, "Phylogeny.Genus", species.capitalize(), species.capitalize()); // Genus = species.capitalize()
+    }
+    else if (urlPath === `/species/${species}/genomes_tutorial.html`) // genomes page
+    {
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes_tutorial.html`, 200, "Phylogeny.Genus", species.capitalize(), species.capitalize()); // Genus = species.capitalize()
+    }
+    else if (urlPath === `/species/${species}/naura.html`) // Naura tool page
+    {
+      readFileAndInclude(`./../interface/views/species/${species}/naura.html`, 200);
+    }
+    else if (urlPath === `/species/${species}/phylogeny.html`) // Phylogeny page
+    {
+      readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`, 200);
+    }
+    else if (urlPath === `/species/${species}/refs.html`) // References page
+    {
+      readFileAndInclude(`./../interface/views/species/${species}/refs.html`, 200);
+    }
+    else if (urlPath.indexOf(`/species/${species}/DATA`) != -1) // References page
+    {
+      var trim = `/species/${species}`
+      urlPathTrimmed = urlPath.replace(trim, "") // relative path from Controller script
+
+      fs.exists(`.${urlPathTrimmed}`, function (exist) {
+        if (!exist) // send 404 page if path doesn't exist
+        {
+          send404(`routeFilesBySpecies()  : File ${urlPathTrimmed} not found!`);
+        }
+        else // read file from file system path
+        {
+          fs.readFile(`.${urlPathTrimmed}`, function (err, data) {
+            if (err) // if this file/path EXISTS cant be reached for any reason
+            {
+              send500(`routeFilesBySpecies() : Error getting the file: ${err}.`);
+            }
+            else {
+              readServerFileAutoMime(`.${urlPathTrimmed}`, 200);
+            }
+          });
+        }
+      });
+    }
+    else if (req.method == "POST") {
+      console.log("received POST request.");
+      // if genomes in url : server side zip + send zipped file to client 
+      if (wordInString(req.url, "genomes")) {
+        console.log("POST request: zip genomes pipeline");
+        var body = '';
+
+        req.on('data', function (data) {
+          body += data;
+          console.log("req url:") // req.url contains uuidv4() from client-side
+          console.log(req.url)
+          // Too much POST data, kill the connection!
+          // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+          if (body.length > 1e6) {
+            req.connection.destroy();
+          }
+        });
+
+        req.on('end', function () {
+          var post = querystring.parse(body, null, null, { maxKeys: 0 });
+          // use post['blah'], etc.
+          console.log("req content:")
+          console.log(JSON.stringify(post))
+          console.log("and")
+          var clientuid = req.url.split('/').pop()
+          shell.exec("mkdir -p /mnt/20To-vol/tmp/" + clientuid, { async: false }) // async=false --> do it here
+          console.log("uuuid : " + clientuid)
+          // create tmp file stream
+          var stream = fs.createWriteStream("/mnt/20To-vol/tmp/" + clientuid + "/filestozip_" + clientuid + ".txt");	// req.url = client uuid
+          var zipfilesList = "/mnt/20To-vol/tmp/" + clientuid + "/filestozip_" + clientuid + ".txt"
+          var zipOutput = "/mnt/20To-vol/tmp/" + clientuid + "/wgsdata_" + clientuid + ".zip"
+          var zipOutputPathToSend = "tmp/" + clientuid + "/wgsdata_" + clientuid + ".zip"
+          //var zipOutputToRead = "./tmp/"+clientuid+"/wgsdata_"+clientuid+".zip"	
+          //iterate over JSON structure
+          console.log("and also")
+          stream.once('open', function (fd) {
+            if (validator.isJSON(JSON.stringify(post))) {
+              for (i in post) {
+                console.log(post[i] + "__n: " + i);
+                stream.write(post[i] + "\n")
+              }
+            }
+          });
+          //stream.end();
+          var child = shell.exec("sh ZipAndCall.sh " + clientuid + " " + zipfilesList, { async: true }); // async=true --> do it when callback
+          // Serve files when child process ended
+          child.stdout.on('end', function (data) {
+            console.log(data)
+            console.log("compression ended, now serving files...")
+            res.writeHead(200, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
+            res.end(zipOutputPathToSend);
+            console.log("sended: " + zipOutputPathToSend)
+          });
+
+        });
+      }
+    }
+    else {
+      send404(`routeFilesBySpecies() : File file not found for ${species}`);
+    }
+  }
+
+  String.prototype.capitalize = function () // capitalize first letter (needed in routeFilesBySpecies())
+  {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+  }
+
+  function send404(message) // file not found
+  {
+    console.log(message);
+    readFileAndInclude('./../interface/views/404.html', 404);
+  }
+
+  function send403(message) {
+    console.log(message);
+    readFileAndInclude('./../interface/views/403.html', 403);
+  }
+
+  function send500(message) // internal server error
+  {
+    console.log(message);
+    readFileAndInclude('./../interface/views/500.html', 500);
+  }
 
 
+
+  /* ///////////////////////////////////////////////////////////////////
+              ----- ROUTING and MVC processing  -----
+   ///////////////////////////////////////////////////////////////// */
+
+
+  // ------------- Static files (css,js,imgs) are routed one by one with readServerFile() ------------- //
+
+  //CSS and JS
+  if (urlPath === '/semantic/dist/semantic.min.css') {
+    readServerFile('./../semantic/dist/semantic.min.css', 'text/css', 200);
+  }
+  else if (urlPath === '/semantic/dist/semantic.min.js') {
+    readServerFile('./../semantic/dist/semantic.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/jquery.min.js') {
+    readServerFile('./../interface/js/jquery.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/gamer.datatables.salmonella.js') {
+    readServerFile('./../interface/js/gamer.datatables.salmonella.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/gamer.datatables.salmonellatuto.js') {
+    readServerFile('./../interface/js/gamer.datatables.salmonellatuto.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/gamer.datatables.listeria.js') {
+    readServerFile('./../interface/js/gamer.datatables.listeria.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/gamer.datatables.staphylococcus.js') {
+    readServerFile('./../interface/js/gamer.datatables.staphylococcus.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/gamer.datatables.clostridium.js') {
+    readServerFile('./../interface/js/gamer.datatables.clostridium.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/highcharts.js') {
+    readServerFile('./../interface/js/highcharts.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/drilldown.js') {
+    readServerFile('./../interface/js/drilldown.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/underscore-min.js') {
+    readServerFile('./../interface/js/underscore-min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/gamer.home.js') {
+    readServerFile('./../interface/js/gamer.home.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/gamer.common.js') {
+    readServerFile('./../interface/js/gamer.common.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/semantic/dist/components/icon.min.css') {
+    readServerFile('./../semantic/dist/components/icon.min.css', 'text/css', 200);
+  }
+  else if (urlPath === '/css/gamer.effects.datatables.css') {
+    readServerFile('./../interface/css/gamer.effects.datatables.css', 'text/css', 200);
+  }
+  else if (urlPath === '/css/gamer.common.css') {
+    readServerFile('./../interface/css/gamer.common.css', 'text/css', 200);
+  }
+  else if (urlPath === '/css/dataTables.semanticui.min.css') {
+    readServerFile('./../interface/css/dataTables.semanticui.min.css', 'text/css', 200);
+  }
+  else if (urlPath === '/css/select.dataTables.min.css') {
+    readServerFile('./../interface/css/select.dataTables.min.css', 'text/css', 200);
+  }
+  else if (urlPath === '/css/buttons.semanticui.min.css') {
+    readServerFile('./../interface/css/buttons.semanticui.min.css', 'text/css', 200);
+  }
+  else if (urlPath === '/css/driver.min.css') {
+    readServerFile('./../interface/css/driver.min.css', 'text/css', 200);
+  }
+  else if (urlPath === '/js/jquery.min.js') {
+    readServerFile('./../interface/js/jquery.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/jquery-1.12.4.js') {
+    readServerFile('./../interface/js/jquery-1.12.4.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/jquery.dataTables.min.js') {
+    readServerFile('./../interface/js/jquery.dataTables.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/dataTables.semanticui.min.js') {
+    readServerFile('./../interface/js/dataTables.semanticui.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/dataTables.select.min.js') {
+    readServerFile('./../interface/js/dataTables.select.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/buttons.semanticui.min.js') {
+    readServerFile('./../interface/js/buttons.semanticui.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/dataTables.buttons.min.js') {
+    readServerFile('./../interface/js/dataTables.buttons.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/jszip.min.js') {
+    readServerFile('./../interface/js/jszip.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/pdfmake.min.js') {
+    readServerFile('./../interface/js/pdfmake.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/vfs_fonts.js') {
+    readServerFile('./../interface/js/vfs_fonts.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/buttons.html5.min.js') {
+    readServerFile('./../interface/js/buttons.html5.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/buttons.print.min.js') {
+    readServerFile('./../interface/js/buttons.print.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/buttons.colVis.min.js') {
+    readServerFile('./../interface/js/buttons.colVis.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/dataTables.colReorder.min.js') {
+    readServerFile('./../interface/js/dataTables.colReorder.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/jszip.js') {
+    readServerFile('./../interface/js/jszip.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/Blob.js') {
+    readServerFile('./../interface/js/Blob.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/canvas-toBlob.js') {
+    readServerFile('./../interface/js/canvas-toBlob.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/FileSaver.min.js') {
+    readServerFile('./../interface/js/FileSaver.min.js', 'application/javascript', 200);
+  }
+  else if (urlPath === '/js/driver.min.js') {
+    readServerFile('./../interface/js/driver.min.js', 'application/javascript', 200);
+  }
+
+
+  // Images
+  else if (urlPath === '/img/anseslogomini.png' || urlPath === '/views/img/anseslogomini.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
+  {
+    readServerFile('./../interface/img/anseslogomini.png', 'image/png', 200);
+  }
+  else if (urlPath === '/img/gamergenomicdblogo.png') // test
+  {
+    readServerFile('./../interface/img/gamergenomicdblogo.png', 'image/png', 200);
+  }
+  else if (urlPath === '/img/statistics.png') // test
+  {
+    readServerFile('./../interface/img/statistics.png', 'image/png', 200);
+  }
+  else if (urlPath === '/img/ansesgamer.png' || urlPath === '/views/img/ansesgamer.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
+  {
+    readServerFile('./../interface/img/ansesgamer.png', 'image/png', 200);
+  }
+  else if (urlPath === '/img/statistics.png') // test
+  {
+    readServerFile('./../interface/img/statistics.png', 'image/png', 200);
+  }
+  else if (urlPath === '/img/favicon.ico' || urlPath === '/views/img/favicon.ico') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
+  {
+    readServerFile('./../interface/img/favicon.ico', 'image/x-icon', 200);
+  }
+  else if (urlPath === '/img/dna.png' || urlPath === '/views/img/dna.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
+  {
+    readServerFile('./../interface/img/dna.png', 'image/png', 200);
+  }
+
+  // Fonts
+  else if (urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff2') {
+    readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.woff2', 'application/x-font-woff', 200);
+  }
+  else if (urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff') {
+    readServerFile('./../semantic/dist:themes/default/assets/fonts/icons.woff', 'application/x-font-woff', 200);
+  }
+  else if (urlPath === '/semantic/dist/themes/default/assets/fonts/icons.ttf') {
+    readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.ttf', 'application/x-font-ttf', 200);
+  }
+
+
+  // ------------- Other files are routed automatically  ------------- //
+
+  //Homepage
+  else if (urlPath === '/' || urlPath === '/home') {
+    readFileAndIncludeAndRender('./../interface/views/homepage/index.html', 200)
+    processpost2(req, res);
+  }
+  //tools pages
+  else if (urlPath === `/views/tools/fastosh.html`) // Quickphylo page
+  {
+    readFileAndInclude(`./../interface/views/tools/fastosh.html`, 200);
+  }
+  //all species page
+  else if (urlPath.indexOf('/species/') >= 0) // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
+  {
+    console.log('path species'); //debug trace
+    if (urlPath.indexOf('bacillus') >= 0) {
+      routeFilesBySpecies('bacillus');
+    }
+    else if (urlPath.indexOf('clostridium') >= 0) {
+      routeFilesBySpecies('clostridium');
+    }
+    else if (urlPath.indexOf('listeria') >= 0) {
+      routeFilesBySpecies('listeria');
+    }
+    else if (urlPath.indexOf('salmonella') >= 0) {
+      routeFilesBySpecies('salmonella');
+    }
+    else if (urlPath.indexOf('staphylococcus') >= 0) {
+      routeFilesBySpecies('staphylococcus');
+    }
+    else {
+      console.log('Species not found!');
+      send404("Species not found or didn't exist");
+    }
+  }
+
+  //
+  // PROHIBED ACCESS
+  //
+
+  else if (prohibed.indexOf(urlPath) >= 0) {
+    send403(); // access denied
+  }
+
+  //////																	 	 //////							 									
+  ///////////////// NAS FILES : auto-routing for existing paths /////////////////////
+  //////																	    ///////	
+
+  // !!! ---> This method works only for when url request == file path <--- !!!
+  // --------> To use files with this method please use symbolic links in the scripts folder
+
+  else {
+    console.log(`${req.method} ${req.url}`);
+    // add a '.' before urlPath in order to use it inside fs.exists()
+    let pathname = `.${urlPath}`;
+    let SpeciesPathname = `./../../${urlPath}`;
+    console.log("SpeciesPathname : " + SpeciesPathname)
+    console.log("pathname :" + pathname)
+    // maps file extention to MIME types
+    fs.exists(pathname, function (exist) {
+      if (!exist) // send 404 page if path doesn't exist
+      {
+        send404(`File ${pathname} not found!`);
+      }
+      else // read file from file system path
+      {
+        fs.createReadStream(pathname, function (err, data) {
+          if (err) // if this file/path EXISTS cant be reached for any reason
+          {
+            send500(`Error getting the file: ${err}.`);
+          }
+          else {
+            readServerFileAutoMime(pathname, 200);
+          }
+        }).pipe(res);
+      }
+    });
+  }
+})
+
+
+
+/* ///////////////////////////////////////////////////////////////////
+            ----- Deprecated code  -----
+  ///////////////////////////////////////////////////////////////// */
+
+
+
+/*
 	// DEPRECATED !!! Same function as readFileAndIncludeAndRenderBySpecies but render directly in Controller.njs script (instead of render inside Views.njs script)
 	function readFileAndIncludeAndRenderBySpeciesHere(templateFilePath,msg,MongoAttribute,MongoValue)
 	{
@@ -331,478 +709,11 @@ const server = http.createServer(function (req, res) {
 		    }
 		});
 	}
-
-
-	// Dynamic routing for species specific pages
-	function routeFilesBySpecies(species)
-	{
-		console.log('routeFilesBySpecies'); //debug trace
-		if(urlPath === `/species/${species}/blast.html`) // blast page
-		{
-			readFileAndInclude(`./../interface/views/../interface/views/species/${species}/blast.html`,200);
-		}
-		else if(urlPath === `/species/${species}/distribution.html`) // distribution page
-		{
-			readFileAndInclude(`./../interface/views/species/${species}/distribution.html`,200);
-		}
-		else if(urlPath === `/species/${species}/genomes.html`) // genomes page
-		{
-			readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`,200,"Phylogeny.Genus",species.capitalize(),species.capitalize()); // Genus = species.capitalize()
-		}
-		else if(urlPath === `/species/${species}/genomes_tutorial.html`) // genomes page
-		{
-			readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes_tutorial.html`,200,"Phylogeny.Genus",species.capitalize(),species.capitalize()); // Genus = species.capitalize()
-		}
-		else if(urlPath === `/species/${species}/naura.html`) // Naura tool page
-		{
-			readFileAndInclude(`./../interface/views/species/${species}/naura.html`,200);
-		}
-		else if(urlPath === `/species/${species}/phylogeny.html`) // Phylogeny page
-		{
-			readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`,200);
-		}
-		else if(urlPath === `/species/${species}/refs.html`) // References page
-		{
-			readFileAndInclude(`./../interface/views/species/${species}/refs.html`,200);
-		}
-		else if(urlPath.indexOf(`/species/${species}/DATA`) != -1) // References page
-		{
-			var trim=`/species/${species}`
-			urlPathTrimmed=urlPath.replace(trim,"") // relative path from Controller script
-
-			fs.exists(`.${urlPathTrimmed}`, function (exist) 
-			{
-				if(!exist) // send 404 page if path doesn't exist
-				{
-					send404(`routeFilesBySpecies()  : File ${urlPathTrimmed} not found!`);
-				}
-				else // read file from file system path
-				{
-					fs.readFile(`.${urlPathTrimmed}`, function(err, data)
-					{
-						if(err) // if this file/path EXISTS cant be reached for any reason
-						{
-							send500(`routeFilesBySpecies() : Error getting the file: ${err}.`);
-						}	 
-						else
-						{
-							readServerFileAutoMime(`.${urlPathTrimmed}`,200);
-						}
-					});
-				}
-			});	
-		}
-		else if(req.method == "POST")
-        {
-        	console.log("received POST request.");
-        	// if genomes in url : server side zip + send zipped file to client 
-        	if (wordInString(req.url,"genomes")) 
-        	{
-	            console.log("POST request: zip genomes pipeline");
-	            var body = '';
-
-		        req.on('data', function (data) {
-		            body += data;
-		            console.log("req url:") // req.url contains uuidv4() from client-side
-		            console.log(req.url)
-		            // Too much POST data, kill the connection!
-		            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
-		            if (body.length > 1e6)
-		            {
-		                req.connection.destroy();
-		            }
-		        });
-
-		        req.on('end', function () {
-					var post = querystring.parse(body,null,null,{ maxKeys: 0 });
-		            // use post['blah'], etc.
-		            console.log("req content:")
-		            console.log(JSON.stringify(post))
-		            console.log("and")
-		            var clientuid=req.url.split('/').pop()
-		            shell.exec("mkdir -p /mnt/20To-vol/tmp/"+clientuid, {async:false}) // async=false --> do it here
-		            console.log("uuuid : "+clientuid)
-		            // create tmp file stream
-		            var stream = fs.createWriteStream("/mnt/20To-vol/tmp/"+clientuid+"/filestozip_"+clientuid+".txt");	// req.url = client uuid
-		            var zipfilesList = "/mnt/20To-vol/tmp/"+clientuid+"/filestozip_"+clientuid+".txt"
-		            var zipOutput = "/mnt/20To-vol/tmp/"+clientuid+"/wgsdata_"+clientuid+".zip"
-		            var zipOutputPathToSend = "tmp/"+clientuid+"/wgsdata_"+clientuid+".zip"
-		            //var zipOutputToRead = "./tmp/"+clientuid+"/wgsdata_"+clientuid+".zip"	
-		            //iterate over JSON structure
-		            console.log("and also")
-		            stream.once('open', function(fd) 
-		            {
-                        if (validator.isJSON(JSON.stringify(post)))
-                        {
-			                for (i in post)
-						    {
-						        console.log(post[i]+"__n: "+i);
-						        stream.write(post[i]+"\n")
-                            }
-                        }   
-					});
-					//stream.end();
-					var child = shell.exec("sh ZipAndCall.sh "+ clientuid + " " + zipfilesList, {async:true}); // async=true --> do it when callback
-					// Serve files when child process ended
-					child.stdout.on('end', function(data) 
-					{
-						console.log(data)
-					  	console.log("compression ended, now serving files...")
-	             		res.writeHead(200,{'Content-Type': 'text/plain' ,'Cache-Control': 'no-cache'}); // type MIME or application/octet-stream if unknown extension
-				  	 	res.end(zipOutputPathToSend);
-				  	 	console.log("sended: "+zipOutputPathToSend)
-					});
-					
-		        });
-		    }
-        }
-		else
-		{
-			send404(`routeFilesBySpecies() : File file not found for ${species}`);
-		}
-	}
-
-	String.prototype.capitalize = function() // capitalize first letter (needed in routeFilesBySpecies())
-	{
-    	return this.charAt(0).toUpperCase() + this.slice(1);
-	}
-
-	function send404(message) // file not found
-	{
-		console.log(message);
-		readFileAndInclude('./../interface/views/404.html',404);
-	}
-
-	function send403(message)
-	{
-		console.log(message);
-		readFileAndInclude('./../interface/views/403.html',403);
-	}
-
-	function send500(message) // internal server error
-	{
-		console.log(message);
-		readFileAndInclude('./../interface/views/500.html',500);
-	}
-
-	
-
-	/*//////////////////////////////////////////////////////////////////////////////////////////////////////////*
-										ROUTING AND VIEWS PROCESSING
-	*///////////////////////////////////////////////////////////////////////////////////////////////////////////*
-
-	
-	//////													   //////							 									
-	///////////////// STATIC FILES : Manual routing /////////////////
-	//////													   //////								     								   
-
-
-	// CSS and JS 
-	//
-	
-	if (urlPath === '/semantic/dist/semantic.min.css')
-	{
-		readServerFile('./../semantic/dist/semantic.min.css','text/css',200);
-	}
-	else if (urlPath === '/semantic/dist/semantic.min.js')
-	{
-		readServerFile('./../semantic/dist/semantic.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/jquery.min.js')
-	{
-		readServerFile('./../interface/js/jquery.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/gamer.datatables.salmonella.js')
-	{
-		readServerFile('./../interface/js/gamer.datatables.salmonella.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/gamer.datatables.salmonellatuto.js')
-	{
-		readServerFile('./../interface/js/gamer.datatables.salmonellatuto.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/gamer.datatables.listeria.js')
-	{
-		readServerFile('./../interface/js/gamer.datatables.listeria.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/gamer.datatables.staphylococcus.js')
-	{
-		readServerFile('./../interface/js/gamer.datatables.staphylococcus.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/gamer.datatables.clostridium.js')
-	{
-		readServerFile('./../interface/js/gamer.datatables.clostridium.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/highcharts.js') {
-		readServerFile('./../interface/js/highcharts.js', 'application/javascript', 200);
-	}
-	else if (urlPath === '/js/drilldown.js') {
-		readServerFile('./../interface/js/drilldown.js', 'application/javascript', 200);
-	}
-	else if (urlPath === '/js/underscore-min.js') {
-		readServerFile('./../interface/js/underscore-min.js', 'application/javascript', 200);
-	}
-	else if (urlPath === '/js/gamer.home.js') {
-		readServerFile('./../interface/js/gamer.home.js', 'application/javascript', 200);
-	}
-	else if (urlPath === '/js/gamer.common.js') 
-	{
-		readServerFile('./../interface/js/gamer.common.js', 'application/javascript', 200);
-	}
-	else if (urlPath === '/semantic/dist/components/icon.min.css')
-	{
-		readServerFile('./../semantic/dist/components/icon.min.css','text/css',200);
-	}
-	else if (urlPath === '/css/gamer.effects.datatables.css')
-	{
-		readServerFile('./../interface/css/gamer.effects.datatables.css','text/css',200);
-	}
-	else if (urlPath === '/css/gamer.common.css') 
-	{
-		readServerFile('./../interface/css/gamer.common.css', 'text/css', 200);
-	}
-	else if (urlPath === '/css/dataTables.semanticui.min.css')
-	{
-		readServerFile('./../interface/css/dataTables.semanticui.min.css','text/css',200);
-	}
-	else if (urlPath === '/css/select.dataTables.min.css')
-	{
-		readServerFile('./../interface/css/select.dataTables.min.css','text/css',200);
-	}
-	else if (urlPath === '/css/buttons.semanticui.min.css')
-	{
-		readServerFile('./../interface/css/buttons.semanticui.min.css','text/css',200);
-	}
-	else if (urlPath === '/css/driver.min.css')
-	{
-		readServerFile('./../interface/css/driver.min.css','text/css',200);
-	}
-	else if (urlPath === '/js/jquery.min.js')
-	{
-		readServerFile('./../interface/js/jquery.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/jquery-1.12.4.js')
-	{
-		readServerFile('./../interface/js/jquery-1.12.4.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/jquery.dataTables.min.js')
-	{
-		readServerFile('./../interface/js/jquery.dataTables.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/dataTables.semanticui.min.js')
-	{
-		readServerFile('./../interface/js/dataTables.semanticui.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/dataTables.select.min.js')
-	{
-		readServerFile('./../interface/js/dataTables.select.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/buttons.semanticui.min.js')
-	{
-		readServerFile('./../interface/js/buttons.semanticui.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/dataTables.buttons.min.js')
-	{
-		readServerFile('./../interface/js/dataTables.buttons.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/jszip.min.js')
-	{
-		readServerFile('./../interface/js/jszip.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/pdfmake.min.js')
-	{
-		readServerFile('./../interface/js/pdfmake.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/vfs_fonts.js')
-	{
-		readServerFile('./../interface/js/vfs_fonts.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/buttons.html5.min.js')
-	{
-		readServerFile('./../interface/js/buttons.html5.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/buttons.print.min.js')
-	{
-		readServerFile('./../interface/js/buttons.print.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/buttons.colVis.min.js')
-	{
-		readServerFile('./../interface/js/buttons.colVis.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/dataTables.colReorder.min.js')
-	{
-		readServerFile('./../interface/js/dataTables.colReorder.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/jszip.js')
-	{
-		readServerFile('./../interface/js/jszip.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/Blob.js')
-	{
-		readServerFile('./../interface/js/Blob.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/canvas-toBlob.js')
-	{
-		readServerFile('./../interface/js/canvas-toBlob.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/FileSaver.min.js')
-	{
-		readServerFile('./../interface/js/FileSaver.min.js','application/javascript',200);
-	}
-	else if (urlPath === '/js/driver.min.js')
-	{
-		readServerFile('./../interface/js/driver.min.js','application/javascript',200);
-	}
-
-
-	//
-	// IMAGES
-	//
-
-	else if(urlPath === '/img/anseslogomini.png' || urlPath === '/views/img/anseslogomini.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
-	{ 
-		readServerFile('./../interface/img/anseslogomini.png','image/png',200);
-	}
-	else if(urlPath === '/img/gamergenomicdblogo.png') // test
-	{ 
-		readServerFile('./../interface/img/gamergenomicdblogo.png','image/png',200);
-	}
-	else if(urlPath === '/img/statistics.png') // test
-	{ 
-		readServerFile('./../interface/img/statistics.png','image/png',200);
-	}
-	else if(urlPath === '/img/ansesgamer.png' || urlPath === '/views/img/ansesgamer.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
-	{ 
-		readServerFile('./../interface/img/ansesgamer.png','image/png',200);
-	}
-	else if(urlPath === '/img/statistics.png') // test
-	{ 
-		readServerFile('./../interface/img/statistics.png','image/png',200);
-	}
-	else if(urlPath === '/img/favicon.ico' || urlPath === '/views/img/favicon.ico') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
-	{ 
-	 	readServerFile('./../interface/img/favicon.ico','image/x-icon',200);
-	}
-	else if(urlPath === '/img/dna.png' || urlPath === '/views/img/dna.png') // support adresse depuis 1er niveau (views/xxx) et 2e niveau(views/species/xxx) du site
-	{ 
-		readServerFile('./../interface/img/dna.png','image/png',200);
-	}
-
-	//
-	// FONTS 
-	//
-
-	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff2')
-	{ 
-		readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.woff2','application/x-font-woff',200);
-	}
-	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff')
-	{ 
-		readServerFile('./../semantic/dist:themes/default/assets/fonts/icons.woff','application/x-font-woff',200);
-	}
-	else if(urlPath === '/semantic/dist/themes/default/assets/fonts/icons.ttf')
-	{ 
-		readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.ttf','application/x-font-ttf',200);
-	}
-	
-
-	//
-	// TEMPLATES Views
-	//
-
-	//Homepage
-	else if(urlPath === '/' ||  urlPath === '/home') 
-	{
-		readFileAndIncludeAndRender('./../interface/views/homepage/index.html', 200)
-		processpost2(req,res);
-    }
-    //tools pages
-    else if (urlPath === `/views/tools/fastosh.html`) // Quickphylo page
-    {
-        readFileAndInclude(`./../interface/views/tools/fastosh.html`, 200);
-    }
-	//all species page
-	else if(urlPath.indexOf('/species/')>=0) // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
-	{
-		console.log('path species'); //debug trace
-		if(urlPath.indexOf('bacillus')>=0)
-		{
-			routeFilesBySpecies('bacillus');
-		}
-		else if(urlPath.indexOf('clostridium')>=0)
-		{
-			routeFilesBySpecies('clostridium');
-		}
-		else if(urlPath.indexOf('listeria')>=0)
-		{
-			routeFilesBySpecies('listeria');
-		}
-		else if(urlPath.indexOf('salmonella')>=0)
-		{
-			routeFilesBySpecies('salmonella');
-		}
-		else if(urlPath.indexOf('staphylococcus')>=0)
-		{
-			routeFilesBySpecies('staphylococcus');
-		}
-		else
-		{
-			console.log('Species not found!'); 
-			send404("Species not found or didn't exist");
-		}
-	}
-
-	//
-	// PROHIBED ACCESS
-	//
-
-	else if(prohibed.indexOf(urlPath)>=0)
-	{
-		send403(); // access denied
-	}
-
-	//////																	 	 //////							 									
-	///////////////// NAS FILES : auto-routing for existing paths /////////////////////
-	//////																	    ///////	
-
-	// !!! ---> This method works only for when url request == file path <--- !!!
-	// --------> To use files with this method please use symbolic links in the scripts folder
-	
-	else
-	{ 
-		console.log(`${req.method} ${req.url}`);
-		// add a '.' before urlPath in order to use it inside fs.exists()
-		let pathname = `.${urlPath}`;
-		let SpeciesPathname = `./../../${urlPath}`;
-		console.log("SpeciesPathname : " + SpeciesPathname)
-		console.log("pathname :" + pathname)
-		// maps file extention to MIME types
-		fs.exists(pathname, function (exist) 
-		{
-			if(!exist) // send 404 page if path doesn't exist
-			{
-				send404(`File ${pathname} not found!`);
-			}
-			else // read file from file system path
-			{
-				fs.createReadStream(pathname, function(err, data)
-				{
-					if(err) // if this file/path EXISTS cant be reached for any reason
-					{
-						send500(`Error getting the file: ${err}.`);
-					} 
-					else
-					{
-						readServerFileAutoMime(pathname,200);
-					}
-				}).pipe(res);
-			}
-		});	
-	}
-})
+*/
 
 /*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 													******* START SERVER and show some info  *******
 */////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-server.listen(listenPort,listenIp);
+server.listen(listenPort, listenIp);
 console.log('Server running at http://' + listenIp + ':' + listenPort);
