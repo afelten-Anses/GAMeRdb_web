@@ -137,6 +137,7 @@ const server = http.createServer(function (req, res) {
          * @returns {string}
          */
   function processpost2(req, res) {
+
     if (req.method === 'POST') {
       let jsonString = '';
       const reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
