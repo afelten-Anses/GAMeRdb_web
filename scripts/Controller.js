@@ -570,7 +570,6 @@ const server = http.createServer(function (req, res) {
   }
 
 
-  // ------------- Other files are routed automatically  ------------- //
 
   //Homepage
   else if (urlPath === '/' || urlPath === '/home') {
@@ -582,7 +581,12 @@ const server = http.createServer(function (req, res) {
   {
     readFileAndInclude(`./../interface/views/tools/fastosh.html`, 200);
   }
-  //all species page
+  else if (urlPath === `/views/tools/fastosh_results.html`) // Quickphylo page
+  {
+    readFileAndInclude(`./../interface/views/tools/fastosh_results.html`, 200);
+  }
+  // ------------- Species workspace pages are routed automatically  ------------- //
+
   else if (urlPath.indexOf('/species/') >= 0) // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
   {
     console.log('path species'); //debug trace
