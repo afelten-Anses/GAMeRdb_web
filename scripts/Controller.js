@@ -7,7 +7,7 @@
 /* A FAIRE AVANT LA MISE EN PRODUCTION de la V2:
 -En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache'
 (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
- -COMMENTER Tout ce qui est commenté 'debug trace' et rennomer debug trace par 'trace'
+ -COMMENTER Tout ce qui est commenté 'debug' et rennomer debug par 'trace'
  -Ecouter sur le port 80 + mettre en place reverse proxy (avec compression de reponses http) :
    https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
    https://eladnava.com/binding-nodejs-port-80-using-nginx/
@@ -28,7 +28,7 @@ const url = require('url'); // url parser
 const path = require('path'); // path parser
 
 // ------------- MVC dependencies ------------- //
-const model = require('./Model'); // use Model.js as a NodeJS module
+// const model = require('./Model'); // use Model.js as a NodeJS module
 const views = require('./Views'); // use Views.js as a NodeJS module
 
 // ------------- External modules ------------- //
@@ -109,7 +109,7 @@ const prohibed = [ // Restricted files access list
      * @exports src/Controller.js
      * @namespace Controller
      */
-const server = http.createServer(function (req, res) {
+const server = http.createServer((req, res) => {
   const urlPath = url.parse(req.url).pathname; // URL without query
   const params = querystring.parse(url.parse(req.url).query); // URL with query
   const fileName = urlPath.split('/').pop(-1); // requested filename
@@ -137,12 +137,11 @@ const server = http.createServer(function (req, res) {
          * @returns {string}
          */
   function processpost2(req, res) {
-
     if (req.method === 'POST') {
       let jsonString = '';
       const reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
-      console.log("processpost2 started")
-      reqUtf.on('data', function (data) {
+      console.log('processpost2 started');
+      reqUtf.on('data', (data) => {
         jsonString += data;
       });
       reqUtf.on('end', function () {
@@ -168,7 +167,7 @@ const server = http.createServer(function (req, res) {
         res.end(contents);
       }
     });
-    console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); // debug trace
+    console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); // debug
   }
 
   /* Read server files and send it to client : automatic MIME type attribution
@@ -178,200 +177,182 @@ const server = http.createServer(function (req, res) {
 
     // If file is a zip file stream it because it may be huge (nodeJS buffer limitations)
     if (mimeType[ext] === 'application/zip') {
-      fs.createReadStream(filePath, function (errors, contents) {
+      fs.createReadStream(filePath, (errors) => {
         if (errors) {
           send500(`readServerFileAutoMime : Error streaming the zip file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
           throw errors;
         }
       }).pipe(res.writeHead(msg, { 'Content-Type': mimeType[ext] || 'application/octet-stream', 'Cache-Control': 'no-cache' })
         .pipe(res.end()));
-      console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
+      console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); // debug
     } else {
-      fs.readFile(filePath, function (errors, contents) {
+      fs.readFile(filePath, (errors, contents) => {
         if (errors) {
-          send500(`readServerFileAutoMime : Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
+          send500(`readServerFileAutoMime : Error getting the file ${filePath} : ${errors}.`);
           throw errors;
-        }
-        else {
+        } else {
           res.writeHead(msg, { 'Content-Type': mimeType[ext] || 'application/octet-stream', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
           res.end(contents);
         }
       });
-      console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); //debug trace
+      console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); // debug
     }
-
   }
 
-  // Routing and "includes" processing (php includes like)
+  /* Routing and "includes" processing (php includes like) */
   function readFileAndInclude(templateFilePath, msg) {
-    fs.readFile(templateFilePath, function (errors, contents) {
+    fs.readFile(templateFilePath, (errors, contents) => {
       if (errors) {
-        console.log(errors);
-        send500(`readFileAndInclude : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+        console.error(errors);
+        send500(`readFileAndInclude : Error getting the file ${templateFilePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
         throw errors;
-      }
-      else {
-        template.set(contents, function (errors, contents) // templatesJS
-        {
-          if (errors) {
-            throw errors;
-          }
-          else {
+      } else {
+        template.set(contents, (err, cont) => {
+          if (err) {
+            throw err;
+          } else {
             res.writeHead(msg, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
-            res.end(contents);
+            res.end(cont);
           }
         });
       }
     });
   }
-  // Same as readFileAndInclude, but include (php like) functionnality added
+
+  /* Same as readFileAndInclude, but include (php like) functionnality added */
   function readFileAndIncludeAndRender(templateFilePath, msg) {
-    console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
-    //debud test
-    fs.readFile(templateFilePath, function (errors, contents) {
+    console.log('readFileAndIncludeAndRenderBySpecies'); // debug
+    fs.readFile(templateFilePath, (errors, contents) => {
       if (errors) {
-        console.log(errors);
-        send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
+        console.error(errors);
+        send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`);
         throw errors;
-      }
-      else {
-        // sleep.sleep(1)
-        views.renderFullJson(contents, res, template, msg)
-
+      } else {
+        views.renderFullJson(contents, res, template, msg);
       }
     });
   }
 
-  // Same role as readFileAndIncludeAndRender, plus procssing views from MongoDB using view and model scripts
+  /* Same role as readFileAndIncludeAndRender, plus procssing views from MongoDB
+   using view and model scripts */
   function readFileAndIncludeAndRenderBySpecies(templateFilePath, msg, MongoAttribute, MongoValue, species) {
-    console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
-    //debud test
-    fs.readFile(templateFilePath, function (errors, contents) {
+    console.log('readFileAndIncludeAndRenderBySpecies'); // debug
+    fs.readFile(templateFilePath, (errors, contents) => {
       if (errors) {
-        console.log(errors);
-        send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`); //if this file/path EXISTS cant be reached for any reason
-        throw errors;
-      }
-      else {
-        // sleep.sleep(1)
-        views.renderDataTables(species, contents, res, template, msg)
-
+        console.error(errors);
+        send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`);
+      } else {
+        views.renderDataTables(species, contents, res, template, msg);
       }
     });
   }
 
-  // Dynamic routing for species workspaces (genomes,references) and rendering using readFileAndInclude...() functions
+  /* Dynamic routing for species workspaces (genomes,references) and rendering
+  using readFileAndInclude...() functions */
   function routeFilesBySpecies(species) {
-    console.log('routeFilesBySpecies'); //debug trace
-    if (urlPath === `/species/${species}/blast.html`) // blast page
-    {
-      readFileAndInclude(`./../interface/views/../interface/views/species/${species}/blast.html`, 200);
-    }
-    else if (urlPath === `/species/${species}/distribution.html`) // distribution page
-    {
-      readFileAndInclude(`./../interface/views/species/${species}/distribution.html`, 200);
-    }
-    else if (urlPath === `/species/${species}/genomes.html`) // genomes page
-    {
-      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`, 200, "Phylogeny.Genus", species.capitalize(), species.capitalize()); // Genus = species.capitalize()
-    }
-    else if (urlPath === `/species/${species}/genomes_tutorial.html`) // genomes page
-    {
-      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes_tutorial.html`, 200, "Phylogeny.Genus", species.capitalize(), species.capitalize()); // Genus = species.capitalize()
-    }
-    else if (urlPath === `/species/${species}/naura.html`) // Naura tool page
-    {
-      readFileAndInclude(`./../interface/views/species/${species}/naura.html`, 200);
-    }
-    else if (urlPath === `/species/${species}/phylogeny.html`) // Phylogeny page
-    {
-      readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`, 200);
-    }
-    else if (urlPath === `/species/${species}/refs.html`) // References page
-    {
-      readFileAndInclude(`./../interface/views/species/${species}/refs.html`, 200);
-    }
-    else if (urlPath.indexOf(`/species/${species}/DATA`) != -1) // References page
-    {
-      var trim = `/species/${species}`
-      urlPathTrimmed = urlPath.replace(trim, "") // relative path from Controller script
+    console.log('routeFilesBySpecies'); // debug
+    if (urlPath === `/species/${species}/blast.html`) {
+      readFileAndInclude(`./../interface/views/../interface/views/species/${species}/blast.html`, 200); // Blast
+    } else if (urlPath === `/species/${species}/distribution.html`) {
+      readFileAndInclude(`./../interface/views/species/${species}/distribution.html`, 200); // CC/ST/Serovar distribution
+    } else if (urlPath === `/species/${species}/genomes.html`) {
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
+    } else if (urlPath === `/species/${species}/genomes_tutorial.html`) {
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes_tutorial.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes interactive tutorial
+    } else if (urlPath === `/species/${species}/naura.html`) {
+      readFileAndInclude(`./../interface/views/species/${species}/naura.html`, 200); // Naura
+    } else if (urlPath === `/species/${species}/phylogeny.html`) {
+      readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`, 200); // Phylogeny
+    } else if (urlPath === `/species/${species}/refs.html`) {
+      readFileAndInclude(`./../interface/views/species/${species}/refs.html`, 200); // Reference genomes
+    } else if (urlPath.indexOf(`/species/${species}/DATA`) !== -1) { // NAS files
+      const trim = `/species/${species}`; // species sub url
+      const urlPathTrimmed = urlPath.replace(trim, ''); // relative path from Controller script
 
-      fs.exists(`.${urlPathTrimmed}`, function (exist) {
-        if (!exist) // send 404 page if path doesn't exist
-        {
+      fs.exists(`.${urlPathTrimmed}`, (exist) => {
+        // send 404 page if path doesn't exist
+        if (!exist) {
           send404(`routeFilesBySpecies()  : File ${urlPathTrimmed} not found!`);
-        }
-        else // read file from file system path
-        {
-          fs.readFile(`.${urlPathTrimmed}`, function (err, data) {
-            if (err) // if this file/path EXISTS cant be reached for any reason
-            {
+        } else {
+          // read file from file system path
+          fs.readFile(`.${urlPathTrimmed}`, (err) => {
+            // if this file/path EXISTS cant be reached for any reason
+            if (err) {
               send500(`routeFilesBySpecies() : Error getting the file: ${err}.`);
-            }
-            else {
+            } else {
               readServerFileAutoMime(`.${urlPathTrimmed}`, 200);
             }
           });
         }
       });
-    }
-    else if (req.method == "POST") {
-      console.log("received POST request.");
-      // if genomes in url : server side zip + send zipped file to client 
-      if (wordInString(req.url, "genomes")) {
-        console.log("POST request: zip genomes pipeline");
-        var body = '';
-
-        req.on('data', function (data) {
+    } else if (req.method === 'POST') {
+      // Handle POST requests (data send by user)
+      console.log('Receiving POST data...');
+      /*
+      Handling POST requests from GENOME WORKSPACES
+      if "genomes" in url : server side zip + send zipped file to client
+      */
+      if (wordInString(req.url, 'genomes')) {
+        console.log('POST for --> zip genomes pipeline');
+        let body = '';
+        req.on('data', (data) => {
           body += data;
-          console.log("req url:") // req.url contains uuidv4() from client-side
-          console.log(req.url)
-          // Too much POST data, kill the connection!
-          // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+          console.log('req url:'); // req.url contains uuidv4() generated on the client-side
+          console.log(req.url);
+          // set POST size limit to 1MB. 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
           if (body.length > 1e6) {
             req.connection.destroy();
           }
         });
 
-        req.on('end', function () {
-          var post = querystring.parse(body, null, null, { maxKeys: 0 });
-          // use post['blah'], etc.
-          console.log("req content:")
-          console.log(JSON.stringify(post))
-          console.log("and")
-          var clientuid = req.url.split('/').pop()
-          shell.exec("mkdir -p /mnt/20To-vol/tmp/" + clientuid, { async: false }) // async=false --> do it here
-          console.log("uuuid : " + clientuid)
-          // create tmp file stream
-          var stream = fs.createWriteStream("/mnt/20To-vol/tmp/" + clientuid + "/filestozip_" + clientuid + ".txt");	// req.url = client uuid
-          var zipfilesList = "/mnt/20To-vol/tmp/" + clientuid + "/filestozip_" + clientuid + ".txt"
-          var zipOutput = "/mnt/20To-vol/tmp/" + clientuid + "/wgsdata_" + clientuid + ".zip"
-          var zipOutputPathToSend = "tmp/" + clientuid + "/wgsdata_" + clientuid + ".zip"
-          //var zipOutputToRead = "./tmp/"+clientuid+"/wgsdata_"+clientuid+".zip"	
-          //iterate over JSON structure
-          console.log("and also")
-          stream.once('open', function (fd) {
-            if (validator.isJSON(JSON.stringify(post))) {
+        req.on('end', () => {
+          const post = querystring.parse(body, null, null, { maxKeys: 0 });
+          console.log('Req content:');
+          console.log(JSON.stringify(post));
+          // Handle the POST request only if its JSON ("validator" used  for forms validation)
+          if (validator.isJSON(JSON.stringify(post))) {
+            const clientuid = req.url.split('/').pop();
+            // Create tmp directory (with uuid) SYNChronously ({ async: false })
+            shell.exec('mkdir -p /mnt/20To-vol/tmp/' + clientuid, { async: false });
+            console.log('uuuid : ', clientuid);
+            // Init filelist to zip
+            const stream = fs.createWriteStream('/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt'); // fs object containing list of files to zip
+            const zipfilesList = '/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt' // list of files to zip
+            const zipOutputPathToSend = 'tmp/' + clientuid + '/wgsdata_' + clientuid + '.zip'
+            console.log('files streamed: ') // debug
+            // debug : stdout files list to zip
+            stream.once('open', () => {
               for (i in post) {
-                console.log(post[i] + "__n: " + i);
-                stream.write(post[i] + "\n")
+                if (Object.prototype.hasOwnProperty.call(post, i)){
+                  console.log(post[i] + "__n: " + i);
+                  stream.write(post[i] + "\n")
+                }
               }
-            }
-          });
-          //stream.end();
-          var child = shell.exec("sh ZipAndCall.sh " + clientuid + " " + zipfilesList, { async: true }); // async=true --> do it when callback
-          // Serve files when child process ended
-          child.stdout.on('end', function (data) {
-            console.log(data)
-            console.log("compression ended, now serving files...")
-            res.writeHead(200, { 'Content-Type': 'text/plain', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
-            res.end(zipOutputPathToSend);
-            console.log("sended: " + zipOutputPathToSend)
-          });
-
+            });
+            //stream.end();
+            var child = shell.exec("sh ZipAndCall.sh " + clientuid + " " + zipfilesList, { async: true }); // async=true --> do it when callback
+            // Serve files when child process ended
+            child.stdout.on('end', function (data) {
+              console.log(data)
+              console.log("compression ended, now serving files...")
+              res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
+              res.end(zipOutputPathToSend); // file path that will be open By AJAX on client side then stremed with readServerFileAutoMime() 
+              console.log("sended: " + zipOutputPathToSend)
+            });
+          }
         });
       }
     }
+    /*
+      Handling POST requests from xxx WORKSPACES
+      if "genomes" in url : server side zip + send zipped file to client
+    */
+
+    // future code for other xxx workspaces
+
+    /*
+      Do not Handle POST request from other pages
+    */
     else {
       send404(`routeFilesBySpecies() : File file not found for ${species}`);
     }
@@ -384,18 +365,18 @@ const server = http.createServer(function (req, res) {
 
   function send404(message) // file not found
   {
-    console.log(message);
+    console.warn(message);
     readFileAndInclude('./../interface/views/404.html', 404);
   }
 
   function send403(message) {
-    console.log(message);
+    console.warn(message);
     readFileAndInclude('./../interface/views/403.html', 403);
   }
 
   function send500(message) // internal server error
   {
-    console.log(message);
+    console.warn(message);
     readFileAndInclude('./../interface/views/500.html', 500);
   }
 
@@ -589,7 +570,7 @@ const server = http.createServer(function (req, res) {
 
   else if (urlPath.indexOf('/species/') >= 0) // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
   {
-    console.log('path species'); //debug trace
+    console.log('path species'); //debug
     if (urlPath.indexOf('bacillus') >= 0) {
       routeFilesBySpecies('bacillus');
     }
@@ -667,7 +648,7 @@ const server = http.createServer(function (req, res) {
 	// DEPRECATED !!! Same function as readFileAndIncludeAndRenderBySpecies but render directly in Controller.njs script (instead of render inside Views.njs script)
 	function readFileAndIncludeAndRenderBySpeciesHere(templateFilePath,msg,MongoAttribute,MongoValue)
 	{
-		console.log('readFileAndIncludeAndRenderBySpecies'); //debug trace
+		console.log('readFileAndIncludeAndRenderBySpecies'); //debug
 		fs.readFile(templateFilePath, function (errors, contents) 
 		{
 			if(errors)
