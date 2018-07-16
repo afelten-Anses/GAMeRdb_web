@@ -101,7 +101,7 @@ const prohibed = [ // Restricted files access list
 
 
 /* ///////////////////////////////////////////////////////////////////
-                    ----- APP starts here -----
+                    ----- Starts here -----
  ///////////////////////////////////////////////////////////////// */
 
 /**
@@ -306,7 +306,7 @@ const server = http.createServer((req, res) => {
             const stream = fs.createWriteStream('/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt'); // fs object containing list of files to zip
             const zipfilesList = '/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt' // list of files to zip
             const zipOutputPathToSend = 'tmp/' + clientuid + '/wgsdata_' + clientuid + '.zip'
-            console.log('files streamed: ') // debug
+            console.log('files streamed: '); // debug
             // debug : stdout files list to zip
             stream.once('open', () => {
               for (let i in post) {
@@ -318,13 +318,13 @@ const server = http.createServer((req, res) => {
               }
             });
             // Launch bash script asynchrously (=when callback)
-            const child = shell.exec('sh ZipAndCall.sh ' + clientuid + " " + zipfilesList, { async: true }); 
+            const child = shell.exec('sh ZipAndCall.sh ' + clientuid + " " + zipfilesList, { async: true });
             // Serve files when child process ended
             child.stdout.on('end', (data) => {
               console.log(data)
               console.log('compression ended, now serving files...');
               res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
-              res.end(zipOutputPathToSend); // file path that will be open By AJAX on client side then stremed with readServerFileAutoMime() 
+              res.end(zipOutputPathToSend); // file path that will be open By AJAX on client side then stremed with readServerFileAutoMime()
               console.log('sended: ', zipOutputPathToSend);
             });
           }
@@ -486,11 +486,11 @@ const server = http.createServer((req, res) => {
   } else if (urlPath === '/semantic/dist/themes/default/assets/fonts/icons.ttf') {
     readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.ttf', 'application/x-font-ttf', 200);
   } else if (urlPath === '/' || urlPath === '/home') {
-    readFileAndIncludeAndRender('./../interface/views/homepage/index.html', 200)
-  } else if (urlPath === `/views/tools/fastosh.html`) {
-    readFileAndInclude(`./../interface/views/tools/fastosh.html`, 200);
-  } else if (urlPath === `/views/tools/fastosh_results.html`) {
-    readFileAndInclude(`./../interface/views/tools/fastosh_results.html`, 200);
+    readFileAndIncludeAndRender('./../interface/views/homepage/index.html', 200);
+  } else if (urlPath === '/views/tools/fastosh.html') {
+    readFileAndInclude('./../interface/views/tools/fastosh.html', 200);
+  } else if (urlPath === '/views/tools/fastosh_results.html') {
+    readFileAndInclude('./../interface/views/tools/fastosh_results.html', 200);
   } else if (urlPath.indexOf('/species/') >= 0) { // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
     console.log('path species'); // debug
     if (urlPath.indexOf('bacillus') >= 0) {
@@ -597,4 +597,4 @@ const server = http.createServer((req, res) => {
   ///////////////////////////////////////////////////////////////// */
 
 server.listen(listenPort, listenIp);
-console.log('Server running at http://' + listenIp + ':' + listenPort);
+console.log('Server running at http://', listenIp, ':', listenPort);
