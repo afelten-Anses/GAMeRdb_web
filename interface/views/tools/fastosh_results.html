@@ -19,7 +19,7 @@
 	    <script type="text/javascript" src="http://www.jsphylosvg.com/js/jsphylosvg-min.js?1.29"></script> 
 	    <script type="text/javascript">
 	    window.onload = function(){
-			var dataObject = { newick: '(((Espresso:2,(Milk Foam:2,Espresso Macchiato:5,((Steamed Milk:2,Cappucino:2,(Whipped Cream:1,Chocolate Syrup:1,Cafe Mocha:3):5):5,Flat White:2):5):5):1,Coffee arabica:0.1,(Columbian:1.5,((Medium Roast:1,Viennese Roast:3,American Roast:5,Instant Coffee:9):2,Heavy Roast:0.1,French Roast:0.2,European Roast:1):5,Brazilian:0.1):1):1,Americano:10,Water:1);' };
+			var dataObject = { newick: '(((Espresso:2,(Milk Foam:2,Espresso Macchiato:5,((Steamed Milk:2,Cappuccino:2,(Whipped Cream:1,Chocolate Syrup:1,Cafe Mocha:3):5):5,Flat White:2):5):5):1,Coffee arabica:0.1,(Columbian:1.5,((Medium Roast:1,Viennese Roast:3,American Roast:5,Instant Coffee:9):2,Heavy Roast:0.1,French Roast:0.2,European Roast:1):5,Brazilian:0.1):1):1,Americano:10,Water:1);' };
 			phylocanvas = new Smits.PhyloCanvas(
 				dataObject,
 				'svgCanvas', 
@@ -42,30 +42,27 @@
             <!------------------------------------------------------------------>
             <div class="ui stackable grid" id="aftertopmenu"> 
                 <!--LEFT GRID : vertical menu -->
-                <div class="two wide column" id="leftmenu">
+                <div class="one wide column" id="leftmenu">
                         <!-- Menu de gauche -->
                 </div>     
                 <!--RIGHT grid : DataTables -->
-                <div class="ten wide column" id="centermenu">
+                <div class="nine wide column" id="centermenu">
                     <div class="ui grid">
                         <div class="eight wide column">
-                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text">FasTosh (W.I.P)</span></h1>
+                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text">FasTosh - Results</span></h1>
                         </div>
                         <div class="eight wide right aligned column" id="helpme">
                             <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
                         </div>
-                    </div>
-                    <div class="ui divider"></div>
-                    <div class="column" id="svgCanvas">
-                       <!-- tree visualisation or input -->
-                    </div>
-                    <div class="ui divider">
-                    </div>
-                    <div class="column" id="dlcheckbox">
-                        <div class="field">
-                            <i class="large cloud download icon"></i><span class="ui small header"> Download settings</span>
+                        <div class="ui divider"></div>
+                        <div class="column" id="svgCanvas">
+                        <!-- tree visualisation or input -->
                         </div>
-                        <!-- download tree -->
+                    </div> 
+                    <div class="four wide column">
+                        <button class="ui button"> Newick </button>
+                        <button class="ui button"> Distance Matrix </button>
+                        <button class="ui button"> Retry </button>
                     </div>
                 </div>
             </div>
