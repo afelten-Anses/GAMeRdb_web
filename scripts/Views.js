@@ -1,156 +1,101 @@
-// **** Author : Kevin Durimel 
-// **** Goal : Generate view froms GAMeRdb data
+/**
+     * @fileOverview GAMeRdbi Views module. Rendering view for the controller
+     * using data obtained from Models.
+     * @author Kévin Durimel <k.durimel@gmail.com>
+     * @version 0.99
+     */
 
-/*
-	---	VIEWS init : modules, MVC scripts, args ---
-*/
-// NodeJS modules
-const fs = require('fs'); //filesystem (file parser)
-const url = require('url'); // url parser
-const path = require('path'); //path parser
-// External modules
-const template = require('templatesjs'); // useful for header and footer 'includes'
-const validator = require('validator'); // queries validator and sanitizer
-const querystring = require('querystring'); // query parser and stringifyier
-// MVC scripts dependencies
+// ------------- MVC dependencies ------------- //
 const model = require('./Model'); // use Model.js as a NodeJS module
-const views = require('./Views'); // use Views.js as a NodeJS module
 
-// Render specific dataTables for each species
-// function renderDataTables(species,callback,response,template,msg) // callback : controller script callback, response,template,msg : values required from controller script
-// {
-// 	model.filterByAttribute("Phylogeny.Genus",species, function(result)
-// 	{
-// 		template.set(callback, function(errors,callback) // templatesJS
-// 		{
-// 			if(errors)
-// 			{
-// 				throw errors;
-// 			}
-// 			else
-// 			{
-// 				console.log("lolilol")
-// 				var JSONstring = result // from model SucessCallback
-// 				var list = // list of variables that needed to be rendered dynamically
-// 				{
-// 					datatablesJSON : JSON.stringify(JSONstring),
-// 					JSONlen : Object.keys(JSONstring).length
-// 				}
-// 				template.renderAll(list, function(err,callback)
-// 			    {
-// 			    	if(err) 
-// 			    	{
-// 			    		throw err;
-// 			    	}
-// 			    	else
-// 			    	{
-// 			    		response.writeHead(msg,{'Content-Type': 'text/html','Cache-Control': 'no-cache'});
-// 			    		response.end(callback);
-// 			    	}
-// 			    })
-// 			}
-// 		})
-// 	});
-// }
 
-function renderDataTables(species,callback,response,template,msg) // callback : controller script callback, response,template,msg : values required from controller script
-{
-	model.filterByAttribute("Phylogeny.Genus",species, function(result)
-	{
-		template.set(callback, function(errors,callback) // templatesJS
-		{
-			if(errors)
-			{
-				throw errors;
-			}
-			else
-			{
-				var JSONstring = result // from model SucessCallback
-				var list = // list of variables that needed to be rendered dynamically
-				{
-					datatablesJSON : JSON.stringify(JSONstring),
-					JSONlen : Object.keys(JSONstring).length
-				}
-				//console.log(JSONstring) //dev
-				template.renderAll(list, function(err,callback)
-			    {
-			    	if(err) 
-			    	{
-			    		throw err;
-			    	}
-			    	else
-			    	{
-			    		response.writeHead(msg,{'Content-Type': 'text/html','Cache-Control': 'no-cache'});
-			    		response.end(callback);
-			    	}
-			    })
-			}
-		})
-	});
+/* ///////////////////////////////////////////////////////////////////
+                    ----- Starts here -----
+ ///////////////////////////////////////////////////////////////// */
+
+/* Rendering  DataTables pages for a species : useful for species pages */
+function renderDataTables(species, callback, response, template, msg) {
+  model.filterByAttribute('Phylogeny.Genus', species, (result) => {
+    // templatesJS imported in model
+    template.set(callback, (errors) => {
+      if (errors) {
+        console.log('error in renderDataTables: ', errors);
+        throw errors;
+      } else {
+        const JSONstring = result; // from model SucessCallback
+        const list = {
+          // list of variables that needed to be rendered dynamically
+          datatablesJSON: JSON.stringify(JSONstring),
+          JSONlen: Object.keys(JSONstring).length
+        };
+        template.renderAll(list, (err, templateCallback) => {
+          if(err) {
+            throw err;
+          } else {
+            response.writeHead(msg, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
+            response.end(templateCallback);
+          }
+        });
+      }
+    });
+  });
 }
 
-function renderFullJson(callback, response, template, msg) // callback : controller script callback, response,template,msg : values required from controller script
-{
-	model.sendAllJson(function (result) {
-		template.set(callback, function (errors, callback) // templatesJS
-		{
-			if (errors) {
-				throw errors;
-			}
-			else {
-				var JSONstring = result // from model SucessCallback
-				var list = // list of variables that needed to be rendered dynamically
-					{
-						fullJSON: JSON.stringify(JSONstring),
-						JSONlen: Object.keys(JSONstring).length
-					}
-				//console.log(JSONstring) //dev
-				template.renderAll(list, function (err, callback) {
-					if (err) {
-						throw err;
-					}
-					else {
-						response.writeHead(msg, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
-						response.end(callback);
-					}
-				})
-			}
-		})
-	});
+/* Rendering  DataTables pages for all species : useful for homepage */
+function renderFullJson(callback, response, template, msg) {
+  model.sendAllJson((result) => {
+    // templatesJS imported from model
+    template.set(callback, (errors) => {
+      if (errors) {
+        console.log('error in  renderFullJson: ', errors);
+        throw errors;
+      } else {
+        const JSONstring = result; // from model SucessCallback
+        const list = {
+          // list of variables that needed to be rendered dynamically
+          fullJSON: JSON.stringify(JSONstring),
+          JSONlen: Object.keys(JSONstring).length
+        };
+        template.renderAll(list, (err, templateCallback) => {
+          if (err) {
+            console.log('rendering error in renderFullJson: ', errors);
+            throw err;
+          } else {
+            response.writeHead(msg, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
+            response.end(templateCallback);
+          }
+        });
+      }
+    });
+  });
 }
+/* ///////////////////////////////////////////////////////////////////
+            ----- Deprecated code  -----
+  ///////////////////////////////////////////////////////////////// */
 
+// model.filterByAttribute(MongoAttribute, MongoValue, (result) => {
+//   template.set(contents, (errors) => {
+//     if (errors) {
+//       throw errors;
+//     } else {
+//       const JSONstring = result; // from model SucessCallback
+//       const list = {
+//         datatablesJSON: JSON.stringify(JSONstring),
+//       }
+//       template.renderAll(list, (err,contents) => {
+//         if (err) {
+//           throw err;
+//         } else {
+//           res.writeHead(msg, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
+//           res.end(contents);
+//         }
+//       });
+//     }
+//   });
+// });
+
+/* ///////////////////////////////////////////////////////////////////
+            ----- Export functions  -----
+  ///////////////////////////////////////////////////////////////// */
 exports.renderDataTables = renderDataTables;
 exports.renderFullJson = renderFullJson;
-
-
-// model.filterByAttribute(MongoAttribute,MongoValue, function(result)
-// 		    	{
-// 		    		template.set(contents, function(errors,contents) // templatesJS
-// 		    		{
-// 						if(errors)
-// 					    {
-// 					    	throw errors;
-// 					    }
-// 					    else
-// 					    {
-// 							var JSONstring = result // from model SucessCallback
-// 							var list = // list of variables that needed to be rendered dynamically
-// 							{
-// 								datatablesJSON : JSON.stringify(JSONstring),
-// 							}
-// 							//console.log(JSONstring) //dev
-// 							template.renderAll(list, function(err,contents)
-// 			    			{
-// 			                	if(err) 
-// 			                	{
-// 			                		throw err;
-// 			                	}
-// 			                	else
-// 			                	{
-// 			                		res.writeHead(msg,{'Content-Type': 'text/html','Cache-Control': 'no-cache'});
-// 									res.end(contents);
-// 			                	}
-// 			     			})
-// 		     			}
-// 					})
-// 		     	});
