@@ -50,7 +50,7 @@
                 <div class="ten wide column" id="centermenu">
                     <div class="ui grid">
                         <div class="eight wide column">
-                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text">FasTosh (W.I.P)</span></h1>
+                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text">FasTosh</span></h1>
                         </div>
                         <div class="eight wide right aligned column" id="helpme">
                             <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
@@ -61,14 +61,18 @@
                     
 
                     <div class="ui grid">
-                    <div class="ten wide column">
-                    <div class="ui accordion">
-                        <div class="title active">
+                    <div class="sixteen wide column">
+                    <div class="ui fluid accordion">
+                        <div class="title">
                             <i class="dropdown icon"></i>
-                            What is a dog?
+                            <b>Fonctionnement</b>
                         </div>
-                        <div class="content active">
-                            <p class="transition visible" style="display: block !important;">A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be found as a welcome guest in many households across the world.</p>
+                        <div class="content">
+                            <ul class="list">
+                                <li>Fastosh aims to fastly build a rooted tree based on k-mers with the Neigbourg Joinning clustering method.</li>
+                                <li>To do the analysis, type direcltly strains ID in the form or put them in a tsv file.</li>
+                                <li>As a result, you obtain a tree. Then it's possible to downdoald matrix and tree files. You can also do an new analysis. </li>
+                            </ul>
                         </div>
                     </div>
                     </div>
@@ -79,15 +83,16 @@
                     <form class="ui form seven wide column centered">
                         <div class="inline field">
                             <label>Strains ID list:</label>
-                            <textarea rows="5" placeholder="Please enter a list of strains ID"></textarea>
+                            <textarea rows="5" placeholder="Please enter strains ID"></textarea>
                         </div>
 
                         <div class="field">
-                            <label for='tfile'> Or upload strain list file: </label>
-                            <input type="file" class="form-control"  name="tfile" />
+                            <label for='tfile'> Or upload strains ID list file: </label>
+                            <input type="file" class="form-control"  name="tfile"/>
                         </div>
 
-                    <button class="ui button" type="submit">Run</button>
+                    <button class="ui button" type="submit" id="run"> Run </button>
+                    <button class="ui button" type="reset"> Reset </button>
                     </form>
                     </div>
                     
@@ -103,7 +108,25 @@
         </div>
     </body>
     <script>
-       $('.ui.accordion').accordion();
+        $('.ui.accordion').accordion();
+        $('#run').click(function (e) {
+            e.preventDefault()
+            var idList = null
+            var idJson = {}
+            if ($('textarea')[0].value != ""){
+                idList = $('textarea')[0].value.split("\n");
+                for (var i = 0; i < idList.length; i++){
+                    if (idList[i] !== "") {
+                        idJson[i] = idList[i]
+                    }
+                }
+                    console.log(idJson)
+            } else {
+                idList = $('input')[0].value
+                console.log(idList)
+            }
+        })
+
     </script>
     <script>
         <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
