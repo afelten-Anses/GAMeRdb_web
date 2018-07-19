@@ -17,7 +17,7 @@ args // App usage (help)
 
 
 
-// Convertion du JSON en liste d'id 
+// Conversion du JSON en liste d'id 
 
 let idJson = {}
 idJson[0] = "LV0877"
@@ -50,7 +50,7 @@ if (args.dbuser != undefined && args.dbpassword != undefined) {
 
 //uuid = uuidv4();
 const directoryName = "Fastosh_" + "lol" + "/";
-const directoryPath = "../../tmp/" + directoryName
+const directoryPath = "tmp/" + directoryName
 const fileName = "sketch_paths.tsv"
 
 shell.exec("mkdir " + directoryPath, { async: false }) // Création du dossier temporaire
@@ -85,8 +85,3 @@ for (let i = 0; i  < idList.length; i++){
 // Réalisation de l'inférence taxonomique
 
 shell.exec("python ../../FasTosh_web.py -i " + directoryPath + fileName + " -u " + directoryPath + " -o " + directoryPath + "distance_matrix" + " -e " + directoryPath + "taxonomy" + " -T 10", { async: true })
-
-
-
-
-// Penser à supprimer le fichier contenant les chemins
