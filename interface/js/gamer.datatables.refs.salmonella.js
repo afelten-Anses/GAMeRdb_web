@@ -71,7 +71,7 @@ $(document).ready(function() {
         columns: 
         [   
             { data: 'ReferenceID' , "title": "Strain"},
-            { data: 'Phylogeny.Serovar' , "title": "Predicted Serovar", "defaultContent": "-"},
+            { data: 'Phylogeny.Serovar' , "title": "Serovar", "defaultContent": "-"},
             { data: 'ZIPpath', "title": " Archive"},
         ],
         columnDefs: 

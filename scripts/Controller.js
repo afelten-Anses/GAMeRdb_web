@@ -427,6 +427,12 @@ const server = http.createServer((req, res) => {
     readServerFile('./../interface/js/gamer.home.js', 'application/javascript', 200);
   } else if (urlPath === '/js/gamer.common.js') {
     readServerFile('./../interface/js/gamer.common.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/gamer.fastosh.js') {
+    readServerFile('./../interface/js/gamer.fastosh.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/jsphylosvg-min.js') {
+    readServerFile('./../interface/js/jsphylosvg-min.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/raphael-min.js') {
+    readServerFile('./../interface/js/raphael-min.js', 'application/javascript', 200);
   } else if (urlPath === '/semantic/dist/components/icon.min.css') {
     readServerFile('./../semantic/dist/components/icon.min.css', 'text/css', 200);
   } else if (urlPath === '/css/gamer.effects.datatables.css') {
@@ -501,9 +507,9 @@ const server = http.createServer((req, res) => {
     readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.ttf', 'application/x-font-ttf', 200);
   } else if (urlPath === '/' || urlPath === '/home') {
     readFileAndIncludeAndRender('./../interface/views/homepage/index.html', 200);
-  } else if (urlPath === '/views/tools/fastosh.html') {
+  } else if (urlPath === '/tools/fastosh.html') {
     readFileAndInclude('./../interface/views/tools/fastosh.html', 200);
-  } else if (urlPath === '/views/tools/fastosh_results.html') {
+  } else if (urlPath === '/tools/fastosh_results.html') {
     readFileAndInclude('./../interface/views/tools/fastosh_results.html', 200);
   } else if (urlPath.indexOf('/species/') >= 0) { // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
     console.log('path species'); // debug

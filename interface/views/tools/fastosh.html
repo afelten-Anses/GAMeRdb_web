@@ -3,7 +3,7 @@
     <!-- GAMeRdbi V2 views : WORK IN PROGRESS -->
     <head>
         <meta charset="utf-8"/>
-        <title>GAMeRdb - Genomes </title>
+        <title>GAMeRdb - Fastosh </title>
         <meta name="description" content="GAMeR genomic database - Clostridium genomes"/>
         <link rel="shortcut icon" type="image/x-icon" href="../../../img/favicon.ico" />
         <!-- SEMANTIC UI main styles-->
@@ -15,29 +15,23 @@
         <!-- SEMANTIC UI main JS-->
         <script src="../../../../semantic/dist/semantic.min.js"></script>
         <!-- JS Phylo -->
-        <script type="text/javascript" src="http://www.jsphylosvg.com/js/raphael/raphael-min.js" ></script> 
-	    <script type="text/javascript" src="http://www.jsphylosvg.com/js/jsphylosvg-min.js?1.29"></script> 
-	    <script type="text/javascript">
-	    /*window.onload = function(){
-			var dataObject = { newick: '(((Espresso:2,(Milk Foam:2,Espresso Macchiato:5,((Steamed Milk:2,Cappucino:2,(Whipped Cream:1,Chocolate Syrup:1,Cafe Mocha:3):5):5,Flat White:2):5):5):1,Coffee arabica:0.1,(Columbian:1.5,((Medium Roast:1,Viennese Roast:3,American Roast:5,Instant Coffee:9):2,Heavy Roast:0.1,French Roast:0.2,European Roast:1):5,Brazilian:0.1):1):1,Americano:10,Water:1);' };
-			phylocanvas = new Smits.PhyloCanvas(
-				dataObject,
-				'svgCanvas', 
-				800, 
-				800,
-                'circular'
-			);
-	    };
-        */
-	    </script>
+        <script type="text/javascript" src="../../js/raphael-min.js" ></script> 
+	    <script type="text/javascript" src="../../js/jsphylosvg-min.js"></script> 
+        <!-- Fastosh specific JS code -->
+        <script type="text/javascript" charset="utf8" src="../../js/gamer.fastosh.js" defer></script><!-- exec when document loaded -->
         <!-- common JS -->
         <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script><!-- exec when document loaded -->
+        <!-- common CSS -->
+        <link rel="stylesheet" type="text/css" href="../../css/gamer.common.css"/>
     </head>
     <body>    
         <div id="bloc_page"><!-- main wrapper-->
             <header>
                 <%include ./../interface/views/includes/header.html%></%include>
             </header> 
+            <!-- Visible modal when "need help?" was clicked : start -->
+            <%include ./../interface/views/includes/genomes_help.html%></%include>
+            <!-- Visible modal when "need help?" was clicked : end -->
             <!------------------------------------------------------------------>
             <!-- MAIN PAGE -->
             <!------------------------------------------------------------------>
@@ -56,81 +50,44 @@
                             <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
                         </div>
                     </div>
-
                     <div class="ui divider"></div>
-                    
-
                     <div class="ui grid">
-                    <div class="sixteen wide column">
-                    <div class="ui fluid accordion">
-                        <div class="title">
-                            <i class="dropdown icon"></i>
-                            <b>Fonctionnement</b>
+                        <div class="sixteen wide column">
+                            <div class="ui fluid accordion">
+                                <div class="huge title">
+                                    <i class="dropdown icon"></i>
+                                    <b>How it works?</b>
+                                </div>
+                                <div class="active content">
+                                    <ul class="list">
+                                        <li>Fastosh aims to fastly build a rooted tree based on k-mers using the neighbour joining clustering method.</li>
+                                        <li>To use Fastosh, type directly strains IDs in the form or send them in a txt file (one id per line).</li>
+                                        <li>As a result, you obtain a tree visualization. Then it's possible to download matrix and tree files. You can also launch a new analysis. </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div class="content">
-                            <ul class="list">
-                                <li>Fastosh aims to fastly build a rooted tree based on k-mers with the Neigbourg Joinning clustering method.</li>
-                                <li>To do the analysis, type direcltly strains ID in the form or put them in a tsv file.</li>
-                                <li>As a result, you obtain a tree. Then it's possible to downdoald matrix and tree files. You can also do an new analysis. </li>
-                            </ul>
-                        </div>
                     </div>
-                    </div>
-                    </div>
-
-
                     <div class="ui grid">
-                    <form class="ui form seven wide column centered">
-                        <div class="inline field">
-                            <label>Strains ID list:</label>
-                            <textarea rows="5" placeholder="Please enter strains ID"></textarea>
-                        </div>
-
-                        <div class="field">
-                            <label for='tfile'> Or upload strains ID list file: </label>
-                            <input type="file" class="form-control"  name="tfile"/>
-                        </div>
-
-                    <button class="ui button" type="submit" id="run"> Run </button>
-                    <button class="ui button" type="reset"> Reset </button>
-                    </form>
-                    </div>
-                    
-                   
-                        <!-- download tree -->
-                    </div>
+                        <form class="ui form seven wide column centered">
+                            <div class="inline field">
+                                <label>Strains ID list:</label>
+                                <textarea rows="5" placeholder="Please enter strains ID"></textarea>
+                            </div>
+                            <div class="field">
+                                <label for='tfile'> Or upload strains ID list file: </label>
+                                <input type="file" class="form-control"  name="tfile"/>
+                            </div>
+                        <button class="ui button" type="submit" id="run"> Run </button>
+                        <button class="ui button" type="reset"> Reset </button>
+                        </form>
+                    </div>                              
+                    <!-- download tree -->
                 </div>
             </div>
-        
-            <footer class= "sticky">
-                <%include ./../interface/views/includes/footer.html%></%include>
-            </footer>
         </div>
+        <footer class= "sticky">
+            <%include ./../interface/views/includes/footer.html%></%include>
+        </footer>
     </body>
-    <script>
-        $('.ui.accordion').accordion();
-        $('#run').click(function (e) {
-            e.preventDefault()
-            var idList = null
-            var idJson = {}
-            if ($('textarea')[0].value != ""){
-                idList = $('textarea')[0].value.split("\n");
-                for (var i = 0; i < idList.length; i++){
-                    if (idList[i] !== "") {
-                        idJson[i] = idList[i]
-                    }
-                }
-                    console.log(idJson)
-            } else {
-                idList = $('input')[0].value
-                console.log(idList)
-            }
-        })
-    </script>
-    <script>
-        <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
-        /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Clostridium_multiqc_report.html"> MultiQC report</a></caption>');*/
-        $('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global overview of files quality, please check the <a href="#"> MultiQC report</a></caption>');
-        var data = <%datatablesJSON%>
-    </script>
 </html>

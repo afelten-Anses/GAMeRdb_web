@@ -72,9 +72,7 @@
         </div>
     </body>
     <script>
-        <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
-        /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Clostridium_multiqc_report.html"> MultiQC report</a></caption>');*/
-        $('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global overview of files quality, please check the <a href="#"> MultiQC report</a></caption>');
-        var data = <%datatablesJSON%>
+        //retrieve newick file path with uuid in url (GET method, like xxxx>>/fasthosh_results.html?tree=uuid)
+        var data = "replace this by newick content"
     </script>
 </html>
