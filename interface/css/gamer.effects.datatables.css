@@ -68,3 +68,6 @@ video {
   height:90%;
    margin-top: 2% !important;
 }
+#dtDownload:hover{
+    background-color:orange;
+}
