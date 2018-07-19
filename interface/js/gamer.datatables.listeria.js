@@ -251,145 +251,14 @@ $(document).ready(function() {
                         extend:  'colvis' , text: 'Columns'
                     },
                     //Show x rows button: no config --> no {'extend',...}
-                    'pageLength',
-                    {
+                    'pageLength'
+                    /*{
                         // Launch download on click
                         text: 'Download',action: function () 
                         {
-                            //SERVER SIDE zip and download    
-                            var currentDate = new Date(Date.now()).toLocaleString();
-                            var count = table.rows( { selected: true } ).count(); // number of selected rows
-                            var toDownload={}; 
-                            var formatToDownload=[];
-                            var selectedRadios=$('.ui.radio.checkbox.checked label') // contains <labels> from selected radio checkboxes
-                            if (selectedRadios.length===0)
-                            {
-                                //alert('Please select which kind of files you want to download (bottom section : download settings)')
-                                $('.small.modal.pleaseselect').modal('show')
-                            }
-                            else // launch file compression only if file format is selected
-                            {
-                                $('.basic.modal.preparing').modal('show')
-                                for (var i=0;i<selectedRadios.length;i++)
-                                {
-                                    formatToDownload.push(selectedRadios[i].innerHTML) //add <labels> (Normalised reads, Variants...) content to formatToDownload[]
-                                }
-
-                                for (var i=0 ; i<count ; i ++) // Create a JSON containing href links to download
-                                {    
-                                    // Generates a JSON including all files that meets the formats included in formatToDownload[]
-                                    if(formatToDownload.includes('Normalized reads (fastq)')) // add Fastq if Normalized reads selected
-                                    {
-                                        toDownload["FASTQ_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
-                                        toDownload["FASTQ_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2
-                                    }
-                                    if(formatToDownload.includes('Variants')) // add Fastq if Normalized reads selected
-                                    {
-                                        toDownload["VCF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF
-                                    }
-                                    if(formatToDownload.includes('Contigs')) // add Fastq if Normalized reads selected
-                                    {
-                                        toDownload["Contigs_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs
-                                    }
-                                    if(formatToDownload.includes('Assembly')) // add Fastq if Normalized reads selected
-                                    {
-                                        toDownload["Assembly_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly
-                                    }
-                                    if(formatToDownload.includes('GFF')) // add Fastq if Normalized reads selected
-                                    {
-                                        toDownload["GFF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF
-                                    }
-                                    if(formatToDownload.includes('GBK')) // add Fastq if Normalized reads selected
-                                    {
-                                        toDownload["GBK_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK
-                                    }
-                                    if(formatToDownload.includes('ARTwork report')) // add Fastq if Normalized reads selected
-                                    {
-                                        toDownload["Report_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Report
-                                    }
-                                }
-                                let clientuuid=uuidv4()
-                                $.ajax({
-                                    url: document.URL+"/"+clientuuid, 
-                                    timeout: 0, //secs
-                                    type: 'POST', 
-                                    contentType: 'application/json', 
-                                    data:toDownload
-                                })
-                                .done(function(msg){
-                                console.log('form submitted. Response payload: '+ msg);
-                                window.location="../../"+msg // change window.location in order to launch dl;
-                                console.log('POST response payload');
-                                $('.basic.modal.preparing').modal('hide')
-                                console.log("got : \n"+JSON.stringify(toDownload))
-                                }).fail(function(request, status, err) {
-                                    if (status == "timeout") {
-                                        // timeout -> reload the page and try again
-                                        console.warn("timeout");
-                                        //window.location.reload();
-                                    } 
-                                    else {
-                                        // another error occured  
-                                        $('.ui.indeterminate.big.text.loader').html('It seems like you requested a lot of files. \
-                                        <br/>You\'ll be able to retrieve them under 5-10 minutes by clicking <a href="http://192.168.184.133:3000/tmp/'+clientuuid+'/wgsdata_'+clientuuid+'.zip'+'">here</a>');
-                                        console.warn('file maybe available in tmp/'+clientuuid)
-                                    }
-                                })       
-                            }
-                            //CLIENT SIDE zip and download
-                            /*var currentDate = new Date(Date.now()).toLocaleString();
-                            var count = table.rows( { selected: true } ).count(); // number of selected rows
-                            var toDownload=[];
-                            var zip = new JSZip();
-                            // Add an top-level, arbitrary text file with contents
-                            //zip.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);  
-                            // Generate a directory within the Zip file structure
-                            var allfiles = zip.folder("Strains");
-                            allfiles.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);
-                            for (var i=0 ; i<count ; i ++)
-                            {
-                                toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
-                            }
-                            var dldata=[]
-                            var promise=[]
-                            for (var i=0 ; i<count ; i ++)
-                            {
-                                var fileTypeList=[
-                                'Reads.FASTQC_pair1',
-                                'Reads.FASTQC_pair2',
-                                'Reads.VCF',
-                                'Genome.Contigs',
-                                'Genome.Assembly',
-                                'Genome.QUAST',
-                                'Genome.GFF',
-                                'Genome.GBK',
-                                'Report']
-                                
-                                dldata[i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF
-                                //Force synchronous Download 
-                                promise[i] = $.get({url: dldata[i],
-                                                    async:false}
-                                                   );
-                                //sleep(300)
-                                // Add a file to the directory, in this case an image with data URI as contents
-                                allfiles.file(dldata[i],promise[i]);
-                                console.log(dldata[i])                
-                            }                
-                            // Generate the zip file asynchronously
-                            console.log("generatesync")
-                            allfiles.generateAsync({
-                                type: "blob",
-                                compression: "STORE",
-                                streamFiles:true,
-                                //compressionOptions: {
-                                //    level: 1
-                                //}
-                            }).then(function(blob) {
-                                // Force down of the Zip file
-                                saveAs(blob, "Strains_data.zip");
-                            });*/                   
+                            //SERVER SIDE zip and download    /                   
                         }
-                    }
+                    }*/
                 ]   
     });
     //Append content to DataTable
@@ -401,4 +270,147 @@ $(document).ready(function() {
     
     // Add download settings checkbox event listeners
     $('.ui.radio.checkbox').checkbox('attach events','.ui.slider.checkbox', 'onBeforeChecked'); //"onBeforeChecked" = invert (check) status. More useful than "check"
+    // Réinit "ui sticky" menu if DataTables length was modified by the client. Then sticky menu can stay sticky by considering the new page length.
+    $('#table_id').on('length.dt', function()
+    {
+        $('.ui.sticky').sticky({
+        offset : 80, // adjust all values so that content does not overlap any content between the top of the browser and the specified value
+        bottomOffset:-1 // same for the bottom of the browser
+        });
+    });
+    // Download files selected in DataTables
+    $('#dtDownload').click(function(){
+        var currentDate = new Date(Date.now()).toLocaleString();
+        var count = table.rows( { selected: true } ).count(); // number of selected rows
+        var toDownload={}; 
+        var formatToDownload=[];
+        var selectedRadios=$('.ui.radio.checkbox.checked label') // contains <labels> from selected radio checkboxes
+        if (selectedRadios.length===0)
+        {
+            //alert('Please select which kind of files you want to download (bottom section : download settings)')
+            $('.small.modal.pleaseselect').modal('show')
+        }
+        else // launch file compression only if file format is selected
+        {
+            $('.basic.modal.preparing').modal('show')
+            for (var i=0;i<selectedRadios.length;i++)
+            {
+                formatToDownload.push(selectedRadios[i].innerHTML) //add <labels> (Normalised reads, Variants...) content to formatToDownload[]
+            }
+
+            for (var i=0 ; i<count ; i ++) // Create a JSON containing href links to download
+            {    
+                // Generates a JSON including all files that meets the formats included in formatToDownload[]
+                if(formatToDownload.includes('Normalized reads (fastq)')) // add Fastq if Normalized reads selected
+                {
+                    toDownload["FASTQ_pair1_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair1
+                    toDownload["FASTQ_pair2_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.FASTQ_pair2
+                }
+                if(formatToDownload.includes('Variants')) // add Fastq if Normalized reads selected
+                {
+                    toDownload["VCF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Reads.VCF
+                }
+                if(formatToDownload.includes('Contigs')) // add Fastq if Normalized reads selected
+                {
+                    toDownload["Contigs_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs
+                }
+                if(formatToDownload.includes('Assembly')) // add Fastq if Normalized reads selected
+                {
+                    toDownload["Assembly_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.Assembly
+                }
+                if(formatToDownload.includes('GFF')) // add Fastq if Normalized reads selected
+                {
+                    toDownload["GFF_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF
+                }
+                if(formatToDownload.includes('GBK')) // add Fastq if Normalized reads selected
+                {
+                    toDownload["GBK_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GBK
+                }
+                if(formatToDownload.includes('ARTwork report')) // add Fastq if Normalized reads selected
+                {
+                    toDownload["Report_"+i]=table.rows( { selected: true } ).data({ selected: true })[i].Report
+                }
+            }
+            let clientuuid=uuidv4()
+            $.ajax({
+                url: document.URL+"/"+clientuuid, 
+                timeout: 0, //secs
+                type: 'POST', 
+                contentType: 'application/json', 
+                data:toDownload
+            })
+            .done(function(msg){
+            console.log('form submitted. Response payload: '+ msg);
+            window.location="../../"+msg // change window.location in order to launch dl;
+            console.log('POST response payload');
+            $('.basic.modal.preparing').modal('hide')
+            console.log("got : \n"+JSON.stringify(toDownload))
+            }).fail(function(request, status, err) {
+                if (status == "timeout") {
+                    // timeout -> reload the page and try again
+                    console.warn("timeout");
+                    //window.location.reload();
+                } 
+                else {
+                    // another error occured  
+                    $('.ui.indeterminate.big.text.loader').html('It seems like you requested a lot of files. \
+                    <br/>You\'ll be able to retrieve them under 5-10 minutes by clicking <a href="http://192.168.184.133:3000/tmp/'+clientuuid+'/wgsdata_'+clientuuid+'.zip'+'">here</a>');
+                    console.warn('file maybe available in tmp/'+clientuuid)
+                }
+            })
+        }      
+        //CLIENT SIDE zip and download
+        /*var currentDate = new Date(Date.now()).toLocaleString();
+        var count = table.rows( { selected: true } ).count(); // number of selected rows
+        var toDownload=[];
+        var zip = new JSZip();
+        // Add an top-level, arbitrary text file with contents
+        //zip.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);  
+        // Generate a directory within the Zip file structure
+        var allfiles = zip.folder("Strains");
+        allfiles.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);
+        for (var i=0 ; i<count ; i ++)
+        {
+            toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
+        }
+        var dldata=[]
+        var promise=[]
+        for (var i=0 ; i<count ; i ++)
+        {
+            var fileTypeList=[
+            'Reads.FASTQC_pair1',
+            'Reads.FASTQC_pair2',
+            'Reads.VCF',
+            'Genome.Contigs',
+            'Genome.Assembly',
+            'Genome.QUAST',
+            'Genome.GFF',
+            'Genome.GBK',
+            'Report']
+
+            dldata[i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF
+            //Force synchronous Download 
+            promise[i] = $.get({url: dldata[i],
+                                async:false}
+                               );
+            //sleep(300)
+            // Add a file to the directory, in this case an image with data URI as contents
+            allfiles.file(dldata[i],promise[i]);
+            console.log(dldata[i])                
+        }                
+        // Generate the zip file asynchronously
+        console.log("generatesync")
+        allfiles.generateAsync({
+            type: "blob",
+            compression: "STORE",
+            streamFiles:true,
+            //compressionOptions: {
+            //    level: 1
+            //}
+        }).then(function(blob) {
+            // Force down of the Zip file
+            saveAs(blob, "Strains_data.zip");
+        });*/
+
+    });
 });
