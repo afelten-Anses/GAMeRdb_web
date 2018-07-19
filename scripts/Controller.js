@@ -145,7 +145,7 @@ const server = http.createServer((req, res) => {
   filePath : file path, type ; file extension, msg: response code */
   function readServerFile(filePath, type, msg) {
     const ext = path.parse(filePath).ext; // Parse file requested to retrieve file extension (ext)
-    fs.readFile(filePath, function (errors, contents) {
+    fs.readFile(filePath, (errors, contents) => {
       if (errors) {
         send500(`readServerFile: Error getting the file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
         throw errors;
@@ -161,7 +161,6 @@ const server = http.createServer((req, res) => {
   type : Content-Type / msg : server response code */
   function readServerFileAutoMime(filePath, msg) {
     const ext = path.parse(filePath).ext; // Parse file requested to retrieve file extension (ext)
-
     // If file is a zip file stream it because it may be huge (nodeJS buffer limitations)
     if (mimeType[ext] === 'application/zip') {
       fs.createReadStream(filePath, (errors) => {
@@ -169,8 +168,9 @@ const server = http.createServer((req, res) => {
           send500(`readServerFileAutoMime : Error streaming the zip file ${filePath} : ${errors}.`); // if this file/path EXISTS cant be reached for any reason
           throw errors;
         }
-      }).pipe(res.writeHead(msg, { 'Content-Type': mimeType[ext] || 'application/octet-stream', 'Cache-Control': 'no-cache' })
-        .pipe(res.end()));
+        readServerFileAutoMime(filePath, 200);
+      }).pipe(res); // stream end
+
       console.log('contenu ' + filePath + ' chargé , mimeType : ' + mimeType[ext]); // debug
     } else {
       fs.readFile(filePath, (errors, contents) => {
@@ -228,8 +228,12 @@ const server = http.createServer((req, res) => {
       if (errors) {
         console.error(errors);
         send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`);
-      } else {
+      } else if (templateFilePath.indexOf('genomes') >= 0) {
         views.renderDataTables(species, contents, res, template, msg);
+      } else if (templateFilePath.indexOf('refs') >= 0) {
+        views.renderDataTablesRefs(species, contents, res, template, msg);
+      } else {
+        console.log('readFileAndIncludeAndRenderBySpecies : not supported');
       }
     });
   }
@@ -244,6 +248,8 @@ const server = http.createServer((req, res) => {
       readFileAndInclude(`./../interface/views/species/${species}/distribution.html`, 200); // CC/ST/Serovar distribution
     } else if (urlPath === `/species/${species}/genomes.html`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
+    } else if (urlPath === `/species/${species}/refs.html`) {
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/refs.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
     } else if (urlPath === `/species/${species}/genomes_tutorial.html`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes_tutorial.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes interactive tutorial
     } else if (urlPath === `/species/${species}/naura.html`) {
@@ -395,14 +401,22 @@ const server = http.createServer((req, res) => {
     readServerFile('./../interface/js/jquery.min.js', 'application/javascript', 200);
   } else if (urlPath === '/js/gamer.datatables.salmonella.js') {
     readServerFile('./../interface/js/gamer.datatables.salmonella.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/gamer.datatables.refs.salmonella.js') {
+    readServerFile('./../interface/js/gamer.datatables.refs.salmonella.js', 'application/javascript', 200);
   } else if (urlPath === '/js/gamer.datatables.salmonellatuto.js') {
     readServerFile('./../interface/js/gamer.datatables.salmonellatuto.js', 'application/javascript', 200);
   } else if (urlPath === '/js/gamer.datatables.listeria.js') {
     readServerFile('./../interface/js/gamer.datatables.listeria.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/gamer.datatables.refs.listeria.js') {
+    readServerFile('./../interface/js/gamer.datatables.refs.listeria.js', 'application/javascript', 200);
   } else if (urlPath === '/js/gamer.datatables.staphylococcus.js') {
     readServerFile('./../interface/js/gamer.datatables.staphylococcus.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/gamer.datatables.refs.staphylococcus.js') {
+    readServerFile('./../interface/js/gamer.datatables.refs.staphylococcus.js', 'application/javascript', 200);
   } else if (urlPath === '/js/gamer.datatables.clostridium.js') {
     readServerFile('./../interface/js/gamer.datatables.clostridium.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/gamer.datatables.refs.clostridium.js') {
+    readServerFile('./../interface/js/gamer.datatables.refs.clostridium.js', 'application/javascript', 200);
   } else if (urlPath === '/js/highcharts.js') {
     readServerFile('./../interface/js/highcharts.js', 'application/javascript', 200);
   } else if (urlPath === '/js/drilldown.js') {
