@@ -13,7 +13,7 @@ const model = require('./Model'); // use Model.js as a NodeJS module
                     ----- Starts here -----
  ///////////////////////////////////////////////////////////////// */
 
-/* Rendering  DataTables pages for a species : useful for species pages */
+/* Rendering  DataTables pages for species GENOMES : useful for species GENOMES pages */
 function renderDataTables(species, callback, response, template, msg) {
   model.filterByAttribute('Phylogeny.Genus', species, (result) => {
     // templatesJS imported in model
@@ -69,6 +69,34 @@ function renderFullJson(callback, response, template, msg) {
     });
   });
 }
+
+/* Rendering  DataTables pages for species GENOMES : useful for species GENOMES pages */
+function renderDataTablesRefs(species, callback, response, template, msg) {
+  model.filterByAttributeRefs('Phylogeny.Genus', species, (result) => {
+    // templatesJS imported in model
+    template.set(callback, (errors) => {
+      if (errors) {
+        console.log('error in renderDataTables: ', errors);
+        throw errors;
+      } else {
+        const JSONstring = result; // from model SucessCallback
+        const list = {
+          // list of variables that needed to be rendered dynamically
+          datatablesJSON: JSON.stringify(JSONstring),
+          JSONlen: Object.keys(JSONstring).length
+        };
+        template.renderAll(list, (err, templateCallback) => {
+          if(err) {
+            throw err;
+          } else {
+            response.writeHead(msg, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
+            response.end(templateCallback);
+          }
+        });
+      }
+    });
+  });
+}
 /* ///////////////////////////////////////////////////////////////////
             ----- Deprecated code  -----
   ///////////////////////////////////////////////////////////////// */
@@ -99,3 +127,4 @@ function renderFullJson(callback, response, template, msg) {
   ///////////////////////////////////////////////////////////////// */
 exports.renderDataTables = renderDataTables;
 exports.renderFullJson = renderFullJson;
+exports.renderDataTablesRefs = renderDataTablesRefs;
