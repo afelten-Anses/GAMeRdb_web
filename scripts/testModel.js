@@ -4,6 +4,9 @@
 // 	console.log(ress)
 // 	console.log("ok")
 // })
+
+// test ecriture Pauline
+
 const model = require('./Model'); // use Model.js as a NodeJS module
 model.sendAllJson(function(result){
 	var ress=JSON.stringify(result)
