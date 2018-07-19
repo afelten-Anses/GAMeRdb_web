@@ -11,6 +11,8 @@
         <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/components/icon.min.css"/>
         <!-- Fastosh specific CSS code -->
         <link rel="stylesheet" type="text/css" href="../../css/gamer.effects.fastosh.css"/>
+        <!-- common CSS -->
+        <link rel="stylesheet" type="text/css" href="../../css/gamer.common.css"/>
         <!--jQuery JS-->
         <script src="../../../../js/jquery.min.js"></script>
         <script type="text/javascript" charset="utf8" src="../../../js/jquery-1.12.4.js"></script><!--jQuery version adapted to DataTables-->
@@ -23,8 +25,6 @@
         <script type="text/javascript" charset="utf8" src="../../js/gamer.fastosh.js" defer></script><!-- exec when document loaded -->
         <!-- common JS -->
         <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script><!-- exec when document loaded -->
-        <!-- common CSS -->
-        <link rel="stylesheet" type="text/css" href="../../css/gamer.common.css"/>
     </head>
     <body>    
         <div id="bloc_page"><!-- main wrapper-->
@@ -42,7 +42,7 @@
                 <div class="two wide column" id="leftmenu">
                         <!-- Menu de gauche -->
                 </div>     
-                <!--RIGHT grid : DataTables -->
+                <!--RIGHT grid : Fastosh form -->
                 <div class="ten wide column" id="centermenu">
                     <div class="ui grid">
                         <div class="eight wide column">
@@ -56,12 +56,11 @@
                     <div class="ui grid">
                         <div class="sixteen wide column">
                             <div class="ui fluid accordion">
-                                <div class="huge title">
-                                    <i class="dropdown icon"></i>
-                                    <b>How it works?</b>
+                                <div class="active title">
+                                    <h3 class="ui medium header"><i class="dropdown icon"></i>How it works?</h3>
                                 </div>
                                 <div class="active content">
-                                    <ul class="list">
+                                    <ul class="list" id="howitworks">
                                         <li>Fastosh aims to fastly build a rooted tree based on k-mers using the neighbour joining clustering method.</li>
                                         <li>To use Fastosh, type directly strains IDs in the form or send them in a txt file (one id per line).</li>
                                         <li>As a result, you obtain a tree visualization. Then it's possible to download matrix and tree files. You can also launch a new analysis. </li>
@@ -83,12 +82,12 @@
                         <button class="ui button" type="submit" id="run"> Run </button>
                         <button class="ui button" type="reset"> Reset </button>
                         </form>
-                    </div>                              
+                    </div>
                     <!-- download tree -->
                 </div>
             </div>
         </div>
-        <footer class= "sticky">
+        <footer class="sticky">
             <%include ./../interface/views/includes/footer.html%></%include>
         </footer>
     </body>
