@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>GAMeRdb - References </title>
+        <meta name="description" content="GAMeR genomic database - Staphylococcus references"/>
+        <link rel="shortcut icon" type="image/x-icon" href="../../../img/favicon.ico" />
+        <!-- SEMANTIC UI main styles-->
+        <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/semantic.min.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/components/icon.min.css"/>
+        <!--DataTables css-->
+        <link rel="stylesheet" type="text/css" href="../../../css/gamer.effects.datatables.css"/> <!--DataTables custom CSS overrides-->    
+        <link rel="stylesheet" type="text/css" href="../../../css/dataTables.semanticui.min.css"/> <!--SemanticUI integration for DataTables-->
+        <link rel="stylesheet" type="text/css" href="../../../css/select.dataTables.min.css"> <!--SemanticUI styling for DataTables selected rows -->
+        <link rel="stylesheet" type="text/css" href="../../../css/buttons.semanticui.min.css"/> <!--SemanticUI styling for DataTables buttons-->
+        <!--jQuery JS-->
+        <script src="../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery-1.12.4.js"></script><!--jQuery version adapted to DataTables-->
+        <!-- SEMANTIC UI main JS-->
+        <script src="../../../../semantic/dist/semantic.min.js"></script>
+        <!--DataTables JS-->
+        <script type="text/javascript" charset="utf8" src="../../../js/gamer.datatables.refs.staphylococcus.js" defer></script><!--Setting Semantic UI custom JS effects settings + DataTables settings-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery.dataTables.min.js"></script><!--Main jQuery for Datatables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.semanticui.min.js"></script><!--SemanticUI integration for DataTables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.select.min.js"></script><!--SemanticUI integration for DataTables selected rows-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.buttons.min.js"></script><!--SemanticUI integration for DataTables selected buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.semanticui.min.js"></script><!--SemanticUI integration for DataTables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jszip.min.js"></script><!--JS class for generating or read zip files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/pdfmake.min.js"></script><!--JS class for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/vfs_fonts.js"></script><!--PdfMake dependency for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.html5.min.js" defer></script><!--JS class for generating Datatables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.print.min.js" defer></script><!--JS class for copying/priting the DataTable-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.colVis.min.js"></script><!--JS class for handling DataTables columns visibility-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.colReorder.min.js"></script>
+        <!--<script async="" type="text/javascript" charset="utf8" src="../../../js/Blob.js"></script>
+        <script async="" type="text/javascript" charset="utf8" src="../../../js/canvas-toBlob.js"></script>
+        <script async="" type="text/javascript" charset="utf8" src="../../../js/FileSaver.min.js"></script>-->
+        <!-- common JS -->
+        <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script><!-- exec when document loaded -->
+    </head>
+    <body>    
+        <div id="bloc_page"><!-- main wrapper-->
+            <header>
+                <%include ./../interface/views/includes/header.html%></%include>
+            </header> 
+            <!-- Visible modal when "download" was clicked : start -->
+            <div class="ui basic modal preparing">
+                <div class="ui indeterminate big text loader">We are preparing your files</div>
+            </div>
+            <!-- Visible modal when "download" was clicked : end -->
+            <div class="ui small modal pleaseselect">
+                <i class="close icon"></i>
+                <div class="header">
+                    No download settings
+                </div>
+                <div class="image content">
+                    <div class="image">
+                        <img class="ui tiny image" src="../../../img/dna.png">
+                    </div>
+                    <div class="description">
+                        <i class="hand point right icon"></i><span class="ui small header"><b>Please select the reference strains from which you want to download their bioinformatic files</b></span>
+                        <ol>
+                            <li>Select strains from the table (left click or CTRL+left click or SHIFT+left click)</li>
+                            <li>Then, go to bottom section: <i class="small cloud download icon"></i>download reference genome files</li>
+                            <li>Then, click download</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- Visible modal when "need help?" was clicked : start -->
+            <%include ./../interface/views/includes/genomes_help.html%></%include>
+            <!-- Visible modal when "need help?" was clicked : end -->
+            <!------------------------------------------------------------------>
+            <!-- MAIN PAGE -->
+            <!------------------------------------------------------------------>
+            <div class="ui stackable grid" id="aftertopmenu"> 
+                <!--LEFT GRID : vertical menu -->
+                <div class="two wide column" id="leftmenu">
+                    <div class="ui sticky vertical menu" id="menu_tutorial">
+                        <a class="item" data-tooltip="Browse and download Staphylococcus data generated by ARTwork" data-position="right center" data-variation="wide" data-inverted="" href="../staphylococcus/genomes.html">
+                            Genomes 
+                        </a>
+                        <a class="active yellow item" data-tooltip="Browse and download WGS data about Staphylococcus reference genomes" data-position="right center" data-variation="wide" data-inverted="" href="../staphylococcus/refs.html">
+                            References (<%JSONlen%></%JSONlen%>)
+                        </a>
+                        <a class="item" data-tooltip="Global overview of the Staphylococcus strains processed by ARTwork" data-position="right center" data-variation="wide" data-inverted="">
+                            Serovars
+                        </a>
+                        <a class="item" data-tooltip="Global phylogeny of the Staphylococcus processed by ARTwork" data-position="right center" data-variation="huge" data-inverted="">
+                            Phylogeny
+                        </a>
+                    </div>
+                </div>     
+                <!--RIGHT grid : DataTables -->
+                <div class="twelve wide column" id="centermenu">
+                    <div class="ui grid">
+                        <div class="eight wide column">
+                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text"><i>Staphylococcus </i>references</span></h1>
+                        </div>
+                        <div class="eight wide right aligned column" id="helpme">
+                            <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
+                        </div>
+                    </div>
+                    <div class="ui divider"></div>
+                    <div class="column">
+                        <table id="table_id" class="ui selectable striped celled teal padded table center aligned">
+                        </table>
+                        
+                    </div>
+                    <div class="ui divider">
+                    </div>
+                    <div class="column" id="dlcheckbox">
+                        <div class="field">
+                            <i class="large cloud download icon"></i><span class="ui small header">Download reference genome files</span>
+                        </div>
+                        <div class="ui form">
+                            <br/>
+                            <button class="ui left floated teal button" id="dtDownload">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class= "sticky">
+                <%include ./../interface/views/includes/footer.html%></%include>
+            </footer>
+        </div>
+    </body>
+    <script>
+        var data = <%datatablesJSON%>
+    </script>
+</html>
