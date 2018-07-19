@@ -427,6 +427,12 @@ const server = http.createServer((req, res) => {
     readServerFile('./../interface/js/gamer.home.js', 'application/javascript', 200);
   } else if (urlPath === '/js/gamer.common.js') {
     readServerFile('./../interface/js/gamer.common.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/gamer.fastosh.js') {
+    readServerFile('./../interface/js/gamer.fastosh.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/jsphylosvg-min.js') {
+    readServerFile('./../interface/js/jsphylosvg-min.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/raphael-min.js') {
+    readServerFile('./../interface/js/raphael-min.js', 'application/javascript', 200);
   } else if (urlPath === '/semantic/dist/components/icon.min.css') {
     readServerFile('./../semantic/dist/components/icon.min.css', 'text/css', 200);
   } else if (urlPath === '/css/gamer.effects.datatables.css') {
