@@ -78,3 +78,7 @@ for (let i = 0; i < idList.length; i += 1) {
 // Réalisation de l'inférence taxonomique
 
 shell.exec('python ../../FasTosh_web.py -i ' + directoryPath + fileName + ' -u ' + directoryPath + ' -o ' + directoryPath + 'distance_matrix -e ' + directoryPath + 'taxonomy -T 10', { async: true });
+
+// const nbTreads = 38;
+
+// shell.exec("srun --cpus-per-task=" + nbTreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + directoryPath + fileName + " -u " + directoryPath + " -o " + directoryPath + "distance_matrix" + " -e " + directoryPath + "taxonomy" + " -T " + nbTreads, { async: true });
