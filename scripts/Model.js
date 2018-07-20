@@ -131,6 +131,17 @@ function filterByAttributeRefs(attribute, value, successCallback) {
     return successCallback(docs); // return JSON results in callback
   });
 }
+/* From SampleIDS return paths of Msh files */
+function getPaths(attribute, value, successCallback) {
+  db.GENOME.find({ [attribute]: value }, (err, docs) => {
+    if (err) {
+      console.log(`fastosh - getPaths: error accessing [${attribute}]:${value} --> ${err}`);
+      return db.close();
+    }
+    return successCallback(docs); // return JSON results in callback
+  });
+}
+
 /* ///////////////////////////////////////////////////////////////////
             ----- Export functions  -----
   ///////////////////////////////////////////////////////////////// */
@@ -139,3 +150,4 @@ exports.findAttribute = findAttribute;
 exports.sendAllJson = sendAllJson;
 exports.findAttributeRefs = findAttributeRefs;
 exports.filterByAttributeRefs = filterByAttributeRefs;
+exports.getPaths = getPaths;

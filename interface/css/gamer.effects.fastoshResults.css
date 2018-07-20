@@ -1,0 +1,20 @@
+#run:hover{
+    background-color:#00FFFF;
+}
+.ui.sticky + div {
+  margin-top: 139px;
+}
+#centermenu{
+    margin-top: 1em;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 3em !important;
+}
+/* Redefines H and W for fastosh apge only : sticky footer fix */ 
+#bloc_page {
+    height: 80% !important;
+    width: 100% !important;
+}
+#howitworks {
+    font-size: 16px;
+}
