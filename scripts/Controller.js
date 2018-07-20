@@ -28,7 +28,7 @@ const url = require('url'); // url parser
 const path = require('path'); // path parser
 
 // ------------- MVC dependencies ------------- //
-// const model = require('./Model'); // use Model.js as a NodeJS module
+const model = require('./Model'); // use Model.js as a NodeJS module
 const views = require('./Views'); // use Views.js as a NodeJS module
 
 // ------------- External modules ------------- //
@@ -335,6 +335,8 @@ const server = http.createServer((req, res) => {
             });
           }
         });
+      }  else {
+        console.log('POST request not supported for this url: ', req.url);
       }
     } else {
       send404(`routeFilesBySpecies() : File file not found for ${species}`);
@@ -429,12 +431,16 @@ const server = http.createServer((req, res) => {
     readServerFile('./../interface/js/gamer.common.js', 'application/javascript', 200);
   } else if (urlPath === '/js/gamer.fastosh.js') {
     readServerFile('./../interface/js/gamer.fastosh.js', 'application/javascript', 200);
+  } else if (urlPath === '/js/gamer.fastoshResults.js') {
+    readServerFile('./../interface/js/gamer.fastoshResults.js', 'application/javascript', 200);
   } else if (urlPath === '/js/jsphylosvg-min.js') {
     readServerFile('./../interface/js/jsphylosvg-min.js', 'application/javascript', 200);
   } else if (urlPath === '/js/raphael-min.js') {
     readServerFile('./../interface/js/raphael-min.js', 'application/javascript', 200);
   } else if (urlPath === '/css/gamer.effects.fastosh.css') {
     readServerFile('./../interface/css/gamer.effects.fastosh.css', 'text/css', 200);
+  } else if (urlPath === '/css/gamer.effects.fastoshResults.css') {
+    readServerFile('./../interface/css/gamer.effects.fastoshResults.css', 'text/css', 200);
   } else if (urlPath === '/semantic/dist/components/icon.min.css') {
     readServerFile('./../semantic/dist/components/icon.min.css', 'text/css', 200);
   } else if (urlPath === '/css/gamer.effects.datatables.css') {
@@ -531,6 +537,71 @@ const server = http.createServer((req, res) => {
     }
   } else if (prohibed.indexOf(urlPath) >= 0) {
     send403(); // access denied
+  } else if(req.method === 'POST') {
+    if (wordInString(req.url, 'fastosh')) {
+        console.log('POST for --> fastosh pipeline');
+        let body = '';
+        req.on('data', (data) => {
+          body += data;
+          console.log('req url:'); // req.url contains uuidv4() generated on the client-side
+          console.log(req.url);
+          // set POST size limit to 1MB. 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+          if (body.length > 1e6) {
+            req.connection.destroy();
+          }
+        });
+        req.on('end', () => {
+          const post = querystring.parse(body, null, null, { maxKeys: 0 });
+          console.log('Req content:');
+          console.log(JSON.stringify(post));
+          // Handle the POST request only if its JSON ("validator" used  for forms validation)
+          if (validator.isJSON(JSON.stringify(post))) {
+            console.log("isjson")
+            const clientuid = req.url.split('/').pop();
+            // Create tmp directory (with uuid) SYNChronously ({ async: false })
+            shell.exec('mkdir -p tmp/fastosh_' + clientuid, { async: false });
+            console.log('uuuid : ', clientuid);
+            // Init filelist to zip
+            const stream = fs.createWriteStream('tmp/fastosh_' + clientuid + '/sketch_paths.tsv'); // fs object that will contain msh files paths
+            const fashtoshTmpPath = 'tmp/fastosh_' + clientuid + '/' // list of files to zip
+
+            console.log('files streamed: '); // debug
+            // debug : stdout files list to zip
+            
+            // 
+            stream.once('open', () => {
+              for (let i in post) {
+                // if prop is not inherited : https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea
+                if (Object.prototype.hasOwnProperty.call(post, i)) {
+                  console.log(post[i], "__n: ", i);
+                  model.getPaths('SampleID', post[i], (result) => {
+                    stream.write(result[0].Genome.Sketch + "\n")
+                  });
+                }
+              }
+            });
+            
+            // // Launch Fashtosh script asynchrously (=when callback)
+            const child = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
+            // Serve files when child process ended
+            child.stdout.on('end', (data) => {
+              console.log(data)
+              console.log("fini!")
+              console.log('compression ended, now serving files...');
+              res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
+              res.end(clientuid); // send uuid to results page
+              console.log('sended: ', clientuid);
+            });
+            child.stdout.on('exit', (data) => {
+              // handle exit : TODO
+            });
+            child.stdout.on('error', (data) => {
+              // handle errors : TODO
+            });
+          }
+        });
+      }
+
   } else {
     /* NAS FILES : auto-routing for existing paths :
       ---> This method works only for when url request == file path !
