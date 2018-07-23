@@ -18,3 +18,13 @@
 #howitworks {
     font-size: 16px;
 }
+/* Centering results buttons to the middle of the page */
+#handleresults {
+    position:absolute;
+    bottom: 50% !important;
+}
+/* Invert results buttons colors on hover */
+#matrix:hover,#newick:hover,#retry:hover{
+    background-color:#3691D4 !important;
+    color:#FFFFFF !important;
+}

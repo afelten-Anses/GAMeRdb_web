@@ -283,11 +283,18 @@ def write_reroot_tree(reroot_tree, tree_file_name):
 	# Transpose l'arbre dans le fichier tree_file_name
 
 	tree_file = open(tree_file_name, 'w')
-	tree_file.write(reroot_tree.as_string("newick"))
+	# tree_file.write(reroot_tree.as_string("newick"))
+	data = reroot_tree.as_string("newick").replace('[&R] ','').replace("'","")
+	tree_file.write(data)
 	tree_file.close()
 
-	os.system("sed -i 's/\[&R\] //g' " + tree_file_name)
-	os.system("sed -i 's/\'//g' " + tree_file_name)
+	# os.system("sed -i 's/\[&R\] //g' " + tree_file_name)
+	# os.system("sed -i 's/\'//g' " + tree_file_name)
+
+	tree_file = open(tree_file_name, 'r')
+	data = tree_file.readlines()
+	print data
+	tree_file.close()
 
 	# try:
 	# 	output = check_output(["sed -i", "'s/\[&R\] //g' ", tree_file_name], stderr=STDOUT, shell=True)

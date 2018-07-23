@@ -21,9 +21,9 @@
 	    <script type="text/javascript" src="http://www.jsphylosvg.com/js/jsphylosvg-min.js?1.29"></script>
         <!-- Fastosh specific JS code -->
         <script type="text/javascript" charset="utf8" src="../../js/gamer.fastoshResults.js" defer></script><!-- exec when document loaded -->
-	    <script type="text/javascript">
-	    window.onload = function(){
-			var dataObject = { newick: '(((Espresso:2,(Milk Foam:2,Espresso Macchiato:5,((Steamed Milk:2,Cappuccino:2,(Whipped Cream:1,Chocolate Syrup:1,Cafe Mocha:3):5):5,Flat White:2):5):5):1,Coffee arabica:0.1,(Columbian:1.5,((Medium Roast:1,Viennese Roast:3,American Roast:5,Instant Coffee:9):2,Heavy Roast:0.1,French Roast:0.2,European Roast:1):5,Brazilian:0.1):1):1,Americano:10,Water:1);' };
+	    <!--<script type="text/javascript">
+	    $(document).ready(function() { 
+			var dataObject = dataNewick,
 			phylocanvas = new Smits.PhyloCanvas(
 				dataObject,
 				'svgCanvas', 
@@ -31,25 +31,27 @@
 				800,
                 'circular'
 			);
-	    };
-	    </script>
+	    });
+	    </script>-->
         <!-- common JS -->
         <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script><!-- exec when document loaded -->
     </head>
     <body>    
-        <div id="bloc_page"><!-- main wrapper-->
+        <div id="bloc_page"><!-- main wrapdper-->
             <header>
                 <%include ./../interface/views/includes/header.html%></%include>
-            </header> 
+            </header>
+            <!-- Visible modal when "need help?" was clicked : start -->
+            <%include ./../interface/views/includes/genomes_help.html%></%include>
+            <!-- Visible modal when "need help?" was clicked : end -->
             <!------------------------------------------------------------------>
             <!-- MAIN PAGE -->
             <!------------------------------------------------------------------>
             <div class="ui stackable grid" id="aftertopmenu"> 
                 <!--LEFT GRID : vertical menu -->
-                <div class="one wide column" id="leftmenu">
-                        <!-- Menu de gauche -->
+                <div class="two wide column" id="leftmenu">
                 </div>     
-                <!--RIGHT grid : DataTables -->
+                <!--CENTER grid : Fashtosh JSphylosvg -->
                 <div class="nine wide column" id="centermenu">
                     <div class="ui grid">
                         <div class="eight wide column">
@@ -58,17 +60,22 @@
                         <div class="eight wide right aligned column" id="helpme">
                             <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
                         </div>
-                        <div class="ui divider"></div>
+                    </div>
+                    <div class="ui divider"></div>
+                    <div class="ui grid">
                         <div class="column" id="svgCanvas">
-                        <!-- tree visualisation or input -->
+                            <!-- tree visualisation or input -->
                         </div>
-                    </div> 
-                    <div class="four wide column">
-                        <button class="ui button"> Newick </button>
-                        <button class="ui button"> Distance Matrix </button>
-                        <button class="ui button"> Retry </button>
                     </div>
                 </div>
+                <!--RIGHT grid : Fashtosh results buttons -->
+                <div class="three wide column" id="leftmenu">
+                    <div class="ui vertical huge basic blue buttons" id="handleresults">
+                        <a href="newick"><button class="ui labeled icon button" id="newick"><i class="download icon"></i>Newick</button></a>
+                        <a href="distance matrix"><button class="ui labeled icon button" id="matrix"><i class="download icon"></i>Distance Matrix </button></a>
+                        <a href="fastosh.html"><button class="ui labeled icon button" id="retry"><i class="redo icon"></i>Retry</button></a>
+                    </div>
+                </div>   
             </div>
             <footer class= "sticky">
                 <%include ./../interface/views/includes/footer.html%></%include>
