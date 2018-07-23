@@ -6,6 +6,7 @@ import copy
 from decimal import Decimal
 import dendropy
 import re
+from subprocess import check_output, STDOUT, CalledProcessError # exec shell and check for errors
 
 
 ##################################
@@ -287,6 +288,18 @@ def write_reroot_tree(reroot_tree, tree_file_name):
 
 	os.system("sed -i 's/\[&R\] //g' " + tree_file_name)
 	os.system("sed -i 's/\'//g' " + tree_file_name)
+
+	# try:
+	# 	output = check_output(["sed -i", "'s/\[&R\] //g' ", tree_file_name], stderr=STDOUT, shell=True)
+	# 	for line in output.stdout:
+	# 		print(line.decode().strip())
+	# 	output = check_output(["sed -i", "'s/\'//g' ", tree_file_name], stderr=STDOUT,shell=True)
+	# 	for line in output.stdout:
+	# 		print(line.decode().strip())
+		
+	# except CalledProcessError as exc:
+	# 	print exc.output
+	  
 
 
 ###########################
