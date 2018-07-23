@@ -73,6 +73,7 @@ const mimeType = { // Used for automatic type MIME attribution in readServerFile
   '.wav': 'audio/wav',
   '.mp3': 'audio/mpeg',
   '.mp4': 'video/mpeg',
+  '.nwk': 'text/plain',
   '.svg': 'image/svg+xml',
   '.pdf': 'application/pdf',
   '.doc': 'application/msword',

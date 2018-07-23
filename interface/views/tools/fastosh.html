@@ -69,18 +69,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ui grid">
+                    <div class="ui grid" id="formgrid">
                         <form class="ui form seven wide column centered">
-                            <div class="inline field">
+                            <div class="inline field" id='idslist'>
                                 <label>Paste your strains ID list here:</label>
                                 <textarea rows="5" placeholder="Please enter strains ID"></textarea>
                             </div>
-                            <div class="field">
+                            <div class="field" id="fileslist">
                                 <label for='tfile'> Or upload them in a text file here: </label>
                                 <input type="file" class="form-control"  name="tfile"/>
                             </div>
                         <button class="ui button" type="submit" id="run"> Run </button>
-                        <button class="ui button" type="reset"> Reset </button>
+                        <button class="ui button" type="reset" id="reset"> Reset </button>
                         </form>
                     </div>
                     <!-- download tree -->

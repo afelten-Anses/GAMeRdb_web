@@ -24,7 +24,11 @@
     bottom: 50% !important;
 }
 /* Invert results buttons colors on hover */
-#matrix:hover,#newick:hover,#retry:hover{
+#matrix:hover,#newick:hover,#retry:hover,#switchtree:hover,#dlimage:hover{
     background-color:#3691D4 !important;
     color:#FFFFFF !important;
+}
+/* Hide rectangular phylogenetic tree by default */
+#svgCanvasRect {
+    display: none;
 }

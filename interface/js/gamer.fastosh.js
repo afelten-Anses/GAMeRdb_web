@@ -17,6 +17,12 @@ $('#run').click(function (e) {
         console.log(idJson)
     }
     let clientuuid=uuidv4()
+    $('#run').replaceWith('<button class="ui disabled button" type="submit" id="run"> Running... </button>')
+    $('#run').append('<div class="ui active inline tiny loader"></div>');
+    $('#reset').transition('horizontal flip')
+    $('#reset').append('<div class="ui active inline tiny loader"></div>');
+    $('.ui.form.seven.wide.column.centered').append(`<br/>Fastosh is running, the process may last a long time, click <a href="../../tools/fastosh_results.html?tree=${clientuuid}">here</a> to see your results if you are not redirected after 2 minutes. Otherwise, we will notify your by email once the analysis terminated`);
+    
             $.ajax({
                 url: document.URL+"/"+clientuuid, 
                 timeout: 0, //secs
@@ -51,3 +57,5 @@ $("#helpme").click(function()
     inverted: false
   }).modal('show');
 });
+
+
