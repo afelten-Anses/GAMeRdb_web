@@ -21,7 +21,7 @@
 /* Centering results buttons to the middle of the page */
 #handleresults {
     position:fixed;
-    margin-top: 7% !important;
+    margin-top: 5% !important;
 }
 /* Invert results buttons colors on hover */
 #matrix:hover,#newick:hover,#retry:hover,#switchtree:hover,#dlimage:hover{
@@ -32,3 +32,4 @@
 #svgCanvasRect, #switchtreeRect {
     display: none;
 }
+
