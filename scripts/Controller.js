@@ -583,12 +583,13 @@ const server = http.createServer((req, res) => {
               }
             }
           });
+
             
             // // Launch Fashtosh script asynchrously (=when callback)
-            const child = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
+            const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
             // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
             // Serve files when child process ended
-            child.stdout.on('end', (data) => {
+            fastosh.stdout.on('end', (data) => {
               console.log(data)
               console.log("fini!")
               console.log('compression ended, now serving files...');
@@ -596,10 +597,10 @@ const server = http.createServer((req, res) => {
               res.end(clientuid); // send uuid to results page
               console.log('sended: ', clientuid);
             });
-            child.stdout.on('exit', (data) => {
+            fastosh.stdout.on('exit', (data) => {
               // handle exit : TODO
             });
-            child.stdout.on('error', (data) => {
+            fastosh.stdout.on('error', (data) => {
               // handle errors : TODO
             });
           }

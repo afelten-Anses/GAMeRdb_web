@@ -75,16 +75,18 @@ def make_sketch_files(input_file, nbThreads, kmer_size, sketch_size):
 	paths = intFile.readlines()
 	intFile.close()
 
-	list_end = []
+	# list_end = []
 
-	for path in paths :
+	# for path in paths :
 	
-		list_end.append(path.split('.')[-1])
+	# 	list_end.append(path.split('.')[-1])
 
-	end = ''.join(list_end)
+	# end = ''.join(list_end)
 
-	if re.search (r"msh", end) is None :
-		os.system("mkdir sketch")
+		
+
+	#if re.search (r"msh", end) is None :
+	#	os.system("mkdir sketch")
 
 	sketch_files = []
 
