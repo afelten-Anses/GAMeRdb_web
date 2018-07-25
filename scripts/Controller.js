@@ -42,11 +42,13 @@ const shell = require('shelljs'); // run bash scripts from NodeJS
 // ------------- Configuration ------------- //
 let listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
 let listenPort = process.argv[3] || 3000; // default listening port
+let nbThreads = 38;
 
 args // App usage (help)
   .version('0.99')
   .option('--dev', 'dev mode (run app in dev port)')
   .option('--local', 'run app in localhost')
+  .option('--threads', 'number of threads')
   .parse(process.argv);
 
 // if  --dev mode: change localhost ip to server ip
@@ -57,6 +59,9 @@ if (args.dev) {
 if (args.local) {
   listenIp = '127.0.0.1';
   listenPort = 3000;
+}
+if (args.threads) {
+  nbThreads = args.threads;
 }
 /* More sockets per host  (default = 5) ==> increase performance.
 decrease if case of excessive ressources draining */
@@ -540,50 +545,48 @@ const server = http.createServer((req, res) => {
     send403(); // access denied
   } else if(req.method === 'POST') {
     if (wordInString(req.url, 'fastosh')) {
-        console.log('POST for --> fastosh pipeline');
-        let body = '';
-        req.on('data', (data) => {
-          body += data;
-          console.log('req url:'); // req.url contains uuidv4() generated on the client-side
-          console.log(req.url);
-          // set POST size limit to 1MB. 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
-          if (body.length > 1e6) {
-            req.connection.destroy();
-          }
-        });
-        req.on('end', () => {
-          const post = querystring.parse(body, null, null, { maxKeys: 0 });
-          console.log('Req content:');
-          console.log(JSON.stringify(post));
-          // Handle the POST request only if its JSON ("validator" used  for forms validation)
-          if (validator.isJSON(JSON.stringify(post))) {
-            console.log("isjson")
-            const clientuid = req.url.split('/').pop();
-            // Create tmp directory (with uuid) SYNChronously ({ async: false })
-            shell.exec('mkdir -p tmp/fastosh_' + clientuid, { async: false });
-            console.log('uuuid : ', clientuid);
-            // Init filelist to zip
-            const stream = fs.createWriteStream('tmp/fastosh_' + clientuid + '/sketch_paths.tsv'); // fs object that will contain msh files paths
-            const fashtoshTmpPath = 'tmp/fastosh_' + clientuid + '/' // list of files to zip
-
-            console.log('files streamed: '); // debug
-            // debug : stdout files list to zip
-            
-            // 
-            stream.once('open', () => {
-              for (let i in post) {
-                // if prop is not inherited : https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea
-                if (Object.prototype.hasOwnProperty.call(post, i)) {
-                  console.log(post[i], "__n: ", i);
-                  model.getPaths('SampleID', post[i], (result) => {
-                    stream.write(result[0].Genome.Sketch + "\n")
-                  });
-                }
+      console.log('POST for --> fastosh pipeline');
+      let body = '';
+      req.on('data', (data) => {
+        body += data;
+        console.log('req url:'); // req.url contains uuidv4() generated on the client-side
+        console.log(req.url);
+        // set POST size limit to 1MB. 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+        if (body.length > 1e6) {
+          req.connection.destroy();
+        }
+      });
+      req.on('end', () => {
+        const post = querystring.parse(body, null, null, { maxKeys: 0 });
+        console.log('Req content:');
+        console.log(JSON.stringify(post));
+        // Handle the POST request only if its JSON ("validator" used  for forms validation)
+        if (validator.isJSON(JSON.stringify(post))) {
+          console.log("isjson")
+          const clientuid = req.url.split('/').pop();
+          // Create tmp directory (with uuid) SYNChronously ({ async: false })
+          shell.exec('mkdir -p tmp/fastosh_' + clientuid, { async: false });
+          console.log('uuuid : ', clientuid);
+          // Init filelist to zip
+          const stream = fs.createWriteStream('tmp/fastosh_' + clientuid + '/sketch_paths.tsv'); // fs object that will contain msh files paths
+          const fashtoshTmpPath = 'tmp/fastosh_' + clientuid + '/' // list of files to zip
+          console.log('files streamed: '); // debug
+          // debug : stdout files list to zip
+          stream.once('open', () => {
+            for (let i in post) {
+              // if prop is not inherited : https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea
+              if (Object.prototype.hasOwnProperty.call(post, i)) {
+                console.log(post[i], "__n: ", i);
+                model.getPaths('SampleID', post[i], (result) => {
+                  stream.write(result[0].Genome.Sketch + "\n")
+                });
               }
-            });
+            }
+          });
             
             // // Launch Fashtosh script asynchrously (=when callback)
             const child = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
+            // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
             // Serve files when child process ended
             child.stdout.on('end', (data) => {
               console.log(data)
