@@ -20,15 +20,15 @@
 }
 /* Centering results buttons to the middle of the page */
 #handleresults {
-    position:absolute;
-    bottom: 50% !important;
+    position:fixed;
+    margin-top: 7% !important;
 }
 /* Invert results buttons colors on hover */
 #matrix:hover,#newick:hover,#retry:hover,#switchtree:hover,#dlimage:hover{
     background-color:#3691D4 !important;
     color:#FFFFFF !important;
 }
-/* Hide rectangular phylogenetic tree by default */
-#svgCanvasRect {
+/* Hide rectangular phylogenetic tree and his button by default */
+#svgCanvasRect, #switchtreeRect {
     display: none;
 }
