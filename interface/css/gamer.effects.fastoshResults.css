@@ -23,6 +23,7 @@
     position:fixed;
     margin-top: 5% !important;
     margin-left: 1% !important!;
+    margin-bottom: auto !important;
 }
 /* Invert results buttons colors on hover */
 #matrix:hover,#newick:hover,#retry:hover,#switchtree:hover,#dlimage:hover{

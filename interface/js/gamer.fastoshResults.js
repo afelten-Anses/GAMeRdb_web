@@ -62,4 +62,21 @@ $("#switchtreeRect").on("click", function() {
 });
 
 
-
+var zip = new JSZip();
+// Add an top-level, arbitrary text file with contents
+//zip.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);  
+// Generate a directory within the Zip file structure
+var allfiles = zip.folder("Strains");
+allfiles.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);
+console.log("generatesync")
+        allfiles.generateAsync({
+            type: "blob",
+            compression: "STORE",
+            streamFiles:true,
+            //compressionOptions: {
+            //    level: 1
+            //}
+        }).then(function(blob) {
+            // Force down of the Zip file
+            saveAs(blob, "Strains_data.zip");
+        });
