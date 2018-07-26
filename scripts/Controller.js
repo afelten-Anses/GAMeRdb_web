@@ -525,6 +525,10 @@ const server = http.createServer((req, res) => {
     readFileAndInclude('./../interface/views/tools/fastosh.html', 200);
   } else if (urlPath === '/tools/fastosh_results.html') {
     readFileAndInclude('./../interface/views/tools/fastosh_results.html', 200);
+  } else if (urlPath === '/tools/XML.html') {
+    readFileAndInclude('./../interface/views/tools/XML.html', 200);
+  } else if (urlPath === '/tools/XML.html') {
+    readFileAndInclude('./../interface/views/tools/fastosh.html', 200);
   } else if (urlPath.indexOf('/species/') >= 0) { // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
     console.log('path species'); // debug
     if (urlPath.indexOf('bacillus') >= 0) {
