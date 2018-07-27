@@ -21,7 +21,7 @@
 /* Centering results buttons to the middle of the page */
 #handleresults {
     position:fixed;
-    margin-top: 5% !important;
+    margin-top: auto !important;
     margin-left: 1% !important!;
     margin-bottom: auto !important;
 }
