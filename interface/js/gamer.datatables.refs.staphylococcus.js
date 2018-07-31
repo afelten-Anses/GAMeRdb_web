@@ -87,6 +87,7 @@ $(document).ready(function() {
             {
     	       style: 'os',
             },
+        scrollX : true,
         lengthChange: false, // do not display second lengthMenu button (used in order to add "show all" option in pageLength)
         colReorder: true,
         lengthMenu: [
