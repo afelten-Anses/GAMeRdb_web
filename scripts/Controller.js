@@ -46,9 +46,10 @@ let nbThreads = 38;
 
 args // App usage (help)
   .version('0.99')
-  .option('--dev', 'dev mode (run app in dev port)')
-  .option('--local', 'run app in localhost')
-  .option('--threads', 'number of threads')
+  .option('--dev [dev]', 'dev mode (run app in dev port)')
+  .option('--local [local]', 'run app in localhost')
+  .option('--threads [threads]', 'number of threads')
+  .option('--mongo <mongo>', 'MongoDB login url')
   .parse(process.argv);
 
 // if  --dev mode: change localhost ip to server ip
@@ -63,6 +64,12 @@ if (args.local) {
 if (args.threads) {
   nbThreads = args.threads;
 }
+// if (args.mongo) {
+//   model.loginGenomes(args.mongo)
+// } else {
+//   console.log("please provide Mongo credentials");
+//   process.exit(1)
+// }
 /* More sockets per host  (default = 5) ==> increase performance.
 decrease if case of excessive ressources draining */
 http.globalAgent.maxSockets = 15;
