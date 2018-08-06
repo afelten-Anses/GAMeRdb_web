@@ -18,11 +18,25 @@ $(document).ready(function() {
             dataObject,
             'svgCanvasRect',
             1000,
-            1500,
+            900,
             'rectangular'
         );
-
         
+        // Adapt svg div heigth to newick length
+        
+        let dataNewickLen = dataNewick.length; // newick length
+        let strainsCount = $('tspan').length; // number of strains contained in the svg generated from the nwk file
+        if (dataNewickLen > 750 && dataNewick.length <= 8000) {
+            if(strainsCount * 9.5 >= 900) {
+                $('svg').height(strainsCount * 9.5);
+            }
+        }  else if (dataNewickLen > 8000 && dataNewick.length <= 20000) {
+            $('svg').height($('tspan').length * 5.05);
+        } else {
+            if(strainsCount * 9.5 >= 900) {
+                $('svg').height($('tspan').length * 4);
+            }
+        }   
     });
     $('a[href="distance_matrix"]').attr('href',"../tmp/fastosh_" + uuid + "/distance_matrix.tsv")
     $('a[href="newick"]').attr('href',"../tmp/fastosh_" + uuid + "/taxonomy.nwk")
