@@ -368,7 +368,7 @@ const server = http.createServer((req, res) => {
   }
 
   /* Capitalize first letter (needed in routeFilesBySpecies()) */
-  String.prototype.capitalize = function() {
+  String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
   }
 
@@ -595,29 +595,25 @@ const server = http.createServer((req, res) => {
             }
           });
 
-            
-            // // Launch Fashtosh script asynchrously (=when callback)
-            const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
-            // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
-            // Serve files when child process ended
-            fastosh.stdout.on('end', (data) => {
-              console.log(data)
-              console.log("fini!")
-              console.log('compression ended, now serving files...');
-              res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
-              res.end(clientuid); // send uuid to results page
-              console.log('sended: ', clientuid);
-            });
-            fastosh.stdout.on('exit', (data) => {
-              // handle exit : TODO
-            });
-            fastosh.stdout.on('error', (data) => {
-              // handle errors : TODO
-            });
-          }
-        });
-      }
+          // // Launch Fashtosh script asynchrously (=when callback)
+          const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
+          // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
+          // Serve files when child process ended
+          fastosh.stdout.on('end', (data) => {;
+            console.log('compression ended, now serving files...');
+            res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
+            res.end(clientuid); // send uuid to results page
+            console.log('sended: ', clientuid);
+          });
+          fastosh.stdout.on('exit', () => {
 
+          });
+          fastosh.stdout.on('error', () => {
+            // handle errors : TODO
+          });
+        }
+      });
+    }
   } else {
     /* NAS FILES : auto-routing for existing paths :
       ---> This method works only for when url request == file path !
