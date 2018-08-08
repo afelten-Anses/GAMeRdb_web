@@ -373,20 +373,20 @@ const server = http.createServer((req, res) => {
   }
 
   /* Send err404 page : file not found
-   and keep error trace */
+   and keep error trace in a log tool */
   function send404(message) {
     console.warn(message);
     readFileAndInclude('./../interface/views/404.html', 404);
   }
   /* Send err403 page : forbidden
-  and keep error trace */
+  and keep error trace in a log tool */
   function send403(message) {
     console.warn(message);
     readFileAndInclude('./../interface/views/403.html', 403);
   }
 
   /* Send err500 page : internal server error
-  and keep error trace */
+  and keep error trace in a log tool */
   function send500(message) {
     console.warn(message);
     readFileAndInclude('./../interface/views/500.html', 500);
@@ -621,24 +621,44 @@ const server = http.createServer((req, res) => {
       same level as GAMeRdb_web/scripts/DATA */
     console.log(`${req.method} ${req.url}`);
     // add a '.' before urlPath in order to use it inside fs.exists()
-    const pathname = `.${urlPath}`;
-    const SpeciesPathname = `./../../${urlPath}`;
-    console.log('SpeciesPathname : ', SpeciesPathname);
-    console.log('pathname :', pathname);
-    // maps file extention to MIME types
-    fs.exists(pathname, (exist) => {
-      if (!exist) {
-        send404(`File ${pathname} not found!`); // send 404 page if path doesn't exist
-      } else {
-        fs.createReadStream(pathname, (err) => { // create a read stream for the file if file exists
-          if (err) {
-            send500(`Error getting the file: ${err}.`); // if this file/path exists but cant be reached for any reason
-          } else {
-            readServerFileAutoMime(pathname, 200); // send file to the client
-          }
-        }).pipe(res); // stream the sended file (readServerFileAutoMime response)
-      }
-    });
+    const NasFilesPaths = `.${urlPath}`; // relative path to NAS files viewed from Controller.js. Example: tmp/...
+    const staticFilePaths = '../interface' + urlPath; // relative path to static files viewed from Controller.js. Example: ..interface/js/file.js
+    const pathFromScript = path.resolve(__dirname, staticFilePaths); // same as staticFilePath but added parents paths support
+    console.log('pathname :', NasFilesPaths);
+    console.log('pathfromscript: ', pathFromScript);
+    // support static files only (do not read "views" folder)
+    if (urlPath.indexOf('views') < 0) {
+      fs.exists(NasFilesPaths, (exist) => {
+        if (exist) {
+          // create a read stream for the file if file exists
+          fs.createReadStream(NasFilesPaths, (err) => {
+            if (err) {
+              send500(`Error getting the file: ${err}.`); // if this file/path exists but cant be reached for any reason
+            } else {
+              readServerFileAutoMime(NasFilesPaths, 200); // send file to the client
+            }
+          }).pipe(res); // stream the sended file (readServerFileAutoMime response)
+        } else {
+          console.log(`File ${NasFilesPaths} not found. Now searching if its a NAS file`); // send 404 page if path doesn't exist)
+          fs.exists(pathFromScript, (existP) => {
+            if (existP) {
+              // create a read stream for the file if file exists
+              fs.createReadStream(pathFromScript, (err) => { 
+                if (err) {
+                  send500(`Error getting the file: ${err}.`); // if this file/path exists but cant be reached for any reason
+                } else {
+                  readServerFileAutoMime(pathFromScript, 200); // send file to the client
+                }
+              }).pipe(res); // stream the sended file (readServerFileAutoMime response)
+            } else {
+              send404(`File ${pathFromScript} not found!`); // send 404 page if path doesn't exist
+            }
+          });
+        }
+      });
+    } else {
+      send403(`'illegal attempt to read [.${urlPath}] dynamic file from native filepath`);
+    }
   }
 });
 
