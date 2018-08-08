@@ -1,0 +1,55 @@
+
+
+/* ///////////////////////////////////////////////////////////////////
+            ----- Deprecated code  -----
+  ///////////////////////////////////////////////////////////////// */
+
+/*
+  // DEPRECATED !!! Same function as readFileAndIncludeAndRenderBySpecies but
+  // render directly in Controller.njs script (instead of render inside Views.njs script)
+  function readFileAndIncludeAndRenderBySpeciesHere(templateFilePath,msg,MongoAttribute,MongoValue) {
+    console.log('readFileAndIncludeAndRenderBySpecies'); //debug
+    fs.readFile(templateFilePath, function (errors, contents) {
+      if(errors) {
+        console.log(errors);
+        send500(`readFileAndIncludeAndRenderBySpeciesHere : Error getting the file ${templateFilePath} : ${errors}.`);
+        throw errors;
+      } else {
+        model.filterByAttribute(MongoAttribute,MongoValue, function(result) {
+          template.set(contents, function(errors,contents) // templatesJS {
+            if(errors) {
+              throw errors;
+            } else {
+              var JSONstring = result // from model SucessCallback
+              var list = // list of variables that needed to be rendered dynamically {
+                datatablesJSON : JSON.stringify(JSONstring),
+                JSONlen : Object.keys(result).length
+              }
+              template.renderAll(list, function(err,contents) {
+                if(err) {
+                  throw err;
+                } else {
+                  res.writeHead(msg,{'Content-Type': 'text/html','Cache-Control': 'no-cache'});
+                  res.end(contents);
+                }
+              })
+            }
+          })
+        });
+      }
+    });
+  }
+   function processpost2(req, res) {
+    if (req.method === 'POST') {
+      let jsonString = '';
+      const reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
+      console.log('processpost2 started');
+      reqUtf.on('data', (data) => {
+        jsonString += data;
+      });
+      reqUtf.on('end', function () {
+        console.log(JSON.parse(jsonString));
+      });
+    }
+  }
+*/
