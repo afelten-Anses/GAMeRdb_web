@@ -1,10 +1,20 @@
 const url = window.location.href;
 const uuid = url.split("=").pop();
+let reloads = "" // used for page refresh using setTimeout and clearTimeout
 console.log(uuid);
-var currentDate = new Date(Date.now()).toLocaleString();
+let currentDate = new Date(Date.now()).toLocaleString();
+
+// reload pages every x seconds
+function startPageReload(seconds) {
+    reloads = setTimeout(function(){ location.reload(1); }, seconds*1000);
+}
+// stop reloading pages
+function stopPageReload() {
+    reloads = clearTimeout(reloads);
+}
 
 $(document).ready(function() {
-    $.get( "../tmp/fastosh_" + uuid + "/taxonomy.nwk", function( data ) {
+    $.get( "../tmp/fastosh_" + uuid + "/taxonomy.nwk", function( data,err ) {
         const dataNewick = data;
         const dataObject = dataNewick;
         phylocanvas = new Smits.PhyloCanvas(
@@ -36,7 +46,13 @@ $(document).ready(function() {
             if(strainsCount * 9.5 >= 900) {
                 $('svg').height($('tspan').length * 4);
             }
-        }   
+        } 
+        // stop reloading page if startPageReload was called in a previous Jquery GET error.
+        stopPageReload()
+    }).fail(function() {
+        console.warn("Fasthosh always in progress, or errored");
+        $('#datatables_header span').html('FasTosh - Results </br><font size="3" font color="grey"> <i class="exclamation circle icon"></i>Always in progress, you may used a big dataset. Page will be refreshed every 10 seconds. If you finally don\'t obtain any results, please contact us. </font>');
+        startPageReload(10)
     });
     $('a[href="distance_matrix"]').attr('href',"../tmp/fastosh_" + uuid + "/distance_matrix.tsv")
     $('a[href="newick"]').attr('href',"../tmp/fastosh_" + uuid + "/taxonomy.nwk")

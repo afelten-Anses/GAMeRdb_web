@@ -16,7 +16,7 @@ $('#run').click(function (e) {
         idList = $('input')[0].value
         console.log(idJson)
     }
-    let clientuuid=uuidv4()
+    let clientuuid=uuidv4();
     $('#run').replaceWith('<button class="ui disabled button" type="submit" id="run"> Running... </button>')
     $('#run').append('<div class="ui active inline tiny loader"></div>');
     $('#reset').transition('horizontal flip')
@@ -43,10 +43,9 @@ $('#run').click(function (e) {
                     //window.location.reload();
                 } 
                 else {
-                    // another error occured  
-                    //$('.ui.indeterminate.big.text.loader').html('It seems like you requested a lot of files. \
-                    //<br/>You\'ll be able to retrieve them under 5-10 minutes by clicking <a //ref="http://192.168.184.133:3000/tmp/'+clientuuid+'/wgsdata_'+clientuuid+'.zip'+'">here</a>');
-                    console.warn('file maybe available in tmp/'+clientuuid)
+                    // report error to client
+                    console.warn('POST request failed for FasTosh');
+                    $('.ui.form.seven.wide.column.centered').append('<font color="red">...Process failed! Please contact us </font>');
                 }
             })
 })
