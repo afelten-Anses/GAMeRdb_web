@@ -399,11 +399,14 @@ const server = http.createServer((req, res) => {
 
 
   /*
-  - Static files (css, js, imgs, fonts) are routed one by one using readServerFile()
-  - Html files not related to species workspaces (homepage,tools pages) are routed
+  1. Static files (css, js, imgs, fonts) are routed one by one using readServerFile()
+
+  2. -Html files not related to species workspaces (homepage,tools pages) are routed
     one by one using readFileAndInclude() or  readFileAndIncludeAndRender()
-  - Html files related to species workfspaces are routed by sub workfspaces
+
+  3. Html files related to species workfspaces are routed by sub workfspaces
     using routeFilesBySpecies
+
   - err403, err404 and err500 routes are partially supported
   - NAS and server tmp files are automatically routed (last routes in this code).
   */
@@ -412,114 +415,6 @@ const server = http.createServer((req, res) => {
     readServerFile('./../semantic/dist/semantic.min.css', 'text/css', 200);
   } else if (urlPath === '/semantic/dist/semantic.min.js') {
     readServerFile('./../semantic/dist/semantic.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/jquery.min.js') {
-    readServerFile('./../interface/js/jquery.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.datatables.salmonella.js') {
-    readServerFile('./../interface/js/gamer.datatables.salmonella.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.datatables.refs.salmonella.js') {
-    readServerFile('./../interface/js/gamer.datatables.refs.salmonella.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.datatables.salmonellatuto.js') {
-    readServerFile('./../interface/js/gamer.datatables.salmonellatuto.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.datatables.listeria.js') {
-    readServerFile('./../interface/js/gamer.datatables.listeria.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.datatables.refs.listeria.js') {
-    readServerFile('./../interface/js/gamer.datatables.refs.listeria.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.datatables.staphylococcus.js') {
-    readServerFile('./../interface/js/gamer.datatables.staphylococcus.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.datatables.refs.staphylococcus.js') {
-    readServerFile('./../interface/js/gamer.datatables.refs.staphylococcus.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.datatables.clostridium.js') {
-    readServerFile('./../interface/js/gamer.datatables.clostridium.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.datatables.refs.clostridium.js') {
-    readServerFile('./../interface/js/gamer.datatables.refs.clostridium.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/highcharts.js') {
-    readServerFile('./../interface/js/highcharts.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/drilldown.js') {
-    readServerFile('./../interface/js/drilldown.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/underscore-min.js') {
-    readServerFile('./../interface/js/underscore-min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.home.js') {
-    readServerFile('./../interface/js/gamer.home.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.common.js') {
-    readServerFile('./../interface/js/gamer.common.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.fastosh.js') {
-    readServerFile('./../interface/js/gamer.fastosh.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/gamer.fastoshResults.js') {
-    readServerFile('./../interface/js/gamer.fastoshResults.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/jsphylosvg-min.js') {
-    readServerFile('./../interface/js/jsphylosvg-min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/raphael-min.js') {
-    readServerFile('./../interface/js/raphael-min.js', 'application/javascript', 200);
-  } else if (urlPath === '/css/gamer.effects.fastosh.css') {
-    readServerFile('./../interface/css/gamer.effects.fastosh.css', 'text/css', 200);
-  } else if (urlPath === '/css/gamer.effects.fastoshResults.css') {
-    readServerFile('./../interface/css/gamer.effects.fastoshResults.css', 'text/css', 200);
-  } else if (urlPath === '/semantic/dist/components/icon.min.css') {
-    readServerFile('./../semantic/dist/components/icon.min.css', 'text/css', 200);
-  } else if (urlPath === '/css/gamer.effects.datatables.css') {
-    readServerFile('./../interface/css/gamer.effects.datatables.css', 'text/css', 200);
-  } else if (urlPath === '/css/gamer.common.css') {
-    readServerFile('./../interface/css/gamer.common.css', 'text/css', 200);
-  } else if (urlPath === '/css/dataTables.semanticui.min.css') {
-    readServerFile('./../interface/css/dataTables.semanticui.min.css', 'text/css', 200);
-  } else if (urlPath === '/css/select.dataTables.min.css') {
-    readServerFile('./../interface/css/select.dataTables.min.css', 'text/css', 200);
-  } else if (urlPath === '/css/buttons.semanticui.min.css') {
-    readServerFile('./../interface/css/buttons.semanticui.min.css', 'text/css', 200);
-  } else if (urlPath === '/css/driver.min.css') {
-    readServerFile('./../interface/css/driver.min.css', 'text/css', 200);
-  } else if (urlPath === '/js/jquery.min.js') {
-    readServerFile('./../interface/js/jquery.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/jquery-1.12.4.js') {
-    readServerFile('./../interface/js/jquery-1.12.4.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/jquery.dataTables.min.js') {
-    readServerFile('./../interface/js/jquery.dataTables.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/dataTables.semanticui.min.js') {
-    readServerFile('./../interface/js/dataTables.semanticui.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/dataTables.select.min.js') {
-    readServerFile('./../interface/js/dataTables.select.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/buttons.semanticui.min.js') {
-    readServerFile('./../interface/js/buttons.semanticui.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/dataTables.buttons.min.js') {
-    readServerFile('./../interface/js/dataTables.buttons.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/jszip.min.js') {
-    readServerFile('./../interface/js/jszip.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/pdfmake.min.js') {
-    readServerFile('./../interface/js/pdfmake.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/vfs_fonts.js') {
-    readServerFile('./../interface/js/vfs_fonts.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/buttons.html5.min.js') {
-    readServerFile('./../interface/js/buttons.html5.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/buttons.print.min.js') {
-    readServerFile('./../interface/js/buttons.print.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/buttons.colVis.min.js') {
-    readServerFile('./../interface/js/buttons.colVis.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/dataTables.colReorder.min.js') {
-    readServerFile('./../interface/js/dataTables.colReorder.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/jszip.js') {
-    readServerFile('./../interface/js/jszip.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/Blob.js') {
-    readServerFile('./../interface/js/Blob.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/canvas-toBlob.js') {
-    readServerFile('./../interface/js/canvas-toBlob.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/FileSaver.min.js') {
-    readServerFile('./../interface/js/FileSaver.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/js/driver.min.js') {
-    readServerFile('./../interface/js/driver.min.js', 'application/javascript', 200);
-  } else if (urlPath === '/img/anseslogomini.png' || urlPath === '/views/img/anseslogomini.png') {
-    readServerFile('./../interface/img/anseslogomini.png', 'image/png', 200);
-  } else if (urlPath === '/img/gamergenomicdblogo.png') {
-    readServerFile('./../interface/img/gamergenomicdblogo.png', 'image/png', 200);
-  } else if (urlPath === '/img/statistics.png') {
-    readServerFile('./../interface/img/statistics.png', 'image/png', 200);
-  } else if (urlPath === '/img/ansesgamer.png' || urlPath === '/views/img/ansesgamer.png') {
-    readServerFile('./../interface/img/ansesgamer.png', 'image/png', 200);
-  } else if (urlPath === '/img/statistics.png') {
-    readServerFile('./../interface/img/statistics.png', 'image/png', 200);
-  } else if (urlPath === '/img/favicon.ico' || urlPath === '/views/img/favicon.ico') {
-    readServerFile('./../interface/img/favicon.ico', 'image/x-icon', 200);
-  } else if (urlPath === '/img/dna.png' || urlPath === '/views/img/dna.png') {
-    readServerFile('./../interface/img/dna.png', 'image/png', 200);
   } else if (urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff2') {
     readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.woff2', 'application/x-font-woff', 200);
   } else if (urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff') {
@@ -639,9 +534,10 @@ const server = http.createServer((req, res) => {
             }
           }).pipe(res); // stream the sended file (readServerFileAutoMime response)
         } else {
-          console.log(`File ${NasFilesPaths} not found. Now searching if its a NAS file`); // send 404 page if path doesn't exist)
+          console.log(`File ${NasFilesPaths} not found. Now searching if its a STATIC file`); // send 404 page if path doesn't exist)
           fs.exists(pathFromScript, (existP) => {
             if (existP) {
+              console.log(`Ok: file ${NasFilesPaths} is a STATIC file`)
               // create a read stream for the file if file exists
               fs.createReadStream(pathFromScript, (err) => { 
                 if (err) {
@@ -661,61 +557,6 @@ const server = http.createServer((req, res) => {
     }
   }
 });
-
-
-/* ///////////////////////////////////////////////////////////////////
-            ----- Deprecated code  -----
-  ///////////////////////////////////////////////////////////////// */
-
-/*
-  // DEPRECATED !!! Same function as readFileAndIncludeAndRenderBySpecies but
-  // render directly in Controller.njs script (instead of render inside Views.njs script)
-  function readFileAndIncludeAndRenderBySpeciesHere(templateFilePath,msg,MongoAttribute,MongoValue) {
-    console.log('readFileAndIncludeAndRenderBySpecies'); //debug
-    fs.readFile(templateFilePath, function (errors, contents) {
-      if(errors) {
-        console.log(errors);
-        send500(`readFileAndIncludeAndRenderBySpeciesHere : Error getting the file ${templateFilePath} : ${errors}.`);
-        throw errors;
-      } else {
-        model.filterByAttribute(MongoAttribute,MongoValue, function(result) {
-          template.set(contents, function(errors,contents) // templatesJS {
-            if(errors) {
-              throw errors;
-            } else {
-              var JSONstring = result // from model SucessCallback
-              var list = // list of variables that needed to be rendered dynamically {
-                datatablesJSON : JSON.stringify(JSONstring),
-                JSONlen : Object.keys(result).length
-              }
-              template.renderAll(list, function(err,contents) {
-                if(err) {
-                  throw err;
-                } else {
-                  res.writeHead(msg,{'Content-Type': 'text/html','Cache-Control': 'no-cache'});
-                  res.end(contents);
-                }
-              })
-            }
-          })
-        });
-      }
-    });
-  }
-   function processpost2(req, res) {
-    if (req.method === 'POST') {
-      let jsonString = '';
-      const reqUtf = req.setEncoding('utf8'); // utf-8 encoding POST request
-      console.log('processpost2 started');
-      reqUtf.on('data', (data) => {
-        jsonString += data;
-      });
-      reqUtf.on('end', function () {
-        console.log(JSON.parse(jsonString));
-      });
-    }
-  }
-*/
 
 /* ///////////////////////////////////////////////////////////////////
             ----- Start the webapp  -----
