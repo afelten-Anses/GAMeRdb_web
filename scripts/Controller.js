@@ -413,6 +413,8 @@ const server = http.createServer((req, res) => {
 
   if (urlPath === '/semantic/dist/semantic.min.css') {
     readServerFile('./../semantic/dist/semantic.min.css', 'text/css', 200);
+  } else if (urlPath === '/semantic/dist/components/icon.min.css') {
+    readServerFile('./../semantic/dist/components/icon.min.css', 'text/css', 200);
   } else if (urlPath === '/semantic/dist/semantic.min.js') {
     readServerFile('./../semantic/dist/semantic.min.js', 'application/javascript', 200);
   } else if (urlPath === '/semantic/dist/themes/default/assets/fonts/icons.woff2') {
@@ -537,7 +539,7 @@ const server = http.createServer((req, res) => {
           console.log(`File ${NasFilesPaths} not found. Now searching if its a STATIC file`); // send 404 page if path doesn't exist)
           fs.exists(pathFromScript, (existP) => {
             if (existP) {
-              console.log(`Ok: file ${NasFilesPaths} is a STATIC file`)
+              console.log(`Ok: file ${NasFilesPaths} is a STATIC file`);
               // create a read stream for the file if file exists
               fs.createReadStream(pathFromScript, (err) => { 
                 if (err) {
@@ -557,6 +559,7 @@ const server = http.createServer((req, res) => {
     }
   }
 });
+
 
 /* ///////////////////////////////////////////////////////////////////
             ----- Start the webapp  -----
