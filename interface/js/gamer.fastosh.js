@@ -1,19 +1,52 @@
+var isTextFile = false ;
+var fileContentCleanArray =""
 $('.ui.accordion').accordion();
-// Retrieve ids from the Fastohs's form page
+// File listener : retrieve ids from a client-side text file
+document.getElementById('fastoshInput').addEventListener('change', readFile, false);
+
+   function readFile (evt) {
+       let files = evt.target.files;
+       let file = files[0];           
+       let reader = new FileReader();
+       reader.onload = function(event) {
+        console.log(event.target.result);
+        let fileContent = event.target.result
+        let fileContentClean = fileContent.replace(/^\s+|\s+$/g, '') // delete traling spaces
+         fileContentCleanArray = fileContentClean.split("\n") // construct array where 1 line = 1 element.
+        console.log(fileContentCleanArray)
+       }
+      reader.readAsText(file,"utf8")
+       isTextFile = true ;
+    }
+
+// Click listener: retrieve ids from the Fastohs's form page
 $('#run').click(function (e) {
     e.preventDefault()
     var idList = null
     var idJson = {}
-    if ($('textarea')[0].value != ""){
-        idList = $('textarea')[0].value.split("\n");
-        for (var i = 0; i < idList.length; i++){
-            if (idList[i] !== "") {
-                idJson[i] = idList[i]
+    // if ids came from text form
+    if (isTextFile==false){
+        if ($('textarea')[0].value != ""){
+            idList = $('textarea')[0].value.split("\n");
+            for (var i = 0; i < idList.length; i++){
+                if (idList[i] !== "") {
+                    idJson[i] = idList[i]
+                }
+            }
+                console.log(idJson)
+        } else {
+            idList = $('input')[0].value
+            console.log(idJson)
+        }
+    }
+    // if ids come from file form
+    else {
+        for (var i = 0; i < fileContentCleanArray.length; i++) {
+            // use for-in to browse only idJson own properties (= not from its prototype)
+            if (Object.prototype.hasOwnProperty.call(fileContentCleanArray, i)) {
+                idJson[i] = fileContentCleanArray[i];
             }
         }
-            console.log(idJson)
-    } else {
-        idList = $('input')[0].value
         console.log(idJson)
     }
     let clientuuid=uuidv4();
