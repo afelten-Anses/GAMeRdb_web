@@ -1,31 +1,62 @@
-var isTextFile = false ;
-var fileContentCleanArray =""
-$('.ui.accordion').accordion();
-// File listener : retrieve ids from a client-side text file
-document.getElementById('fastoshInput').addEventListener('change', readFile, false);
-
-   function readFile (evt) {
-       let files = evt.target.files;
-       let file = files[0];           
-       let reader = new FileReader();
-       reader.onload = function(event) {
+//--//--// Init //--//--// 
+var fileContentCleanArray =""; // array that will contains form data
+$('.ui.accordion').accordion(); // SemanticUi accordion effect
+// Help tutorial pop on click
+$("#helpme").click(function() {
+    $('.longer.modal').modal({
+    inverted: false
+  }).modal('show');
+});
+//--//--// File listener : retrieve ids from a client-side text file //--//--//
+document.getElementById('fastoshInput').addEventListener('change', readFile, false); // file event form listener
+// -- Read file when file event form happens -- // 
+function readFile (evt) {
+    let files = evt.target.files;
+    let file = files[0];           
+    let reader = new FileReader();
+    reader.onload = function(event) {
         console.log(event.target.result);
         let fileContent = event.target.result
         let fileContentClean = fileContent.replace(/^\s+|\s+$/g, '') // delete traling spaces
-         fileContentCleanArray = fileContentClean.split("\n") // construct array where 1 line = 1 element.
+        fileContentCleanArray = fileContentClean.split("\n") // construct array where 1 line = 1 element.
         console.log(fileContentCleanArray)
-       }
-      reader.readAsText(file,"utf8")
-       isTextFile = true ;
+        // -- append file content to text form for form validation and submit -- // 
+        let fillform = "";
+        for (var i = 0; i < fileContentCleanArray.length; i++) {
+            fillform=fillform + fileContentCleanArray[i] + '\n';   
+        }
+        fillform.replace(/^\s+|\s+$/g, ""); // trim possible blanklines
+        $('textarea')[0].append(fillform) 
     }
+    reader.readAsText(file,"utf8") // Read as utf8 text file
+}
 
-// Click listener: retrieve ids from the Fastohs's form page
-$('#run').click(function (e) {
-    e.preventDefault()
-    var idList = null
-    var idJson = {}
-    // if ids came from text form
-    if (isTextFile==false){
+$(document).ready(function() {
+    //--//--// Form validation //--//--//
+    $('.ui.form').form({
+      fields: {
+        ids: {
+          identifier  : 'ids',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter ids'
+            },
+            {
+              type   : 'regExp',
+                value :  '^[a-zA-Z0-9_\n]*$', // only letters (up or lowercase), numbers, underscore and dash and newline.
+              prompt : 'Please enter a valid id'
+            }
+          ]
+        }
+      }
+    });
+
+    //--//--// Click listener: retrieve ids from the Fastohs's text form //--//--//
+    $('.ui.form').on('submit', function(e){
+        e.preventDefault()
+        var idList = null
+        var idJson = {}
         if ($('textarea')[0].value != ""){
             idList = $('textarea')[0].value.split("\n");
             for (var i = 0; i < idList.length; i++){
@@ -38,24 +69,15 @@ $('#run').click(function (e) {
             idList = $('input')[0].value
             console.log(idJson)
         }
-    }
-    // if ids come from file form
-    else {
-        for (var i = 0; i < fileContentCleanArray.length; i++) {
-            // use for-in to browse only idJson own properties (= not from its prototype)
-            if (Object.prototype.hasOwnProperty.call(fileContentCleanArray, i)) {
-                idJson[i] = fileContentCleanArray[i];
-            }
-        }
-        console.log(idJson)
-    }
-    let clientuuid=uuidv4();
-    $('#run').replaceWith('<button class="ui disabled button" type="submit" id="run"> Running... </button>')
-    $('#run').append('<div class="ui active inline tiny loader"></div>');
-    $('#reset').transition('horizontal flip')
-    $('#reset').append('<div class="ui active inline tiny loader"></div>');
-    $('.ui.form.seven.wide.column.centered').append(`<br/>Fastosh is running, the process may last a long time, click <a href="../../tools/fastosh_results.html?tree=${clientuuid}">here</a> to see your results if you are not redirected after 2 minutes.`);
-    
+
+         //If form is valid (there is no error div, so its length = 0), so process DOM update and POST request
+        if($('.ui.form.seven.wide.column.centered.error').length === 0) {
+            let clientuuid=uuidv4();
+            $('#run').replaceWith('<button class="ui disabled button" type="submit" id="run"> Running... </button>')
+            $('#run').append('<div class="ui active inline tiny loader"></div>');
+            $('#reset').transition('horizontal flip')
+            $('#reset').append('<div class="ui active inline tiny loader"></div>');
+            $('.ui.form.seven.wide.column.centered').append(`<br/>Fastosh is running, the process may last a long time, click <a href="../../tools/fastosh_results.html?tree=${clientuuid}">here</a> to see your results if you are not redirected after 2 minutes.`);
             $.ajax({
                 url: document.URL+"/"+clientuuid, 
                 timeout: 0, //secs
@@ -81,13 +103,6 @@ $('#run').click(function (e) {
                     $('.ui.form.seven.wide.column.centered').append('<font color="red">...Process failed! Please contact us </font>');
                 }
             })
+        }
+    })
 })
-// help tutorial
-$("#helpme").click(function()
-{
-    $('.longer.modal').modal({
-    inverted: false
-  }).modal('show');
-});
-
-

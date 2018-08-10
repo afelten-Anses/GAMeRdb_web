@@ -73,17 +73,20 @@
                         </div>
                     </div>
                     <div class="ui grid" id="formgrid">
-                        <form class="ui form seven wide column centered">
+                        <form class="ui form seven wide column centered" method="post">
                             <div class="inline field" id='idslist'>
                                 <label>Paste your strains ID list here:</label>
-                                <textarea rows="5" placeholder="Please enter strains ID"></textarea>
+                                <textarea rows="5" placeholder="Please enter strains ID" name="ids"></textarea>
                             </div>
                             <div class="field" id="fileslist">
                                 <label for='tfile'> Or upload them in a text file here: </label>
-                                <input type="file" class="form-control"  id="fastoshInput"/>
+                                <input type="file" class="form-control"  id="fastoshInput" name="file"/>
                             </div>
-                        <button class="ui button" type="submit" id="run"> Run </button>
+                        <div class="ui submit button" id="run"> Run </div>
                         <button class="ui button" type="reset" id="reset"> Reset </button>
+                            <div class="ui error message">
+                                <!-- Errors about form validation will be displayed here -->
+                            </div>
                         </form>
                     </div>
                     <!-- download tree -->
