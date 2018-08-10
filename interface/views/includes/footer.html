@@ -29,25 +29,54 @@
                         </div>
                         <div class="four wide column" id="footertutorial">
                             <h3 class="ui inverted small violet header">Contact us</h3>
-                            <form class="ui mini form">
+                            <form class="ui footer mini form" method="post">
                                 <div class="two fields">
                                     <div class="field">
-                                        <input placeholder="Name" type="text"/>
+                                        <input placeholder="Name" type="text" id="name"/>
                                     </div>
                                     <div class="field">
-                                        <input placeholder="Mail" type="text"/>
+                                        <input placeholder="Mail" type="text" id="mail"/>
                                     </div>
                                 </div>
                                 <div class="field">
-                                    <textarea placeholder="Message" rows=4></textarea>
+                                    <textarea placeholder="Message" rows=4 id="message"></textarea>
                                 </div>
                                 <div class="submit">
-                                    <input type="submit" value="Submit" class="ui mini grey button"/>
+                                    <button class="ui mini grey submit button" id="contact" name="Submit">Submit</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div class="ui inverted section divider" id="lignefooter"></div>
                     <img src="../../img/ansesgamer.png" id="footerlogo"/>
-                    <h4>2016-2018 GAMeRdb v.beta - Unless otherwise stated, all content on the site is licensed under (Creative Commons BY-SA 2.0+?)</h4>
+                    <h4>2016-2018 GAMeRdb v.beta - Unless otherwise stated, all content on the site is licensed under (Creative Commons BY-SA 2.0+)</h4>
                 </div>
+<!-- Modal on form sucessfully submitted -->
+<div class="ui sucess modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Message bien reçu!
+  </div>
+  <div class="image content">
+    <div class="ui medium image">
+      <img src="../../img/anseslogomini.png">
+    </div>
+    <div class="description">
+      <div class="ui header">Votre ticket est est le numéro <span id="position">X</span> dans la liste d'attente.</div>
+      <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
+      <p>Is it okay to use this photo?</p>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui black deny button">
+      Nope
+    </div>
+    <div class="ui positive right labeled icon button">
+      Yep, that's me
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
+</div>
+<!-- Modal on form not submitted -->
+<div class="ui fail modal">
+</div>

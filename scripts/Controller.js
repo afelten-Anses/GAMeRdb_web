@@ -348,8 +348,9 @@ const server = http.createServer((req, res) => {
             });
           }
         });
-      }  else {
-        console.log('POST request not supported for this url: ', req.url);
+      } else if (wordInString(req.url, 'ticket')) {
+        processForm(req.url)
+        //console.log('POST request not supported for this url: ', req.url);
       }
     } else {
       send404(`routeFilesBySpecies() : File file not found for ${species}`);
@@ -367,6 +368,43 @@ const server = http.createServer((req, res) => {
     */
   }
 
+  function processForm(requrl) {
+    console.log('POST for --> ticket form received');
+    let body = '';
+    req.on('data', (data) => {
+      body += data;
+      console.log('req url:'); // req.url contains uuidv4() generated on the client-side
+      console.log(req.url);
+      // set POST size limit to 1MB. 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+      if (body.length > 1e6) {
+        req.connection.destroy();
+      }
+    });
+    req.on('end', () => {
+      const post = querystring.parse(body, null, null, { maxKeys: 0 });
+      console.log('Req content:');
+      console.log(JSON.stringify(post));
+      // Handle the POST request only if its JSON ("validator" used  for forms validation)
+      if (validator.isJSON(JSON.stringify(post))) {
+        console.log("isjson")
+        const clientuid = req.url.split('/').pop();
+        console.log('uuuid : ', clientuid);
+        // Init filelist to zip
+        const stream = fs.createWriteStream('private/tickets/' + post.name + '_' + clientuid + '.txt');
+        stream.once('open', () => {
+          stream.write('-----------\nName: ' + post.name + '\n' + '-----------\nMail: ' + post.mail + '\n' + '-----------\n');
+          stream.write(post.message)
+        });
+        // how many tickets are not resolved (deleted) = number of files in the "tickets" directory
+        const dir = './private/tickets';
+        fs.readdir(dir, (err, files) => {
+          res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
+          res.end(String(files.length)); // number of ticket files (not resolved)
+        });
+
+      }
+    });
+  }
   /* Capitalize first letter (needed in routeFilesBySpecies()) */
   String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -452,64 +490,69 @@ const server = http.createServer((req, res) => {
   } else if (prohibed.indexOf(urlPath) >= 0) {
     send403(); // access denied
   } else if(req.method === 'POST') {
+    console.log('POST: ', req.url)
     if (wordInString(req.url, 'fastosh')) {
-      console.log('POST for --> fastosh pipeline');
-      let body = '';
-      req.on('data', (data) => {
-        body += data;
-        console.log('req url:'); // req.url contains uuidv4() generated on the client-side
-        console.log(req.url);
-        // set POST size limit to 1MB. 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
-        if (body.length > 1e6) {
-          req.connection.destroy();
-        }
-      });
-      req.on('end', () => {
-        const post = querystring.parse(body, null, null, { maxKeys: 0 });
-        console.log('Req content:');
-        console.log(JSON.stringify(post));
-        // Handle the POST request only if its JSON ("validator" used  for forms validation)
-        if (validator.isJSON(JSON.stringify(post))) {
-          console.log("isjson")
-          const clientuid = req.url.split('/').pop();
-          // Create tmp directory (with uuid) SYNChronously ({ async: false })
-          shell.exec('mkdir -p tmp/fastosh_' + clientuid, { async: false });
-          console.log('uuuid : ', clientuid);
-          // Init filelist to zip
-          const stream = fs.createWriteStream('tmp/fastosh_' + clientuid + '/sketch_paths.tsv'); // fs object that will contain msh files paths
-          const fashtoshTmpPath = 'tmp/fastosh_' + clientuid + '/' // list of files to zip
-          console.log('files streamed: '); // debug
-          // debug : stdout files list to zip
-          stream.once('open', () => {
-            for (let i in post) {
-              // if prop is not inherited : https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea
-              if (Object.prototype.hasOwnProperty.call(post, i)) {
-                console.log(post[i], "__n: ", i);
-                model.getPaths('SampleID', post[i], (result) => {
-                  stream.write(result[0].Genome.Sketch + "\n")
-                });
+      if (!wordInString(req.url, 'ticket')) {
+        console.log('POST for --> fastosh pipeline');
+        let body = '';
+        req.on('data', (data) => {
+          body += data;
+          console.log('req url:'); // req.url contains uuidv4() generated on the client-side
+          console.log(req.url);
+          // set POST size limit to 1MB. 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+          if (body.length > 1e6) {
+            req.connection.destroy();
+          }
+        });
+        req.on('end', () => {
+          const post = querystring.parse(body, null, null, { maxKeys: 0 });
+          console.log('Req content:');
+          console.log(JSON.stringify(post));
+          // Handle the POST request only if its JSON ("validator" used  for forms validation)
+          if (validator.isJSON(JSON.stringify(post))) {
+            console.log("isjson")
+            const clientuid = req.url.split('/').pop();
+            // Create tmp directory (with uuid) SYNChronously ({ async: false })
+            shell.exec('mkdir -p tmp/fastosh_' + clientuid, { async: false });
+            console.log('uuuid : ', clientuid);
+            // Init filelist to zip
+            const stream = fs.createWriteStream('tmp/fastosh_' + clientuid + '/sketch_paths.tsv'); // fs object that will contain msh files paths
+            const fashtoshTmpPath = 'tmp/fastosh_' + clientuid + '/' // list of files to zip
+            console.log('files streamed: '); // debug
+            // debug : stdout files list to zip
+            stream.once('open', () => {
+              for (let i in post) {
+                // if prop is not inherited : https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea
+                if (Object.prototype.hasOwnProperty.call(post, i)) {
+                  console.log(post[i], "__n: ", i);
+                  model.getPaths('SampleID', post[i], (result) => {
+                    stream.write(result[0].Genome.Sketch + "\n")
+                  });
+                }
               }
-            }
-          });
+            });
 
-          // // Launch Fashtosh script asynchrously (=when callback)
-          const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
-          // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
-          // Serve files when child process ended
-          fastosh.stdout.on('end', (data) => {;
-            console.log('compression ended, now serving files...');
-            res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
-            res.end(clientuid); // send uuid to results page
-            console.log('sended: ', clientuid);
-          });
-          fastosh.stdout.on('exit', () => {
+            // // Launch Fashtosh script asynchrously (=when callback)
+            const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
+            // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
+            // Serve files when child process ended
+            fastosh.stdout.on('end', (data) => {;
+              console.log('compression ended, now serving files...');
+              res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
+              res.end(clientuid); // send uuid to results page
+              console.log('sended: ', clientuid);
+            });
+            fastosh.stdout.on('exit', () => {
 
-          });
-          fastosh.stdout.on('error', () => {
-            // handle errors : TODO
-          });
-        }
-      });
+            });
+            fastosh.stdout.on('error', () => {
+              // handle errors : TODO
+            });
+          }
+        });
+      } 
+    } else if (wordInString(req.url, 'ticket')) {
+      processForm(req.url) // process tickets forms from fastosh page
     }
   } else {
     /* NAS FILES : auto-routing for existing paths :

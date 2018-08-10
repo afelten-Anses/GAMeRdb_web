@@ -53,7 +53,7 @@ $(document).ready(function() {
     });
 
     //--//--// Click listener: retrieve ids from the Fastohs's text form //--//--//
-    $('.ui.form').on('submit', function(e){
+    $('.ui.fastosh.form').on('submit', function(e){
         e.preventDefault()
         var idList = null
         var idJson = {}

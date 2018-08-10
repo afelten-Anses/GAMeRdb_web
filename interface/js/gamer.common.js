@@ -3,7 +3,6 @@ var ms_ie = false;
 var ua = window.navigator.userAgent;
 var old_ie = ua.indexOf('MSIE ');
 var new_ie = ua.indexOf('Trident/');
-
 if ((old_ie > -1) || (new_ie > -1)) 
 {
     ms_ie = true;
@@ -14,10 +13,24 @@ if(ms_ie)
     console.log("msie")
 }
 // ------------------------ Functions init ------------------------ //
-function wordInString(sentence, word) // return true if a full string (word) (not a substring) is contained in a other string(sentence)
-{
+// return true if a full string (word) (not a substring) is contained in a other string(sentence)
+function wordInString(sentence, word) {
 return new RegExp( '\\b' + word + '\\b', 'i').test(sentence);
 }
+
+// Generate uuids
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+// Async sleep
+function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}	
+
 // ------------------------ Colorize item based on the active page url pathname ------------------------ //
 
 let suburl=window.location.pathname // retrive url pathname
@@ -34,8 +47,8 @@ if(wordInString(suburl,"species"))
     $("#"+species).attr('class','active item') //colorize item (=change class to active item) based on url (species page)
 }*/
 
-let a = "tools"
-let b ="species"
+let a="tools"
+let b="species"
 
 switch(true){
     case wordInString(suburl,a):
@@ -47,20 +60,34 @@ switch(true){
         //console.log("b")
 }
 
-//------------------------------------------------//
-//              Other JS functions                //
-//------------------------------------------------//
+// ------------------------ Footer form submit action ------------------------ //
+$('.ui.footer.form').on('submit', function(e){
+    e.preventDefault()
+    // Stock form data in a variable
+    let ticket={};
+    ticket.name=$('footer input')[0].value;
+    ticket.mail=$('footer input')[1].value;
+    ticket.message=$('footer textarea')[0].value;
+    // Generate a ticket uuid
+    let clientuuid=uuidv4()
+    // Submit ticket using Ajax POST request
+    $.ajax({
+        url: "ticket/" +clientuuid,  
+        type: 'POST',
+        timeout:0,
+        contentType: 'application/json', 
+        data:ticket
+    }).done(function(msg){
+        console.log(msg);
+        console.log("ok");
+        $('span#position').text(msg) // position in ticket waiting list
+        $('.ui.sucess.modal').modal('show');
+    }).fail(function(request, status, err) {
+        $('.ui.fail.modal').modal('show');
+        console.log(err)
+    })
+})
 
-// Generate uuids
-function uuidv4() {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-}
-
-// Async sleep
-
-function sleep (time) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}	
+/*$(document).ready(function() {
+     $('.ui.sucess.modal').modal('show');
+});*/
