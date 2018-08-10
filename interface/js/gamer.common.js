@@ -3,6 +3,9 @@ var ms_ie = false;
 var ua = window.navigator.userAgent;
 var old_ie = ua.indexOf('MSIE ');
 var new_ie = ua.indexOf('Trident/');
+/* Used to fire only ONE post request. If true (one request fired) we'll call stopImmediatePropagation.
+Without using this we had 3 requests fired after SemanticUI form validation. */
+var doImmediatePropagationStop = false; // Returns whether event.stopImmediatePropagation() was ever called 
 if ((old_ie > -1) || (new_ie > -1)) 
 {
     ms_ie = true;
@@ -61,33 +64,88 @@ switch(true){
 }
 
 // ------------------------ Footer form submit action ------------------------ //
+// Form validation
+$('.ui.footer.form').form({
+      fields: {
+        name: {
+          identifier  : 'name',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Please enter your name'
+            },
+            {
+              type   : 'minLength[2]',
+              prompt : 'Please enter your real name'
+            },
+            {
+              type   : 'regExp',
+                value :  "/^[a-z ,.'-]+$/i", // first and last name then more...
+              prompt : 'Please enter your real name'
+            }
+          ]
+        },
+        mail: {
+          identifier  : 'mail',
+          rules: [
+            {
+              type   : 'email',
+              prompt : 'Whaaat? Please enter a valid email adress'
+            }
+          ]
+        },
+        message: {
+          identifier  : 'message',
+          rules: [
+            {
+              type   : 'empty',
+              prompt : 'Your forgotten to say something, please talk to us.'
+            }
+          ]
+        }
+      },
+    onSuccess: function(event) {
+        if(doImmediatePropagationStop===true){
+            event.stopImmediatePropagation() 
+            $('#contact').on('click', () => {
+                window.alert("Request already submitted"); // needs a fix to not be called twice
+            });
+        }
+        event.preventDefault();
+        doImmediatePropagationStop=true;
+    }
+});
+// Parse form and send it to back-end if its not errored.
 $('.ui.footer.form').on('submit', function(e){
-    e.preventDefault()
-    // Stock form data in a variable
-    let ticket={};
-    ticket.name=$('footer input')[0].value;
-    ticket.mail=$('footer input')[1].value;
-    ticket.message=$('footer textarea')[0].value;
-    // Generate a ticket uuid
-    let clientuuid=uuidv4()
-    // Submit ticket using Ajax POST request
-    $.ajax({
-        url: "ticket/" +clientuuid,  
-        type: 'POST',
-        timeout:0,
-        contentType: 'application/json', 
-        data:ticket
-    }).done(function(msg){
-        console.log(msg);
-        console.log("ok");
-        $('span#position').text(msg) // position in ticket waiting list
-        $('.ui.sucess.modal').modal('show');
-    }).fail(function(request, status, err) {
-        $('.ui.fail.modal').modal('show');
-        console.log(err)
-    })
+    e.preventDefault();
+    if($('div.field.error').length === 0) {
+        // Stock form data in a variable
+        let ticket={};
+        ticket.name=$('footer input')[0].value;
+        ticket.mail=$('footer input')[1].value;
+        ticket.message=$('footer textarea')[0].value;
+        // Generate a ticket uuid
+        let clientuuid=uuidv4()
+        console.log("blabla")
+        // Submit ticket using Ajax POST request
+        $.ajax({
+            url: "ticket/" +clientuuid,  
+            type: 'POST',
+            timeout:0,
+            contentType: 'application/json', 
+            data:ticket
+        }).done(function(msg){
+            //console.log(msg);
+            console.log("ok");
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            $('span#userposition').text(msg) // update and show in the modal position in ticket waiting list from nodeJS response
+            $('span#usermessage').text(ticket.message) // same for message sended, but retrieved from client side in place of NodeJS
+            $('span#usermail').text(ticket.mail) // same, for mail address
+            $('.ui.sucess.modal').modal('show');
+        }).fail(function(request, status, err) {
+            $('.ui.fail.modal').modal('show');
+            console.log(err)
+        })
+    }
 })
-
-/*$(document).ready(function() {
-     $('.ui.sucess.modal').modal('show');
-});*/

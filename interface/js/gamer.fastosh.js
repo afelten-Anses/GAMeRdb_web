@@ -33,7 +33,7 @@ function readFile (evt) {
 
 $(document).ready(function() {
     //--//--// Form validation //--//--//
-    $('.ui.form').form({
+    $('.ui.fastosh.form').form({
       fields: {
         ids: {
           identifier  : 'ids',

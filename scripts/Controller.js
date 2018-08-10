@@ -299,56 +299,59 @@ const server = http.createServer((req, res) => {
       if "genomes" in url : server side zip + send zipped file to client
       */
       if (wordInString(req.url, 'genomes')) {
-        console.log('POST for --> zip genomes pipeline');
-        let body = '';
-        req.on('data', (data) => {
-          body += data;
-          console.log('req url:'); // req.url contains uuidv4() generated on the client-side
-          console.log(req.url);
-          // set POST size limit to 1MB. 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
-          if (body.length > 1e6) {
-            req.connection.destroy();
-          }
-        });
+        if (!wordInString(req.url, 'ticket')) {
+          console.log('POST for --> zip genomes pipeline');
+          let body = '';
+          req.on('data', (data) => {
+            body += data;
+            console.log('req url:'); // req.url contains uuidv4() generated on the client-side
+            console.log(req.url);
+            // set POST size limit to 1MB. 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
+            if (body.length > 1e6) {
+              req.connection.destroy();
+            }
+          });
 
-        req.on('end', () => {
-          const post = querystring.parse(body, null, null, { maxKeys: 0 });
-          console.log('Req content:');
-          console.log(JSON.stringify(post));
-          // Handle the POST request only if its JSON ("validator" used  for forms validation)
-          if (validator.isJSON(JSON.stringify(post))) {
-            const clientuid = req.url.split('/').pop();
-            // Create tmp directory (with uuid) SYNChronously ({ async: false })
-            shell.exec('mkdir -p /mnt/20To-vol/tmp/' + clientuid, { async: false });
-            console.log('uuuid : ', clientuid);
-            // Init filelist to zip
-            const stream = fs.createWriteStream('/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt'); // fs object containing list of files to zip
-            const zipfilesList = '/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt' // list of files to zip
-            const zipOutputPathToSend = 'tmp/' + clientuid + '/wgsdata_' + clientuid + '.zip'
-            console.log('files streamed: '); // debug
-            // debug : stdout files list to zip
-            stream.once('open', () => {
-              for (let i in post) {
-                // if prop is not inherited : https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea
-                if (Object.prototype.hasOwnProperty.call(post, i)) {
-                  console.log(post[i], "__n: ", i);
-                  stream.write(post[i] + "\n")
+          req.on('end', () => {
+            const post = querystring.parse(body, null, null, { maxKeys: 0 });
+            console.log('Req content:');
+            console.log(JSON.stringify(post));
+            // Handle the POST request only if its JSON ("validator" used  for forms validation)
+            if (validator.isJSON(JSON.stringify(post))) {
+              const clientuid = req.url.split('/').pop();
+              // Create tmp directory (with uuid) SYNChronously ({ async: false })
+              shell.exec('mkdir -p /mnt/20To-vol/tmp/' + clientuid, { async: false });
+              console.log('uuuid : ', clientuid);
+              // Init filelist to zip
+              const stream = fs.createWriteStream('/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt'); // fs object containing list of files to zip
+              const zipfilesList = '/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt' // list of files to zip
+              const zipOutputPathToSend = 'tmp/' + clientuid + '/wgsdata_' + clientuid + '.zip'
+              console.log('files streamed: '); // debug
+              // debug : stdout files list to zip
+              stream.once('open', () => {
+                for (let i in post) {
+                  // if prop is not inherited : https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea
+                  if (Object.prototype.hasOwnProperty.call(post, i)) {
+                    console.log(post[i], "__n: ", i);
+                    stream.write(post[i] + "\n")
+                  }
                 }
-              }
-            });
-            // Launch bash script asynchrously (=when callback)
-            const child = shell.exec('sh ZipAndCall.sh ' + clientuid + " " + zipfilesList, { async: true });
-            // Serve files when child process ended
-            child.stdout.on('end', (data) => {
-              console.log(data)
-              console.log('compression ended, now serving files...');
-              res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
-              res.end(zipOutputPathToSend); // file path that will be open By AJAX on client side then stremed with readServerFileAutoMime()
-              console.log('sended: ', zipOutputPathToSend);
-            });
-          }
-        });
-      } else if (wordInString(req.url, 'ticket')) {
+              });
+              // Launch bash script asynchrously (=when callback)
+              const child = shell.exec('sh ZipAndCall.sh ' + clientuid + " " + zipfilesList, { async: true });
+              // Serve files when child process ended
+              child.stdout.on('end', (data) => {
+                console.log(data)
+                console.log('compression ended, now serving files...');
+                res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
+                res.end(zipOutputPathToSend); // file path that will be open By AJAX on client side then stremed with readServerFileAutoMime()
+                console.log('sended: ', zipOutputPathToSend);
+              });
+            }
+          });
+        } 
+      }
+      else if (wordInString(req.url, 'ticket')) {
         processForm(req.url)
         //console.log('POST request not supported for this url: ', req.url);
       }
@@ -398,7 +401,7 @@ const server = http.createServer((req, res) => {
         // how many tickets are not resolved (deleted) = number of files in the "tickets" directory
         const dir = './private/tickets';
         fs.readdir(dir, (err, files) => {
-          res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
+          res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
           res.end(String(files.length)); // number of ticket files (not resolved)
         });
 
@@ -537,7 +540,7 @@ const server = http.createServer((req, res) => {
             // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
             // Serve files when child process ended
             fastosh.stdout.on('end', (data) => {;
-              console.log('compression ended, now serving files...');
+              console.log('FasTosh ended, now serving files...');
               res.writeHead(200, { 'Content-Type': 'application/zip', 'Cache-Control': 'no-cache' }); // type MIME or application/octet-stream if unknown extension
               res.end(clientuid); // send uuid to results page
               console.log('sended: ', clientuid);

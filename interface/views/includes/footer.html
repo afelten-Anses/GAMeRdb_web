@@ -44,6 +44,9 @@
                                 <div class="submit">
                                     <button class="ui mini grey submit button" id="contact" name="Submit">Submit</button>
                                 </div>
+                                <!-- Errors about form validation will be displayed here -->
+                                <div class="ui error message"> 
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -53,30 +56,46 @@
                 </div>
 <!-- Modal on form sucessfully submitted -->
 <div class="ui sucess modal">
-  <i class="close icon"></i>
   <div class="header">
-    Message bien reçu!
+      We had successfully received your message.
   </div>
   <div class="image content">
     <div class="ui medium image">
-      <img src="../../img/anseslogomini.png">
+      <img src="../../img/gamer.png">
     </div>
     <div class="description">
-      <div class="ui header">Votre ticket est est le numéro <span id="position">X</span> dans la liste d'attente.</div>
-      <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your registered e-mail address.</p>
-      <p>Is it okay to use this photo?</p>
+        <div class="ui header">Your ticket is number <span id="userposition">X</span> in the waiting list.</div>
+        <p>We'll contact you as soon as possible at <span id="usermail"><b>X</b></span>. Here is the message you sent:</p>
+        <div class="ui compact message">
+            <p><span id="usermessage">xxxxxxxxxxxxxx</span></p>
+        </div>
     </div>
   </div>
   <div class="actions">
-    <div class="ui black deny button">
-      Nope
-    </div>
     <div class="ui positive right labeled icon button">
-      Yep, that's me
+      Ok, thanks
       <i class="checkmark icon"></i>
     </div>
   </div>
 </div>
 <!-- Modal on form not submitted -->
 <div class="ui fail modal">
+      <div class="header">
+      Something bad happended.
+  </div>
+  <div class="image content">
+    <div class="ui medium image">
+      <img src="../../img/what.jpg">
+    </div>
+    <div class="description">
+        <div class="ui header">There is an unhandled error.</div>
+        <p>We are so sorry. Can you please report us this bug directly by email?</p>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui positive right labeled icon button">
+      Ok, thanks
+      <i class="checkmark icon"></i>
+    </div>
+  </div>
 </div>

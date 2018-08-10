@@ -15,3 +15,7 @@ video {
     width:100%;
     height:auto;
 }
+/* Authorize browser to break words in forms fields */
+.field{
+   word-wrap: break-word;
+}
