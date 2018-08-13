@@ -360,58 +360,15 @@ $(document).ready(function() {
                 }
             })
         }      
-        //CLIENT SIDE zip and download
-        /*var currentDate = new Date(Date.now()).toLocaleString();
-        var count = table.rows( { selected: true } ).count(); // number of selected rows
-        var toDownload=[];
-        var zip = new JSZip();
-        // Add an top-level, arbitrary text file with contents
-        //zip.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);  
-        // Generate a directory within the Zip file structure
-        var allfiles = zip.folder("Strains");
-        allfiles.file("Readme", "Here you can find the files downloaded from GAMeR genomic database at : "+currentDate);
-        for (var i=0 ; i<count ; i ++)
-        {
-            toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].Genome.Contigs)
-        }
-        var dldata=[]
-        var promise=[]
-        for (var i=0 ; i<count ; i ++)
-        {
-            var fileTypeList=[
-            'Reads.FASTQC_pair1',
-            'Reads.FASTQC_pair2',
-            'Reads.VCF',
-            'Genome.Contigs',
-            'Genome.Assembly',
-            'Genome.QUAST',
-            'Genome.GFF',
-            'Genome.GBK',
-            'Report']
-
-            dldata[i]=table.rows( { selected: true } ).data({ selected: true })[i].Genome.GFF
-            //Force synchronous Download 
-            promise[i] = $.get({url: dldata[i],
-                                async:false}
-                               );
-            //sleep(300)
-            // Add a file to the directory, in this case an image with data URI as contents
-            allfiles.file(dldata[i],promise[i]);
-            console.log(dldata[i])                
-        }                
-        // Generate the zip file asynchronously
-        console.log("generatesync")
-        allfiles.generateAsync({
-            type: "blob",
-            compression: "STORE",
-            streamFiles:true,
-            //compressionOptions: {
-            //    level: 1
-            //}
-        }).then(function(blob) {
-            // Force down of the Zip file
-            saveAs(blob, "Strains_data.zip");
-        });*/
-
     });
+    // Filtering DataTables according to GET parameters
+    let urlArray = window.location.href.split('/'); // url array based on "/" separation
+    // (NOT SAFE, need improvements) if there is a GET parameter in the url, process the code below.
+    if(wordInString(urlArray,"id=")) {
+        let strainID = urlArray[5].replace("genomes?id=",""); 
+        table
+        .column(0)
+        .search(strainID)
+        .draw(); // Use 6th parameter to perform DataTables search using column.search method, then draw() it
+    }
 });
