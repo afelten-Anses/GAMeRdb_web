@@ -259,7 +259,7 @@ const server = http.createServer((req, res) => {
       readFileAndInclude(`./../interface/views/../interface/views/species/${species}/blast.html`, 200); // Blast
     } else if (urlPath === `/species/${species}/distribution.html`) {
       readFileAndInclude(`./../interface/views/species/${species}/distribution.html`, 200); // CC/ST/Serovar distribution
-    } else if (urlPath === `/species/${species}/genomes.html`) {
+    } else if (urlPath === `/species/${species}/genomes`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
     } else if (urlPath === `/species/${species}/refs.html`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/refs.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
