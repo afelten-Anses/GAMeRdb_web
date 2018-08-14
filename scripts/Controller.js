@@ -243,6 +243,8 @@ const server = http.createServer((req, res) => {
         views.renderDataTables(species, contents, res, template, msg);
       } else if (templateFilePath.indexOf('refs') >= 0) {
         views.renderDataTablesRefs(species, contents, res, template, msg);
+      } else if (templateFilePath.indexOf('distribution') >= 0) {
+        views.renderDataTables(species, contents, res, template, msg);
       }
     });
   }
@@ -254,7 +256,7 @@ const server = http.createServer((req, res) => {
     if (urlPath === `/species/${species}/blast`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/../interface/views/species/${species}/blast.html`, 200); // Blast
     } else if (urlPath === `/species/${species}/distribution`) {
-      readFileAndInclude(`./../interface/views/species/${species}/distribution.html`, 200); // CC/ST/Serovar distribution
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/distribution.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // CC/ST/Serovar distribution
     } else if (urlPath === `/species/${species}/genomes`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
     } else if (urlPath === `/species/${species}/refs`) {
@@ -262,8 +264,8 @@ const server = http.createServer((req, res) => {
     } else if (urlPath === `/species/${species}/genomes_tutorial`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes_tutorial.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes interactive tutorial
     } else if (urlPath === `/species/${species}/phylogeny`) {
-      readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`, 200); // Phylogeny
-    } else if (urlPath.indexOf(`/species/${species}/DATA`) !== -1) { 
+      readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`, 200); // global phylogeny
+    } else if (urlPath.indexOf(`/species/${species}/DATA`) !== -1) {
     /* Dynamic routing for NAS files */
       const trim = `/species/${species}`; // species sub url
       const urlPathTrimmed = urlPath.replace(trim, ''); // relative path from Controller script
