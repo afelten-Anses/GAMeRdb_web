@@ -569,7 +569,7 @@ const server = http.createServer((req, res) => {
             if (existP) {
               console.log(`Ok: file ${NasFilesPaths} is a STATIC file`);
               // create a read stream for the file if file exists
-              fs.createReadStream(pathFromScript, (err) => { 
+              fs.createReadStream(pathFromScript, (err) => {
                 if (err) {
                   send500(`Error getting the file: ${err}.`); // if this file/path exists but cant be reached for any reason
                 } else {
