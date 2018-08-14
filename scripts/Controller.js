@@ -243,8 +243,6 @@ const server = http.createServer((req, res) => {
         views.renderDataTables(species, contents, res, template, msg);
       } else if (templateFilePath.indexOf('refs') >= 0) {
         views.renderDataTablesRefs(species, contents, res, template, msg);
-      } else {
-        console.log('readFileAndIncludeAndRenderBySpecies : not supported');
       }
     });
   }
@@ -254,7 +252,7 @@ const server = http.createServer((req, res) => {
   function routeFilesBySpecies(species) {
     console.log('routeFilesBySpecies'); // debug
     if (urlPath === `/species/${species}/blast`) {
-      readFileAndInclude(`./../interface/views/../interface/views/species/${species}/blast.html`, 200); // Blast
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/../interface/views/species/${species}/blast.html`, 200); // Blast
     } else if (urlPath === `/species/${species}/distribution`) {
       readFileAndInclude(`./../interface/views/species/${species}/distribution.html`, 200); // CC/ST/Serovar distribution
     } else if (urlPath === `/species/${species}/genomes`) {
@@ -263,8 +261,6 @@ const server = http.createServer((req, res) => {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/refs.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
     } else if (urlPath === `/species/${species}/genomes_tutorial`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes_tutorial.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes interactive tutorial
-    } else if (urlPath === `/species/${species}/naura`) {
-      readFileAndInclude(`./../interface/views/species/${species}/naura.html`, 200); // Naura
     } else if (urlPath === `/species/${species}/phylogeny`) {
       readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`, 200); // Phylogeny
     } else if (urlPath.indexOf(`/species/${species}/DATA`) !== -1) { 
