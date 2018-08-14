@@ -82,10 +82,10 @@
                         <span class="ui medium header"> 
                             MultiQC of the <i>Salmonella</i> strains processed by ARTwork (updated monthly)
                             <br/>
-                            Full page available <a href="../../multiqc/Salmonella_multiqc_report.html" target="_blank" rel="noopener noreferrer">here</a>
+                            Full page available <a href="../../multiqc/Salmonella_multiqc_report" target="_blank" rel="noopener noreferrer">here</a>
                         </span>    
                     </div>
-                    <iframe src="../../multiqc/Salmonella_multiqc_report.html" id="MultiQC_preview"></iframe> 
+                    <iframe src="../../multiqc/Salmonella_multiqc_report" id="MultiQC_preview"></iframe> 
                 </div>
             </div>
             <!-- Visible EMBED MultiQC when "MultiQC report was clicked: start-->
@@ -205,7 +205,7 @@
             </style>
     <script>
         <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
-        /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Salmonella_multiqc_report.html"> MultiQC report</a></caption>');*/
+        /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Salmonella_multiqc_report"> MultiQC report</a></caption>');*/
         $('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global overview of files quality, please check the <a href="#"> MultiQC report</a></caption>');
         var data = <%datatablesJSON%>
     </script>

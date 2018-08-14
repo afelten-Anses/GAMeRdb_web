@@ -87,7 +87,7 @@ $(document).ready(function() {
             })
             .done(function(msg){
             console.log('form submitted. Response payload: '+ msg);
-            window.location="../../tools/fastosh_results.html?tree="+msg // change window.location in order to launch dl;
+            window.location="../../tools/fastosh_results?tree="+msg // change window.location in order to launch dl;
             //console.log('POST response payload');
             //$('.basic.modal.preparing').modal('hide')
             //console.log("got : \n"+JSON.stringify(idJson))

@@ -7,13 +7,11 @@
 /* A FAIRE AVANT LA MISE EN PRODUCTION de la V2:
 -En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache'
 (interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
- -COMMENTER Tout ce qui est commenté 'debug' et rennomer debug par 'trace'
  -Ecouter sur le port 80 + mettre en place reverse proxy (avec compression de reponses http) :
    https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
    https://eladnava.com/binding-nodejs-port-80-using-nginx/
    --> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
    -Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
-   -ReVerifier 100% async, callbacks pour toutes les fonctions
    -Crypter mot de passe GAMeRdb
 
 
@@ -70,6 +68,7 @@ if (args.threads) {
 //   console.log("please provide Mongo credentials");
 //   process.exit(1)
 // }
+
 /* More sockets per host  (default = 5) ==> increase performance.
 decrease if case of excessive ressources draining */
 http.globalAgent.maxSockets = 15;
@@ -111,7 +110,6 @@ const prohibed = [ // Restricted files access list
   '/Model.njs',
   '/Views.njs'
 ];
-
 
 /* ///////////////////////////////////////////////////////////////////
                     ----- Starts here -----
@@ -255,23 +253,22 @@ const server = http.createServer((req, res) => {
   using readFileAndInclude...() functions */
   function routeFilesBySpecies(species) {
     console.log('routeFilesBySpecies'); // debug
-    if (urlPath === `/species/${species}/blast.html`) {
+    if (urlPath === `/species/${species}/blast`) {
       readFileAndInclude(`./../interface/views/../interface/views/species/${species}/blast.html`, 200); // Blast
-    } else if (urlPath === `/species/${species}/distribution.html`) {
+    } else if (urlPath === `/species/${species}/distribution`) {
       readFileAndInclude(`./../interface/views/species/${species}/distribution.html`, 200); // CC/ST/Serovar distribution
     } else if (urlPath === `/species/${species}/genomes`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
-    } else if (urlPath === `/species/${species}/refs.html`) {
+    } else if (urlPath === `/species/${species}/refs`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/refs.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
-    } else if (urlPath === `/species/${species}/genomes_tutorial.html`) {
+    } else if (urlPath === `/species/${species}/genomes_tutorial`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes_tutorial.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes interactive tutorial
-    } else if (urlPath === `/species/${species}/naura.html`) {
+    } else if (urlPath === `/species/${species}/naura`) {
       readFileAndInclude(`./../interface/views/species/${species}/naura.html`, 200); // Naura
-    } else if (urlPath === `/species/${species}/phylogeny.html`) {
+    } else if (urlPath === `/species/${species}/phylogeny`) {
       readFileAndInclude(`./../interface/views/species/${species}/phylogeny.html`, 200); // Phylogeny
-    } else if (urlPath === `/species/${species}/refs.html`) {
-      readFileAndInclude(`./../interface/views/species/${species}/refs.html`, 200); // Reference genomes
-    } else if (urlPath.indexOf(`/species/${species}/DATA`) !== -1) { // NAS files
+    } else if (urlPath.indexOf(`/species/${species}/DATA`) !== -1) { 
+    /* Dynamic routing for NAS files */
       const trim = `/species/${species}`; // species sub url
       const urlPathTrimmed = urlPath.replace(trim, ''); // relative path from Controller script
 
@@ -358,19 +355,9 @@ const server = http.createServer((req, res) => {
     } else {
       send404(`routeFilesBySpecies() : File file not found for ${species}`);
     }
-
-    /*
-      else if(s) : Handling POST requests from xxx WORKSPACES
-      if "genomes" in url : server side zip + send zipped file to client
-    */
-
-    // future code for other xxx workspaces
-
-    /*
-      Do not Handle POST request from other pages
-    */
   }
 
+  /* Handle website contact forms and write every message in a tickets file */
   function processForm(requrl) {
     console.log('POST for --> ticket form received');
     let body = '';
@@ -408,6 +395,7 @@ const server = http.createServer((req, res) => {
       }
     });
   }
+
   /* Capitalize first letter (needed in routeFilesBySpecies()) */
   String.prototype.capitalize = function () {
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -432,7 +420,6 @@ const server = http.createServer((req, res) => {
     console.warn(message);
     readFileAndInclude('./../interface/views/500.html', 500);
   }
-
 
   /* ///////////////////////////////////////////////////////////////////
               ----- ROUTING and MVC processing  -----
@@ -466,14 +453,10 @@ const server = http.createServer((req, res) => {
     readServerFile('./../semantic/dist/themes/default/assets/fonts/icons.ttf', 'application/x-font-ttf', 200);
   } else if (urlPath === '/' || urlPath === '/home') {
     readFileAndIncludeAndRender('./../interface/views/homepage/index.html', 200);
-  } else if (urlPath === '/tools/fastosh.html') {
+  } else if (urlPath === '/tools/fastosh') {
     readFileAndInclude('./../interface/views/tools/fastosh.html', 200);
-  } else if (urlPath === '/tools/fastosh_results.html') {
+  } else if (urlPath === '/tools/fastosh_results') {
     readFileAndInclude('./../interface/views/tools/fastosh_results.html', 200);
-  } else if (urlPath === '/tools/XML.html') {
-    readFileAndInclude('./../interface/views/tools/XML.html', 200);
-  } else if (urlPath === '/tools/XML.html') {
-    readFileAndInclude('./../interface/views/tools/fastosh.html', 200);
   } else if (urlPath.indexOf('/species/') >= 0) { // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
     console.log('path species'); // debug
     if (urlPath.indexOf('bacillus') >= 0) {
@@ -534,7 +517,6 @@ const server = http.createServer((req, res) => {
                 }
               }
             });
-
             // // Launch Fashtosh script asynchrously (=when callback)
             const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
             // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
@@ -546,14 +528,14 @@ const server = http.createServer((req, res) => {
               console.log('sended: ', clientuid);
             });
             fastosh.stdout.on('exit', () => {
-
+              // handle exit : TODO
             });
             fastosh.stdout.on('error', () => {
               // handle errors : TODO
             });
           }
         });
-      } 
+      }
     } else if (wordInString(req.url, 'ticket')) {
       processForm(req.url) // process tickets forms from fastosh page
     }
@@ -605,7 +587,6 @@ const server = http.createServer((req, res) => {
     }
   }
 });
-
 
 /* ///////////////////////////////////////////////////////////////////
             ----- Start the webapp  -----
