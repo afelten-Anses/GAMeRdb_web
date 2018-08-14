@@ -44,7 +44,7 @@ $(document).ready(function() {
             },
             {
               type   : 'regExp',
-                value :  '[A-Za-z0-9]*([a-zA-Z]+[0-9_]+|[0-9_]+[a-zA-Z\n]+)', // only letters (up or lowercase), numbers, underscore and dash and newline.
+                value :  '[A-Za-z0-9]*([a-zA-Z]+[0-9_]+|[0-9_]+[a-zA-Z\n]+)', // only letters (up or lowercase) with number with underscore and dash and newline.
               prompt : 'Please enter a valid id'
             }
           ]
