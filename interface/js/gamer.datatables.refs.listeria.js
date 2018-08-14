@@ -169,7 +169,7 @@ $(document).ready(function() {
             let zip = new JSZip();
             // Generate a directory within the Zip file structure  
             // Add an top-level, arbitrary text file with content
-            zip.file("Readme.txt", "Reference genomes downloaded from GAMeR genomic database at : "+currentDate); 
+            zip.file("Readme.txt", "Reference genomes downloaded from GAMeR genomic database at : "+currentDate,{binary:true}); 
             for (let i=0 ; i<count ; i ++){
                 toDownload.push(table.rows( { selected: true } ).data({ selected: true })[i].ZIPpath);
             }
