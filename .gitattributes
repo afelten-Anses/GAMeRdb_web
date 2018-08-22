@@ -1,2 +1,2 @@
-* linguist-vendored
-*.js linguist-vendored=false
+semantic/* linguist-vendored
+node_modules/* linguist-vendored
