@@ -364,11 +364,11 @@ $(document).ready(function() {
     // Filtering DataTables according to GET parameters
     let urlArray = window.location.href.split('/'); // url array based on "/" separation
     // (NOT SAFE, need improvements) if there is a GET parameter in the url, process the code below.
-    if(wordInString(urlArray,"id=")) {
-        let strainID = urlArray[5].replace("genomes?id=",""); 
+    if(wordInString(urlArray,"ids=")) {
+        let strainID = urlArray[5].replace("genomes?ids=",""); 
         table
         .column(0)
-        .search(strainID)
+        .search(strainID.split(',').join('|'),true)
         .draw(); // Use 6th parameter to perform DataTables search using column.search method, then draw() it
     }
     // Perform regex-based search
