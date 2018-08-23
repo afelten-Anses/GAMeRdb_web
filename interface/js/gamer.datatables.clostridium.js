@@ -369,4 +369,10 @@ $(document).ready(function() {
         .search(strainID)
         .draw(); // Use 6th parameter to perform DataTables search using column.search method, then draw() it
     }
+    // Perform regex-based search
+    $('#table_id_filter.dataTables_filter.ui.input').on( 'keyup click', function () {
+        /* Replace ' '  in text input by '|' in order to perform regex searches. 
+        Why not typing '|' directly? Because 'copy ids' tools returns strings separated by ' ' */
+        $('#table_id').DataTable().search($('.dataTables_filter input').val().split(' ').join('|'),true).draw(); 
+    } );
 });
