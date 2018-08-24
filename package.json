@@ -24,6 +24,7 @@
     "mongojs": "^2.5.0",
     "query-string": "^5.1.0",
     "semantic-ui": "^2.3.1",
+    "shelljs": "^0.8.2",
     "templatesjs": "^2.0.0",
     "validator": "^9.4.0"
   },
@@ -31,7 +32,6 @@
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.11.0",
     "jsdoc": "^3.5.5",
-    "shelljs": "^0.8.1",
     "sleep": "^5.1.1"
   }
 }
