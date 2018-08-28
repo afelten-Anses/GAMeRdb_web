@@ -64,6 +64,7 @@ switch(true){
 }
 
 // ------------------------ Footer form submit action ------------------------ //
+
 // Form validation
 $('.ui.footer.form').form({
       fields: {
@@ -75,13 +76,13 @@ $('.ui.footer.form').form({
               prompt : 'Please enter your name'
             },
             {
-              type   : 'minLength[2]',
-              prompt : 'Please enter your real name'
+              type   : 'minLength[3]',
+              prompt : 'Please enter a real name'
             },
             {
               type   : 'regExp',
-                value :  "/^[a-z ,.'-]+$/i", // first and last name then more...
-              prompt : 'Please enter your real name'
+                value :  "[a-zA-Z]+(?:[-'\s][a-zA-Z]+)*$", // NaN
+              prompt : 'Please enter a real name'
             }
           ]
         },
