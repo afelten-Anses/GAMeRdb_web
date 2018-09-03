@@ -56,7 +56,7 @@ function makeHighChartsST(speciesJson,speciesName){
     $(document).ready(function() {
         this.data= speciesJson
         // Compute CC distribution
-        const listCC=_.countBy(data, function(e) { return e.Phylogeny.ClonalComplex })
+        const listCC=_.countBy(data, function(e) { return e.Phylogeny.SequenceType})
         Highcharts.chart('distribution', {
             chart: {
             type: 'column'
@@ -109,7 +109,7 @@ function makeHighChartsSerovar(speciesJson,speciesName){
     $(document).ready(function() {
         this.data= speciesJson
         // Compute CC distribution
-        const listCC=_.countBy(data, function(e) { return e.Phylogeny.ClonalComplex })
+        const listCC=_.countBy(data, function(e) { return e.Phylogeny.Serovar })
         Highcharts.chart('distribution', {
             chart: {
             type: 'column'
