@@ -150,3 +150,9 @@ $('.ui.footer.form').on('submit', function(e){
         })
     }
 })
+$(document).ready(function() { 
+    // Hide highcharts credits because non-commercial use
+    if($('.highcharts-credits')){
+        $('.highcharts-credits').hide()
+    }
+});

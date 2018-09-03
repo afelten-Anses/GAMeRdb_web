@@ -84,7 +84,8 @@ $(document).ready(function() {
             { data: 'Genome.GFF' , "title": "GFF"},
             { data: 'Genome.GBK' , "title": "GBK"},
             { data: 'Report' , "title": "ARTwork report"},
-            { data: 'Report' , "title": "ARTwork HTML report"}
+            { data: 'Report' , "title": "ARTwork HTML report"},
+            { data: 'Reads.NbReads' , "title": "Number of reads"}
         ],
         columnDefs: 
         [   
@@ -207,6 +208,10 @@ $(document).ready(function() {
                 {
                     return '<a href="'+data+'.html'+'" target="_blank" rel="noopener noreferrer">View</a>'; //important ==> format txt.html
                 }
+            },
+            {
+                "targets":17,
+                visible:false
             }
         ],
         //"scrollX": true, // Vertically scrollable table
@@ -377,4 +382,11 @@ $(document).ready(function() {
         Why not typing '|' directly? Because 'copy ids' tools returns strings separated by ' ' */
         $('#table_id').DataTable().search($('.dataTables_filter input').val().split(' ').join('|'),true).draw(); 
     } );
+    // Used in Datatabes distribution pages : search exact match for CC,ST, or serovar
+    $('g text[opacity]').click(function(){
+    table
+        .column(3,4)
+        .search( "^" + $(this).text() + "$", true, false, true)
+        .draw()
+    })
 });

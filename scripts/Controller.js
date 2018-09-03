@@ -243,7 +243,11 @@ const server = http.createServer((req, res) => {
         views.renderDataTables(species, contents, res, template, msg);
       } else if (templateFilePath.indexOf('refs') >= 0) {
         views.renderDataTablesRefs(species, contents, res, template, msg);
-      } else if (templateFilePath.indexOf('distribution') >= 0) {
+      } else if (templateFilePath.indexOf('ccdistribution') >= 0) {
+        views.renderDataTables(species, contents, res, template, msg);
+      } else if (templateFilePath.indexOf('stdistribution') >= 0) {
+        views.renderDataTables(species, contents, res, template, msg);
+      } else if (templateFilePath.indexOf('sdistribution') >= 0) {
         views.renderDataTables(species, contents, res, template, msg);
       }
     });
@@ -255,8 +259,12 @@ const server = http.createServer((req, res) => {
     console.log('routeFilesBySpecies'); // debug
     if (urlPath === `/species/${species}/blast`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/../interface/views/species/${species}/blast.html`, 200); // Blast
-    } else if (urlPath === `/species/${species}/distribution`) {
-      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/distribution.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // CC/ST/Serovar distribution
+    } else if (urlPath === `/species/${species}/ccdistribution`) {
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/ccdistribution.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // CC/ST/Serovar distribution
+    }else if (urlPath === `/species/${species}/stdistribution`) {
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/stdistribution.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // CC/ST/Serovar distribution
+    }else if (urlPath === `/species/${species}/sdistribution`) {
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/sdistribution.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // CC/ST/Serovar distribution
     } else if (urlPath === `/species/${species}/genomes`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
     } else if (urlPath === `/species/${species}/refs`) {
