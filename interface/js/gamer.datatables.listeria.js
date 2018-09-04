@@ -383,10 +383,20 @@ $(document).ready(function() {
         $('#table_id').DataTable().search($('.dataTables_filter input').val().split(' ').join('|'),true).draw(); 
     } );
     // Used in Datatabes distribution pages : search exact match for CC,ST, or serovar
-    $('g text[opacity]').click(function(){
-    table
-        .column(3,4)
-        .search( "^" + $(this).text() + "$", true, false, true)
-        .draw()
-    })
+    if(wordInString(urlArray,"ccdistribution")) {
+       $('g text[opacity]').click(function(){
+        table
+            .column(4)
+            .search( "^" + $(this).text() + "$", true, false, true)
+            .draw()
+        })
+    }
+    else {
+       $('g text[opacity]').click(function(){
+        table
+            .column(3)
+            .search( "^" + $(this).text() + "$", true, false, true)
+            .draw()
+        })
+    }
 });

@@ -380,11 +380,4 @@ $(document).ready(function() {
         Why not typing '|' directly? Because 'copy ids' tools returns strings separated by ' ' */
         $('#table_id').DataTable().search($('.dataTables_filter input').val().split(' ').join('|'),true).draw(); 
     } );
-    // Used in Datatabes distribution pages
-    $('g text[opacity]').click(function(){
-    table
-        .column(4)
-        .search($(this).text(),true)
-        .draw()
-    })
 });

@@ -387,8 +387,8 @@ $(document).ready(function() {
     // Used in Datatabes distribution pages
     $('g text[opacity]').click(function(){
     table
-        .column(4)
-        .search($(this).text(),true)
+        .column(3)
+        .search( "^" + $(this).text() + "$", true, false, true)
         .draw()
     })
 });
