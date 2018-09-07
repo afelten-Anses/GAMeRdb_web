@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>About US</title>
+        <meta name="description" content="GAMeR genomic database - About us" />
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico" />
+        <!-- Common CSS -->
+        <link rel="stylesheet" type="text/css" href="../../css/gamer.common.css"/>
+        <!-- Semantic UI CSS -->
+        <link rel="stylesheet" type="text/css" href="../../../semantic/dist/semantic.min.css"/>
+        <!-- JQuery JS -->
+        <script src="../../js/jquery.min.js"></script>
+        <!-- SemanticUI JS -->
+        <script src="../../../semantic/dist/semantic.min.js"></script>
+        <!-- common JS -->
+        <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script> <!-- used in almost every page of this website -->
+    </head>
+    <body>
+        <!-- main wrapper "bloc_page". Englobe tout le site pour la mise en page globale-->
+        <div id="bloc_page">
+            <header>
+                <%include ./../interface/views/includes/header.html%></%include>
+            </header>        
+            <div class="ui stackable grid" id="aftertopmenu"> <!--grid principal (grids de grids) -->
+                <div class="one column row">
+                    <h1 class="ui center aligned icon header teal">
+                        <i class="circular users icon"></i>
+                        About Us
+                    </h1>
+                </div>
+                <div class="one centered column row">
+                    <div class="ui segment">
+                        <div class="ui people shape">
+                            <div class="sides">
+                                <!-- ACTIVE side -->
+                                <div class="active side">
+                                    <div class="ui card">
+                                        <div class="image">
+                                            <img src="/img/dreamteam.jpg">
+                                        </div>
+                                        <div class="content">
+                                            <div class="header">
+                                                Steve Jobes
+                                            </div>
+                                            <div class="meta">
+                                                <a>Acquaintances</a>
+                                            </div>
+                                            <div class="description">
+                                                Steve Jobes is a fictional character designed to resemble someone familiar to readers.
+                                            </div>
+                                        </div>
+                                        <div class="extra content">
+                                            <span class="right floated">
+                                            Joined in 2014
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- New side -->
+                                <div class="side">
+                                    <div class="ui card">
+                                        <div class="image">
+                                            <img src="/images/avatar/large/stevie.jpg">
+                                        </div>
+                                        <div class="content">
+                                            <a class="header">Stevie Feliciano</a>
+                                            <div class="meta">
+                                                <span class="date">Joined in 2014</span>
+                                            </div>
+                                            <div class="description">
+                                                Stevie Feliciano is a library scientist living in New York City. She likes to spend her time reading, running, and writing.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- New side -->
+                                <div class="side">
+                                    <div class="ui card">
+                                        <div class="image">
+                                            <img src="/images/avatar/large/stevie.jpg">
+                                        </div>
+                                        <div class="content">
+                                            <a class="header">Stevie Feliciano</a>
+                                            <div class="meta">
+                                                <span class="date">Joined in 2014</span>
+                                            </div>
+                                            <div class="description">
+                                                Stevie Feliciano is a library scientist living in New York City. She likes to spend her time reading, running, and writing.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- New side -->
+                                <div class="side">
+                                    <div class="ui card">
+                                        <div class="image">
+                                            <img src="/images/avatar/large/stevie.jpg">
+                                        </div>
+                                        <div class="content">
+                                            <a class="header">Stevie Feliciano</a>
+                                            <div class="meta">
+                                                <span class="date">Joined in 2014</span>
+                                            </div>
+                                            <div class="description">
+                                                Stevie Feliciano is a library scientist living in New York City. She likes to spend her time reading, running, and writing.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- New side -->
+                                <div class="side">
+                                    <div class="ui card">
+                                        <div class="image">
+                                            <img src="/images/avatar/large/stevie.jpg">
+                                        </div>
+                                        <div class="content">
+                                            <a class="header">Stevie Feliciano</a>
+                                            <div class="meta">
+                                                <span class="date">Joined in 2014</span>
+                                            </div>
+                                            <div class="description">
+                                                Stevie Feliciano is a library scientist living in New York City. She likes to spend her time reading, running, and writing.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="teal ui buttons" id="groupbuttons">
+                        <button class="circular ui icon button" id="left">
+                            <i class="left arrow icon"></i>
+                        </button>
+                        <button class="circular ui icon button" id="up">
+                            <i class="up arrow icon"></i>
+                        </button>
+                        <button class="circular ui icon button" id="down">
+                            <i class="down arrow icon"></i>
+                        </button>
+                        <button class="circular ui icon button" id="right">
+                            <i class="right arrow icon"></i>
+                        </button>
+                    </div>
+                    <div class="ui segment" id="lastsegment">
+                        <h2>Special thanks to</h2>
+                        <br/>
+                        <h3 class="ui header">The dream team</h3>
+                        <img class="ui large centered rounded image" src="/img/dreamteam.jpg" id="dreamteam"/>
+                        <p>Kevin for the webapp deployment, Pauline for integrating its tool (Fastosh) to the webapp, and Arnaud for 
+                        supervising <b>inexhaustibly</b> each of these two students.</p>
+                        <h3 class="ui header">Barthelemy Julien</h3>
+                        <img class="ui large centered rounded image" src="/img/bjulien.jpg" id="dreamteam"/>
+                        <p>for his <b>quality</b> drawings</p>
+                    </div>
+                </div>
+            </div>
+            <!-- ex classe sticky-->
+            <footer>
+                <%include ./../interface/views/includes/footer.html%></%include>
+            </footer>       
+        </div>
+    </body>
+    <style>
+        #aftertopmenu{
+            margin-top: 7em;
+        }
+        #dreamteam{
+            margin-top:0;
+        }
+        h2 {
+          font-weight: bold;
+          color: #00B5AD;
+          font-size: 3em;
+        }
+        #lastsegment{
+            margin-top: 4em;
+        }
+    </style>
+    <script>
+        $('.shape').shape();
+        $('#left').click( () => {
+            $('.shape').shape('flip left');
+        }); 
+        $('#up').click( () => {
+            $('.shape').shape('flip up');
+        });
+        $('#down').click( () => {
+            $('.shape').shape('flip down');
+        });
+        $('#right').click( () => {
+            $('.shape').shape('flip right');
+        });
+    </script>
+</html>

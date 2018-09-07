@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>About US</title>
+        <meta name="description" content="GAMeR genomic database - About us" />
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="../../img/favicon.ico" />
+        <!-- Common CSS -->
+        <link rel="stylesheet" type="text/css" href="../../css/gamer.common.css"/>
+        <!-- Semantic UI CSS -->
+        <link rel="stylesheet" type="text/css" href="../../../semantic/dist/semantic.min.css"/>
+        <!-- JQuery JS -->
+        <script src="../../js/jquery.min.js"></script>
+        <!-- SemanticUI JS -->
+        <script src="../../../semantic/dist/semantic.min.js"></script>
+        <!-- common JS -->
+        <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script> <!-- used in almost every page of this website -->
+    </head>
+    <body>
+        <!-- main wrapper "bloc_page". Englobe tout le site pour la mise en page globale-->
+        <div id="bloc_page">
+            <header>
+                <%include ./../interface/views/includes/header.html%></%include>
+            </header>        
+            <div class="ui stackable grid" id="aftertopmenu"> <!--grid principal (grids de grids) -->
+                <div class="sixteen wide column">
+                    <h1 class="ui header">
+                        Frequently Asked Questions (FAQ)
+                    </h1>
+                    <div class="ui styled fluid accordion">
+                        <div class="active title">
+                            <i class="dropdown icon"></i>
+                            What is the goal of this page?
+                        </div>
+                        <div class="active content">
+                            <p>Its a Frequently asked questions (FAQ) page. So We'll try to respond here to the most "possible" frequently asked questions about using
+                            this website and its features.</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Why there is nothing on the FAQ?
+                        </div>
+                        <div class="content">
+                            <p>This FAQ is still under construction.</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 3
+                        </div>
+                        <div class="content">
+                            <p>Response 3 [...]</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 4
+                        </div>
+                        <div class="content">
+                            <p>Response 4 [...]</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 5
+                        </div>
+                        <div class="content">
+                            <p>Response 5 [...]</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 6
+                        </div>
+                        <div class="content">
+                            <p>Response 6 [...]</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 7
+                        </div>
+                        <div class="content">
+                            <p>Response 7 [...]</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 8
+                        </div>
+                        <div class="content">
+                            <p>Response 8 [...]</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 9
+                        </div>
+                        <div class="content">
+                            <p>Response 9 [...]</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 10
+                        </div>
+                        <div class="content">
+                            <p>Response 10 [...]</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 11
+                        </div>
+                        <div class="content">
+                            <p>Response 11 [...]</p>
+                        </div>
+                        <div class="title">
+                            <i class="dropdown icon"></i>
+                            Answer 12
+                        </div>
+                        <div class="content">
+                            <p>Response 12 [...]</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ex classe sticky-->
+            <footer>
+                <%include ./../interface/views/includes/footer.html%></%include>
+            </footer>       
+        </div>
+    </body>
+    <style>
+        #aftertopmenu{
+            margin-top: 7em;
+        }
+    </style>
+    <script>
+        $('.ui.accordion')
+            .accordion();
+    </script>
+</html>
