@@ -117,8 +117,8 @@ $(document).ready(function() {
                         className: 'selectall',
                         action : function(e) {
                             e.preventDefault();
-                            table.rows({ search: 'applied'}).deselect();
-                            table.rows({ search: 'applied'}).select();
+                            table.rows({page:'current'}).deselect();
+                            table.rows({page:'current'}).select();
                         }
                     },
                     //copy button : export only STRAIN ID
