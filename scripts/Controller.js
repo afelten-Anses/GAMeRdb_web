@@ -1,18 +1,8 @@
 /**
      * @fileOverview GAMeRdbi Controller module. Main script of the NodeJS webapp.
      * @author Kévin Durimel <k.durimel@gmail.com>
-     * @version 0.99
+     * @version 1.99 RC
      */
-
-/* A FAIRE AVANT LA MISE EN PRODUCTION de la V2:
--En tête de reponse (res.writehead) avec 'Cache-Control': 'no-cache'
-(interet en prod : eviter biais d'affichage de pages pendant les maj du code controleur.js)
- -Ecouter sur le port 80 + mettre en place reverse proxy (avec compression de reponses http) :
-   https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
-   https://eladnava.com/binding-nodejs-port-80-using-nginx/
-   --> Utilité :  possible d'écouter sur le port 80 (dond adresse ip a taper sans le port)
-   -Démarrage automatique au boot : https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
-   -Crypter mot de passe GAMeRdb
 
 
 /* ///////////////////////////////////////////////////////////////////
@@ -438,7 +428,7 @@ const server = http.createServer((req, res) => {
   2. -Html files not related to species workspaces (homepage,tools pages) are routed
     one by one using readFileAndInclude() or  readFileAndIncludeAndRender()
 
-  3. Html files related to species workfspaces are routed by sub workfspaces
+  3. Html files related to species workfspaces are routed by sub workspaces
     using routeFilesBySpecies
 
   - err403, err404 and err500 routes are partially supported
@@ -461,6 +451,10 @@ const server = http.createServer((req, res) => {
     readFileAndIncludeAndRender('./../interface/views/homepage/index.html', 200);
   } else if (urlPath === '/tools/fastosh') {
     readFileAndInclude('./../interface/views/tools/fastosh.html', 200);
+  } else if (urlPath === '/moreinfo/about') {
+    readFileAndInclude('./../interface/views/moreinfo/about.html', 200);
+  } else if (urlPath === '/moreinfo/faq') {
+    readFileAndInclude('./../interface/views/moreinfo/faq.html', 200);
   } else if (urlPath === '/tools/fastosh_results') {
     readFileAndInclude('./../interface/views/tools/fastosh_results.html', 200);
   } else if (urlPath.indexOf('/species/') >= 0) { // indexOf returns -1 if the string is not found. It will return 0 if the string start with 'views/species'(index of the occurence)
