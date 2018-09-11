@@ -77,7 +77,7 @@ $(document).ready(function() {
             $('#run').append('<div class="ui active inline tiny loader"></div>');
             $('#reset').transition('horizontal flip')
             $('#reset').append('<div class="ui active inline tiny loader"></div>');
-            $('.ui.form.seven.wide.column.centered').append(`<br/>Fastosh is running, the process may last a long time, click <a href="../../tools/fastosh_results.html?tree=${clientuuid}">here</a> to see your results if you are not redirected after 2 minutes.`);
+            $('.ui.form.seven.wide.column.centered').append(`<br/>Fastosh is running, the process may last a long time, click <a href="../../tools/fastosh_results?tree=${clientuuid}">here</a> to see your results if you are not redirected after 2 minutes.`);
             $.ajax({
                 url: document.URL+"/"+clientuuid, 
                 timeout: 0, //secs
