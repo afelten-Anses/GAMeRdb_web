@@ -84,7 +84,7 @@ $('.ui.accordion')
             innerSize:'75%', // piechart innersize (0: fully filled)
             dataLabels: {
                 enabled: true, //allow data labels
-                format: '<b>{point.name}</b>: {point.y}({point.x}%)', //data labels format
+                format: '<b>{point.name}</b>: {point.y} ({point.x}%)', //data labels format
                 style: {
                     color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                 }

@@ -1,89 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-    <!-- GAMeRdbi V2 views : WORK IN PROGRESS -->
     <head>
         <meta charset="utf-8"/>
-        <title>GAMeRdb - Genomes </title>
-        <meta name="description" content="GAMeR genomic database - Bacillus phylogeny"/>
+        <title>Genomes</title>
+        <meta name="description" content="GAMeR genomic database - Bacillus genomes"/>
         <link rel="shortcut icon" type="image/x-icon" href="../../../img/favicon.ico" />
         <!-- SEMANTIC UI main styles-->
         <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/semantic.min.css"/>
         <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/components/icon.min.css"/>
-        <!-- Fastosh specific CSS code -->
-        <link rel="stylesheet" type="text/css" href="../../css/gamer.effects.fastoshResults.css"/>
-        <!-- common CSS -->
-        <link rel="stylesheet" type="text/css" href="../../css/gamer.common.css"/>
+        <!--DataTables css-->
+        <link rel="stylesheet" type="text/css" href="../../../css/gamer.effects.datatables.css"/> <!--DataTables custom CSS overrides-->    
+        <link rel="stylesheet" type="text/css" href="../../../css/dataTables.semanticui.min.css"/> <!--SemanticUI integration for DataTables-->
+        <link rel="stylesheet" type="text/css" href="../../../css/select.dataTables.min.css"> <!--SemanticUI styling for DataTables selected rows -->
+        <link rel="stylesheet" type="text/css" href="../../../css/buttons.semanticui.min.css"/> <!--SemanticUI styling for DataTables buttons-->       
         <!--jQuery JS-->
         <script src="../../../../js/jquery.min.js"></script>
         <script type="text/javascript" charset="utf8" src="../../../js/jquery-1.12.4.js"></script><!--jQuery version adapted to DataTables-->
         <!-- SEMANTIC UI main JS-->
         <script src="../../../../semantic/dist/semantic.min.js"></script>
-        <!-- JS Phylo -->
-        <script type="text/javascript" src="../../js/raphael-min.js" ></script> 
-	    <script type="text/javascript" src="../../js/jsphylosvg-min.js"></script>
-        <!-- Scripts for generating files client-side using blobs -->
-        <script async="" type="text/javascript" charset="utf8" src="../../js/jszip.min.js"></script>
-        <script async="" type="text/javascript" charset="utf8" src="../../js/Blob.js"></script>
-        <script async="" type="text/javascript" charset="utf8" src="../../js/canvas-toBlob.js"></script>
-        <script async="" type="text/javascript" charset="utf8" src="../../js/FileSaver.min.js"></script>
-        
-        <!-- Fastosh specific JS code -->
-        <script type="text/javascript" charset="utf8" src="../../js/gamer.fastoshGlobal.js" defer></script><!-- exec when document loaded -->
+        <!--DataTables JS-->
+        <script type="text/javascript" charset="utf8" src="../../../js/gamer.datatables.bacillus.js" defer></script><!--Setting Semantic UI custom JS effects settings + DataTables settings-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery.dataTables.min.js"></script><!--Main jQuery for Datatables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.semanticui.min.js"></script><!--SemanticUI integration for DataTables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.select.min.js"></script><!--SemanticUI integration for DataTables selected rows-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.buttons.min.js"></script><!--SemanticUI integration for DataTables selected buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.semanticui.min.js"></script><!--SemanticUI integration for DataTables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jszip.min.js"></script><!--JS class for generating or read zip files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/pdfmake.min.js"></script><!--JS class for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/vfs_fonts.js"></script><!--PdfMake dependency for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.html5.min.js" defer></script><!--JS class for generating Datatables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.print.min.js" defer></script><!--JS class for copying/priting the DataTable-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.colVis.min.js"></script><!--JS class for handling DataTables columns visibility-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.colReorder.min.js"></script>
+        <!--<script async="" type="text/javascript" charset="utf8" src="../../../js/Blob.js"></script>
+        <script async="" type="text/javascript" charset="utf8" src="../../../js/canvas-toBlob.js"></script>
+        <script async="" type="text/javascript" charset="utf8" src="../../../js/FileSaver.min.js"></script>-->
         <!-- common JS -->
         <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script><!-- exec when document loaded -->
     </head>
     <body>    
-        <div id="bloc_page"><!-- main wrapdper-->
+        <div id="bloc_page"><!-- main wrapper-->
             <header>
                 <%include ./../interface/views/includes/header.html%></%include>
-            </header>
+            </header> 
+            <!-- Visible modal when "download" was clicked : start -->
+            <div class="ui basic modal preparing">
+                <div class="ui indeterminate big text loader">We are preparing your files</div>
+            </div>
+            <!-- Visible modal when "download" was clicked : end -->
+            <div class="ui small modal pleaseselect">
+                <i class="close icon"></i>
+                <div class="header">
+                    No download settings
+                </div>
+                <div class="image content">
+                    <div class="image">
+                        <img class="ui tiny image" src="../../../img/dna.png">
+                    </div>
+                    <div class="description">
+                        <i class="hand point right icon"></i><span class="ui small header"><b>Please select which kind of files you want to download:</b></span>
+                        <ol>
+                            <li>Select strains from the table (left click or CTRL+left click or SHIFT+left click)</li>
+                            <li>Then, go to bottom section: <i class="small cloud download icon"></i>download settings</li>
+                            <li>Then, click download</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
             <!-- Visible modal when "need help?" was clicked : start -->
             <%include ./../interface/views/includes/genomes_help.html%></%include>
-            <!-- Visible modal when "need help?" was clicked : end -->
+            <!-- Visible modal when "need help?" was clicked : start -->
+            <!-- Visible EMBED MultiQC when "MultiQC report was clicked: end-->
+            <div class="ui massive modal scrolling vontent transition" >
+                <div class="column" id="multiQC">
+                    <div class="ui medium message">
+                        <span class="ui medium header"> 
+                            MultiQC of the <i>Bacillus</i> strains processed by ARTwork (updated monthly)
+                            <br/>
+                            Full page available <a href="../../multiqc/Bacillus_multiqc_report.html" target="_blank" rel="noopener noreferrer">here</a>
+                        </span>    
+                    </div>
+                    <iframe src="../../multiqc/Bacillus_multiqc_report.html" id="MultiQC_preview"></iframe> 
+                </div>
+            </div>
+            <!-- Visible EMBED MultiQC when "MultiQC report was clicked: start-->
             <!------------------------------------------------------------------>
             <!-- MAIN PAGE -->
             <!------------------------------------------------------------------>
             <div class="ui stackable grid" id="aftertopmenu"> 
                 <!--LEFT GRID : vertical menu -->
                 <div class="two wide column" id="leftmenu">
+                    <div class="ui sticky vertical menu">
+                        <a class="active yellow item" data-tooltip="Browse and download Bacillus data generated by ARTwork" data-position="right center" data-variation="wide" data-inverted="" href="../bacillus/genomes">
+                            Genomes (<%JSONlen%></%JSONlen%>)
+                        </a>
+                        <a class="item" data-tooltip="Browse and download WGS data about Bacillus reference genomes" data-position="right center" data-variation="wide" data-inverted="" href="../bacillus/refs">
+                            References
+                        </a>
+                        <a class="item" data-tooltip="Global phylogeny of the Bacillus processed by ARTwork" data-position="right center" data-variation="huge" data-inverted="" href="../bacillus/phylogeny">
+                            Phylogeny
+                        </a>
+                    </div>
                 </div>     
-                <!--CENTER grid : Fashtosh JSphylosvg -->
-                <div class="nine wide column" id="centermenu">
+                <!--RIGHT grid : DataTables -->
+                <div class="twelve wide column" id="centermenu">
                     <div class="ui grid">
-                        <div class="twelve wide column">
-                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text">Bacillus phylogeny</span></h1>
+                        <div class="eight wide column">
+                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text"><i>Bacillus </i>genomes </span></h1>
                         </div>
-                        <div class="four wide right aligned column" id="helpme">
+                        <div class="eight wide right aligned column" id="helpme">
                             <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
                         </div>
                     </div>
                     <div class="ui divider"></div>
-                    <div class="ui grid">
-                        <div class="column" id="svgCanvasRect">
-                            <!-- tree visualisation or input -->
-                        </div>
+                    <div class="column">
+                        <table id="table_id" class="ui selectable striped celled blue padded table center aligned">
+                        </table>
+                        
                     </div>
-                    <div class="ui grid">
-                       <div class="column" id="svgCanvas">
-                            <!-- tree visualisation or input -->
+                    <div class="ui divider">
+                    </div>
+                    <div class="column" id="dlcheckbox">
+                        <div class="field">
+                            <i class="large cloud download icon"></i><span class="ui small header"> Download settings</span>
+                        </div>
+                        <div class="ui form">
+                            <br/>
+                            <div class="inline multiple fields">
+                                <div class="field">
+                                    <div class="ui slider checkbox">
+                                        <input id="All" type="checkbox">
+                                        <label>Download all</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="inline multiple fields"><!--custom classes : ui radio checkbox {report;wgs} in order to enable check all by groupe-->
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="fastq" type="checkbox">
+                                        <label>Normalized reads (fastq)</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>Variants</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>Contigs</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>Assembly</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>GBK</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>GFF</label>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui radio checkbox">
+                                        <input name="frequency" type="checkbox">
+                                        <label>ARTwork report</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="ui left floated teal button" id="dtDownload">Download</button>
                         </div>
                     </div>
                 </div>
-                <!--RIGHT grid : Fashtosh results buttons -->
-                <div class="three wide column" id="leftmenu">
-                    <div class="ui vertical big basic blue buttons" id="handleresults">
-                        <button class="ui labeled icon button" id="switchtree"><i class="eye icon"></i>Switch for rectangular tree</button>
-                        <button class="ui labeled icon button" id="switchtreeRect"><i class="eye icon"></i>Switch for circular tree</button>
-                        <a href="newick" download><button class="ui labeled icon button" id="newick"><i class="download icon"></i> Download newick</button></a>
-                        <a href="distance_matrix" download><button class="ui labeled icon button" id="matrix"><i class="download icon"></i>Download distance matrix </button></a>
-                        <button class="ui labeled icon button" id="dlimage"><i class="download icon"></i>Download images</button>
-                        <button class="ui labeled icon button" id="dlall"><i class="download icon"></i>Download all</button>
-                        <a href="fastosh"><button class="ui labeled icon button" id="retry"><i class="redo icon"></i>Retry</button></a>
-                    </div>
-                </div>   
             </div>
             <footer class= "sticky">
                 <%include ./../interface/views/includes/footer.html%></%include>
             </footer>
         </div>
     </body>
+    <script>
+        <!--from GAMeRdb JSON and species specific : add species DataTables and MultiQC caption-->
+        /*$('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global view files quality, please check the <a href="../../multiqc/Bacillus_multiqc_report"> MultiQC report</a></caption>');*/
+        $('#table_id').append('<caption style="caption-side: bottom" id="multiqc"><br/>For a global overview of files quality, please check the <a href="#"> MultiQC report</a></caption>');
+        var data = <%datatablesJSON%>
+    </script>
+</html>
