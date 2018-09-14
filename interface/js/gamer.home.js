@@ -12,6 +12,7 @@ $('.ui.accordion')
         // ------------ Retrieve GAMeRdb info in JSON files ------------ //
         
         // Separe JSON info by species in specific JSONs
+	let bacJSON=_.filter(JSONstring, function(a){ return a.Phylogeny && a.Phylogeny.Genus === "Bacillus"; });
         let closJSON=_.filter(JSONstring, function(a){ return a.Phylogeny && a.Phylogeny.Genus === "Clostridium"; });
         let lisJSON=_.filter(JSONstring, function(a){ return a.Phylogeny && a.Phylogeny.Genus === "Listeria"; });
         let staphJSON=_.filter(JSONstring, function(a){ return a.Phylogeny && a.Phylogeny.Genus === "Staphylococcus"; });
@@ -107,7 +108,7 @@ $('.ui.accordion')
                     "y": closJSON.length,
                     "x":round(((closJSON.length/JSONlength)*100),1),
                     // no CC/ST/Serovar distribution available for Clostridium : no drilldown
-                },
+                },	
                 {
                     "name": "Listeria",
                     "y": lisJSON.length,
@@ -125,6 +126,12 @@ $('.ui.accordion')
                     "y": staphJSON.length,
                     "x":round(((staphJSON.length/JSONlength)*100),2),
                     "drilldown": "Staphylococcus"
+                },
+		{
+                    "name": "Bacillus",
+                    "y": bacJSON.length,
+                    "x":round(((bacJSON.length/JSONlength)*100),1),
+                    // no CC/ST/Serovar distribution available for Bacillus : no drilldown
                 }
             ]
         }
