@@ -74,6 +74,7 @@ $(document).ready(function() {
             { data: 'Project' , "title": "Project"},
             { data: 'Reads.Center' , "title": "Center"},
             { data: 'Phylogeny.Serovar' , "title": "Predicted Serovar"},
+	    { data: 'Phylogeny.Antigenic_profile' , "title": "Predicted Antigenic Profile"},
             { data: 'Reads.FASTQC_pair1', "title": " Fastqc R1"},
             { data: 'Reads.FASTQC_pair2' , "title": "Fastqc R2"},
             { data: 'Reads.FASTQ_pair1' , "title": "Normalized reads R1"},
@@ -86,7 +87,15 @@ $(document).ready(function() {
             { data: 'Genome.GBK' , "title": "GBK"},
             { data: 'Report' , "title": "ARTwork report"},
             { data: 'Report' , "title": "ARTwork HTML report"},
-            { data: 'Reads.NbReads' , "title": "Number of reads"}
+            { data: 'Reads.NbReads' , "title": "Number of reads"},
+	    { data: 'Reads.BreadthCoverage' , "title": "Breadth coverage (%)"},
+	    { data: 'Genome.N50' , "title": "N50"},
+	    { data: 'Genome.NbContigs' , "title": "Number of contigs"},
+	    { data: 'Genome.GenomeFraction' , "title": "Genome fraction (%)"},
+	    { data: 'Genome.LargestContig' , "title": "Largest contig"},
+	    { data: 'Genome.TotalLength' , "title": "Total assembly length"},
+	    { data: 'Reads.RefSNP' , "title": "SNP reference"},
+	    { data: 'Genome.RefScaffold' , "title": "Scaffolding reference"}
             
         ],
         columnDefs: 
@@ -100,8 +109,12 @@ $(document).ready(function() {
                     return '<b>'+data+'</b>';
                 }
             },
+	    {
+                "targets":4,
+                visible:false
+            },
             {
-                "targets": 4,
+                "targets": 5,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -110,7 +123,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":5,
+                "targets":6,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -119,7 +132,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":6,
+                "targets":7,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
@@ -128,7 +141,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":7,
+                "targets":8,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
@@ -137,7 +150,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":8,
+                "targets":9,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
@@ -146,17 +159,8 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":9,
-                visible:false,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
-                }
-            },
-            {
                 "targets":10,
+                visible:false,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -170,11 +174,20 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
                 }
             },
             {
                 "targets":12,
+                orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
+                }
+            },
+            {
+                "targets":13,
                 visible:false,
                 orderable: false,
                 "data": "link",
@@ -184,7 +197,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":13,
+                "targets":14,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -193,7 +206,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":14,
+                "targets":15,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -202,7 +215,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":15,
+                "targets":16,
                 visible:false,
                 orderable: false,
                 "data": "link",
@@ -212,7 +225,39 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":16,
+                "targets":17,
+                visible:false
+            },
+	    {
+                "targets":18,
+                visible:false
+            },
+	    {
+                "targets":19,
+                visible:false
+            },
+	    {
+                "targets":20,
+                visible:false
+            },
+	    {
+                "targets":21,
+                visible:false
+            },
+	    {
+                "targets":22,
+                visible:false
+            },
+	    {
+                "targets":23,
+                visible:false
+            },
+	    {
+                "targets":24,
+                visible:false
+            },
+	    {
+                "targets":25,
                 visible:false
             }
         ],
@@ -248,11 +293,11 @@ $(document).ready(function() {
                     },
                     //excel button : export only colums containing text metadatas (not links to files)
                     { 
-                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3]}
+                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,18,19,20,22,23,24,25]}
                     },
                     //pdf button : eexport only colums containing text metadatas (not links to files), at a landscape format (useful in order to do not crop table)
                     {
-                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3]}
+                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,18,19,20,22,23,24,25]}
                     },
                     //column visibility button
                     {

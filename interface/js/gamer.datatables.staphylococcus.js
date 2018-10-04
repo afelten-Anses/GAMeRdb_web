@@ -84,7 +84,15 @@ $(document).ready(function() {
             { data: 'Genome.GBK' , "title": "GBK"},
             { data: 'Report' , "title": "ARTwork report"},
             { data: 'Report' , "title": "ARTwork HTML report"},
-            { data: 'Reads.NbReads' , "title": "Number of reads"}
+            { data: 'Reads.NbReads' , "title": "Number of reads"},
+	    { data: 'Reads.BreadthCoverage' , "title": "Breadth coverage (%)"},
+	    { data: 'Genome.N50' , "title": "N50"},
+	    { data: 'Genome.NbContigs' , "title": "Number of contigs"},
+	    { data: 'Genome.GenomeFraction' , "title": "Genome fraction (%)"},
+	    { data: 'Genome.LargestContig' , "title": "Largest contig"},
+	    { data: 'Genome.TotalLength' , "title": "Total assembly length"},
+	    { data: 'Reads.RefSNP' , "title": "SNP reference"},
+	    { data: 'Genome.RefScaffold' , "title": "Scaffolding reference"}
         ],
         columnDefs: 
         [   
@@ -211,6 +219,38 @@ $(document).ready(function() {
             {
                 "targets":16,
                 visible:false
+            },
+            {
+                "targets":17,
+                visible:false
+            },
+	    {
+                "targets":18,
+                visible:false
+            },
+	    {
+                "targets":19,
+                visible:false
+            },
+	    {
+                "targets":20,
+                visible:false
+            },
+	    {
+                "targets":21,
+                visible:false
+            },
+	    {
+                "targets":22,
+                visible:false
+            },
+	    {
+                "targets":23,
+                visible:false
+            },
+	    {
+                "targets":24,
+                visible:false
             }
         ],
         //"scrollX": true, // Vertically scrollable table
@@ -245,11 +285,11 @@ $(document).ready(function() {
                     },
                     //excel button : export only colums containing text metadatas (not links to files)
                     { 
-                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3]}
+                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,17,18,19,20,22,23,24]}
                     },
                     //pdf button : eexport only colums containing text metadatas (not links to files), at a landscape format (useful in order to do not crop table)
                     {
-                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3]}
+                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,17,18,19,20,22,23,24]}
                     },
                     //column visibility button
                     {
