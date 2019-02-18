@@ -313,11 +313,11 @@ const server = http.createServer((req, res) => {
             if (validator.isJSON(JSON.stringify(post))) {
               const clientuid = req.url.split('/').pop();
               // Create tmp directory (with uuid) SYNChronously ({ async: false })
-              shell.exec('mkdir -p /mnt/20To-vol/tmp/' + clientuid, { async: false });
+              shell.exec('mkdir -p /global/scratch/tmp/' + clientuid, { async: false });
               console.log('uuuid : ', clientuid);
               // Init filelist to zip
-              const stream = fs.createWriteStream('/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt'); // fs object containing list of files to zip
-              const zipfilesList = '/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt' // list of files to zip
+              const stream = fs.createWriteStream('/global/scratch/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt'); // fs object containing list of files to zip
+              const zipfilesList = '/global/scratch/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt' // list of files to zip
               const zipOutputPathToSend = 'tmp/' + clientuid + '/wgsdata_' + clientuid + '.zip'
               console.log('files streamed: '); // debug
               // debug : stdout files list to zip
