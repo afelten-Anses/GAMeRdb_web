@@ -90,6 +90,8 @@ def make_sketch_files(input_file, nbThreads, kmer_size, sketch_size):
 
 	sketch_files = []
 
+	os.system("cp " + input_file + " /global/scratch/tmp/tata")
+
 	for path in paths :
 
 		path = path.rstrip()
@@ -130,7 +132,7 @@ def make_dist_tab(fasta_querie, fasta_targets, nbThreads, mashDist, dir_name):
 	# la sortie de mash est écrite dans outputFile_name
 
 	outputFile_name = fasta_querie.split('/')[-1] + "_dist.tsv"
-	outputFile = open(dir_name + outputFile_name,'w')
+	#outputFile = open(dir_name + outputFile_name,'w')
 
 	if mashDist :
 		os.system("mash dist -t -p " + str(nbThreads) + " " + fasta_querie + \
@@ -153,6 +155,7 @@ def mash_dist_loop(sketch_files, nbThreads, mashDist, dir_name):
 
 	for sketch_file in sketch_files :
 
+		os.system("echo " + sketch_file + " >> /global/scratch/tmp/toto")
 		sketch_targets = copy.copy(sketch_files)
 		sketch_targets.remove(sketch_file)
 
@@ -317,6 +320,8 @@ def write_reroot_tree(reroot_tree, tree_file_name):
 
 
 def main():
+
+	os.system("sleep 10")
 
 	begin = time.time()
 	##################### gets arguments #####################

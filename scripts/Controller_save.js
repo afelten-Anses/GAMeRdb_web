@@ -28,7 +28,7 @@ const shell = require('shelljs'); // run bash scripts from NodeJS
 // const crypto = require("crypto"); // used for generating uuids --> now generated on client-side
 
 // ------------- Configuration ------------- //
-let listenIp = process.argv[2] || '192.168.184.55'; // default listening ip
+let listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
 let listenPort = process.argv[3] || 3000; // default listening port
 let nbThreads = 38;
 
@@ -42,7 +42,7 @@ args // App usage (help)
 
 // if  --dev mode: change localhost ip to server ip
 if (args.dev) {
-  listenIp = '192.168.184.55';
+  listenIp = '192.168.184.133';
   listenPort = 3001;
 }
 if (args.local) {
@@ -518,10 +518,7 @@ const server = http.createServer((req, res) => {
               }
             });
             // // Launch Fashtosh script asynchrously (=when callback)
-            const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 1', { async: true });
-	
-            //const fastosh = shell.exec('echo FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 1 > ' + fashtoshTmpPath + 'command.txt', { async: true });
-
+            const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
             // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
             // Serve files when child process ended
             fastosh.stdout.on('end', (data) => {;
