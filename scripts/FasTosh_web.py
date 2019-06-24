@@ -90,8 +90,6 @@ def make_sketch_files(input_file, nbThreads, kmer_size, sketch_size):
 
 	sketch_files = []
 
-	os.system("cp " + input_file + " /global/scratch/tmp/tata")
-
 	for path in paths :
 
 		path = path.rstrip()
@@ -155,7 +153,6 @@ def mash_dist_loop(sketch_files, nbThreads, mashDist, dir_name):
 
 	for sketch_file in sketch_files :
 
-		os.system("echo " + sketch_file + " >> /global/scratch/tmp/toto")
 		sketch_targets = copy.copy(sketch_files)
 		sketch_targets.remove(sketch_file)
 
