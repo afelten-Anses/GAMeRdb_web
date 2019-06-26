@@ -29,7 +29,7 @@
         <script async="" type="text/javascript" charset="utf8" src="../../js/FileSaver.min.js"></script>
         
         <!-- Fastosh specific JS code -->
-        <script type="text/javascript" charset="utf8" src="../../js/gamer.fastoshGlobal.js" defer></script><!-- exec when document loaded -->
+        <!--<script type="text/javascript" charset="utf8" src="../../js/gamer.fastoshGlobal.js" defer></script> exec when document loaded -->
         <!-- common JS -->
         <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script><!-- exec when document loaded -->
     </head>
@@ -54,7 +54,7 @@
                         <a class="item" data-tooltip="Browse and download WGS data about Salmonella reference genomes" data-position="right center" data-variation="wide" data-inverted="" href="../salmonella/refs">
                             References
                         </a>
-                        <a class="item" data-tooltip="Global overview of the Salmonella strains processed by ARTwork" data-position="right center" data-variation="wide" data-inverted="" href="../listeria/stdistribution">
+                        <a class="item" data-tooltip="Global overview of the Salmonella strains processed by ARTwork" data-position="right center" data-variation="wide" data-inverted="" href="../salmonella/sdistribution">
                             Serovars
                         </a>
                         <a class="active yellow item" data-tooltip="Global phylogeny of the Salmonella processed by ARTwork" data-position="right center" data-variation="huge" data-inverted="" href="../salmonella/phylogeny">
@@ -62,38 +62,16 @@
                         </a>
                     </div>
                 </div>    
-                <!--CENTER grid : Fashtosh JSphylosvg -->
-                <div class="nine wide column" id="centermenu">
-                    <div class="ui grid">
-                        <div class="twelve wide column">
-                            <h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text">Salmonella phylogeny</span></h1>
-                        </div>
-                        <div class="four wide right aligned column" id="helpme">
-                            <i class="right aligned circular teal help icon" id="helpgrow"></i><span class="ui small header" id="texthover">Need help?</span>
-                        </div>
-                    </div>
-                    <div class="ui divider"></div>
-                    <div class="ui grid">
-                        <div class="column" id="svgCanvasRect">
-                            <!-- tree visualisation or input -->
-                        </div>
-                    </div>
-                    <div class="ui grid">
-                       <div class="column" id="svgCanvas">
-                            <!-- tree visualisation or input -->
-                        </div>
-                    </div>
-                </div>
+
+		<center><h1 class="ui huge header" id="datatables_header"><span class="datatables_header_text">Salmonella phylogeny</span></h1></center>
+		<div class="two wide column" id="rightmenu">
+		<h7 id="datatables_header"><span class="datatables_header_text">/!\ Impossible to visualize the tree (too many strains). Please, download the newick file and use viewer like <a href="https://itol.embl.de/" target="_blank"> iTol </a> or <a href="http://dendroscope.org/" target="_blank"> dendroscrope </a>.</span></h7>
+		 </div>
                 <!--RIGHT grid : Fashtosh results buttons -->
                 <div class="three wide column" id="rightmenu">
                     <div class="ui vertical big basic blue buttons" id="handleresults">
-                        <button class="ui labeled icon button" id="switchtree"><i class="eye icon"></i>Switch for rectangular tree</button>
-                        <button class="ui labeled icon button" id="switchtreeRect"><i class="eye icon"></i>Switch for circular tree</button>
-                        <a href="newick" download><button class="ui labeled icon button" id="newick"><i class="download icon"></i> Download newick</button></a>
-                        <a href="distance_matrix" download><button class="ui labeled icon button" id="matrix"><i class="download icon"></i>Download distance matrix </button></a>
-                        <button class="ui labeled icon button" id="dlimage"><i class="download icon"></i>Download images</button>
-                        <button class="ui labeled icon button" id="dlall"><i class="download icon"></i>Download all</button>
-                        <a href="fastosh"><button class="ui labeled icon button" id="retry"><i class="redo icon"></i>Retry</button></a>
+			<a href="../../phylogeny_global/salmonella/taxonomy.nwk" download><button class="ui labeled icon button" id="matrix"><i class="download icon"></i>Download newick </button></a>
+                        <a href="../../phylogeny_global/salmonella/distance_matrix.tsv" download><button class="ui labeled icon button" id="matrix"><i class="download icon"></i>Download distance matrix </button></a>
                     </div>
                 </div>   
             </div>

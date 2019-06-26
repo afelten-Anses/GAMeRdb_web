@@ -5,7 +5,7 @@ let species = window.location.pathname.split('/')[2];
 
 
 $(document).ready(function() {
-    $.get( "../../tmp/fastosh_" + species + "/taxonomy.nwk", function( data,err ) {
+    $.get( "../../phylogeny_global/" + species + "/taxonomy.nwk", function( data,err ) {
         const dataNewick = data;
         const dataObject = dataNewick;
         phylocanvas = new Smits.PhyloCanvas(
@@ -27,8 +27,8 @@ $(document).ready(function() {
     }).fail(function() {
         console.warn("Cannot retrieve global phylogeny");
     });
-    $('a[href="distance_matrix"]').attr('href',"../../tmp/fastosh_" + species + "/distance_matrix.tsv")
-    $('a[href="newick"]').attr('href',"../../tmp/fastosh_" + species + "/taxonomy.nwk")
+    $('a[href="distance_matrix"]').attr('href',"../../phylogeny_global/" + species + "/distance_matrix.tsv")
+    $('a[href="newick"]').attr('href',"../../phylogeny_global/" + species + "/taxonomy.nwk")
     
 });
 
@@ -114,12 +114,12 @@ phylocanvas.getSvgSource() because it seems buggy when used for more than 1 tree
 allfiles.file("Rectangular_Tree.svg", $('#svgCanvasRect')[0].outerHTML); 
 allfiles.file("Circular_tree.svg", $('#svgCanvas')[0].outerHTML);
 let distMatrix=$.get({
-    url: "../../tmp/fastosh_" + species + "/distance_matrix.tsv",
+    url: "../../phylogeny_global/" + species + "/distance_matrix.tsv",
     async:false
 });
 allfiles.file("distance_matrix.tsv", distMatrix); 
 let newick=$.get({
-    url: "../../tmp/fastosh_" + species + "/taxonomy.nwk",
+    url: "../../phylogeny_global/" + species + "/taxonomy.nwk",
     async:false
 });
 allfiles.file("taxonomy.nwk", newick); 

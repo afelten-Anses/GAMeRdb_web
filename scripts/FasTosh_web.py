@@ -318,7 +318,7 @@ def write_reroot_tree(reroot_tree, tree_file_name):
 
 def main():
 
-	os.system("sleep 10")
+	os.system("sleep 2")
 
 	begin = time.time()
 	##################### gets arguments #####################
