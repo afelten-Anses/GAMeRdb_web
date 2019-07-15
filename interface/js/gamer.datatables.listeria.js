@@ -75,6 +75,9 @@ $(document).ready(function() {
             { data: 'Phylogeny.ClonalComplex' , "title": "Predicted CC"},
             { data: 'Reads.FASTQC_pair1', "title": " Fastqc R1"},
             { data: 'Reads.FASTQC_pair2' , "title": "Fastqc R2"},
+            { data: 'Contam.ContamStatus' , "title": "ContamStatus"},
+            { data: 'Contam.NumContamSNVs' , "title": "NumContamSNVs"},
+            { data: 'Contam.percentContam' , "title": "percentContam" },
             { data: 'Reads.FASTQ_pair1' , "title": "Normalized reads R1"},
             { data: 'Reads.FASTQ_pair2' , "title": "Normalized reads R2"},
             { data: 'Reads.VCF' , "title": "Variants"},
@@ -106,6 +109,10 @@ $(document).ready(function() {
                     return '<b>'+data+'</b>';
                 }
             },
+	    {
+                "targets":2,
+                visible:false
+            },
             {
                 "targets": 5,
                 orderable: false,
@@ -125,7 +132,15 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":7,
+                "targets":8,
+                visible:false
+            },
+            {
+                "targets":9,
+                visible:false
+            },
+            {
+                "targets":10,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
@@ -134,7 +149,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":8,
+                "targets":11,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
@@ -143,40 +158,12 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":9,
+                "targets":12,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
                     return '<a href="'+data+'" download>gVCF</a>';
-                }
-            },
-            {
-                "targets":10,
-                visible:false,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
-                }
-            },
-            {
-                "targets":11,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
-                }
-            },
-            {
-                "targets":12,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
                 }
             },
             {
@@ -186,7 +173,7 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GFF</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
                 }
             },
             {
@@ -195,7 +182,7 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GBK</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
                 }
             },
             {
@@ -204,7 +191,7 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Txt</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
                 }
             },
             {
@@ -214,22 +201,39 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'.html'+'" target="_blank" rel="noopener noreferrer">View</a>'; //important ==> format txt.html
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GFF</a>';
                 }
             },
             {
                 "targets":17,
-                visible:false
+                orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GBK</a>';
+                }
             },
-	    {
+            {
                 "targets":18,
-                visible:false
+                visible:false,
+                orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Txt</a>';
+                }
             },
-	    {
+            {
                 "targets":19,
-                visible:false
+                visible:false,
+                orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<a href="'+data+'.html'+'" target="_blank" rel="noopener noreferrer">View</a>'; //important ==> format txt.html
+                }
             },
-	    {
+            {
                 "targets":20,
                 visible:false
             },
@@ -251,6 +255,18 @@ $(document).ready(function() {
             },
 	    {
                 "targets":25,
+                visible:false
+            },
+	    {
+                "targets":26,
+                visible:false
+            },
+	    {
+                "targets":27,
+                visible:false
+            },
+	    {
+                "targets":28,
                 visible:false
             }
         ],
@@ -286,11 +302,11 @@ $(document).ready(function() {
                     },
                     //excel button : export only colums containing text metadatas (not links to files)
                     { 
-                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,18,19,20,22,23,24,25]}
+                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,7,8,9,21,22,23,25,26,27,28]}
                     },
                     //pdf button : eexport only colums containing text metadatas (not links to files), at a landscape format (useful in order to do not crop table)
                     {
-                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,18,19,20,22,23,24,25]}
+                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,7,8,9,21,22,23,25,26,27,28]}
                     },
                     //column visibility button
                     {
