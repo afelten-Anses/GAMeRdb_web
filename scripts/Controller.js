@@ -28,9 +28,9 @@ const shell = require('shelljs'); // run bash scripts from NodeJS
 // const crypto = require("crypto"); // used for generating uuids --> now generated on client-side
 
 // ------------- Configuration ------------- //
-let listenIp = process.argv[2] || '192.168.184.55'; // default listening ip
+let listenIp = process.argv[2] || '192.168.1.184'; // default listening ip
 let listenPort = process.argv[3] || 3000; // default listening port
-let nbThreads = 38;
+let nbThreads = 30;
 
 args // App usage (help)
   .version('0.99')
@@ -42,7 +42,7 @@ args // App usage (help)
 
 // if  --dev mode: change localhost ip to server ip
 if (args.dev) {
-  listenIp = '192.168.184.55';
+  listenIp = '192.168.1.184';
   listenPort = 3001;
 }
 if (args.local) {
