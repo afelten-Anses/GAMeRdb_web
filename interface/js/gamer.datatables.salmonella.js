@@ -77,6 +77,9 @@ $(document).ready(function() {
 	    { data: 'Phylogeny.Antigenic_profile' , "title": "Predicted Antigenic Profile"},
             { data: 'Reads.FASTQC_pair1', "title": " Fastqc R1"},
             { data: 'Reads.FASTQC_pair2' , "title": "Fastqc R2"},
+            { data: 'Contam.ContamStatus' , "title": "ContamStatus"},
+            { data: 'Contam.NumContamSNVs' , "title": "NumContamSNVs"},
+            { data: 'Contam.percentContam' , "title": "percentContam" },
             { data: 'Reads.FASTQ_pair1' , "title": "Normalized reads R1"},
             { data: 'Reads.FASTQ_pair2' , "title": "Normalized reads R2"},
             { data: 'Reads.VCF' , "title": "Variants"},
@@ -95,7 +98,10 @@ $(document).ready(function() {
 	    { data: 'Genome.LargestContig' , "title": "Largest contig"},
 	    { data: 'Genome.TotalLength' , "title": "Total assembly length"},
 	    { data: 'Reads.RefSNP' , "title": "SNP reference"},
-	    { data: 'Genome.RefScaffold' , "title": "Scaffolding reference"}
+	    { data: 'Genome.RefScaffold' , "title": "Scaffolding reference"},
+        { data: 'Gene.resfinder' , "title": "Antibiotic resistance"},
+        { data: 'Gene.vfdb' , "title": "Virulence factors"},
+        { data: 'Gene.spi' , "title": "SPI"}
             
         ],
         columnDefs: 
@@ -108,6 +114,10 @@ $(document).ready(function() {
                 {
                     return '<b>'+data+'</b>';
                 }
+            },
+            {
+                "targets":2,
+                visible:false
             },
 	    {
                 "targets":4,
@@ -132,7 +142,15 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":7,
+                "targets":8,
+                visible:false
+            },
+            {
+                "targets":9,
+                visible:false
+            },
+            {
+                "targets":10,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
@@ -141,7 +159,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":8,
+                "targets":11,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
@@ -150,40 +168,12 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":9,
+                "targets":12,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
                     return '<a href="'+data+'" download>gVCF</a>';
-                }
-            },
-            {
-                "targets":10,
-                visible:false,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
-                }
-            },
-            {
-                "targets":11,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
-                }
-            },
-            {
-                "targets":12,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
                 }
             },
             {
@@ -193,7 +183,7 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GFF</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
                 }
             },
             {
@@ -202,7 +192,7 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GBK</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
                 }
             },
             {
@@ -211,7 +201,7 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Txt</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
                 }
             },
             {
@@ -221,22 +211,39 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'.html'+'" target="_blank" rel="noopener noreferrer">View</a>'; //important ==> format txt.html
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GFF</a>';
                 }
             },
             {
                 "targets":17,
-                visible:false
+                orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GBK</a>';
+                }
             },
-	    {
+            {
                 "targets":18,
-                visible:false
+                visible:false,
+                orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Txt</a>';
+                }
             },
-	    {
+            {
                 "targets":19,
-                visible:false
+                visible:false,
+                orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<a href="'+data+'.html'+'" target="_blank" rel="noopener noreferrer">View</a>'; //important ==> format txt.html
+                }
             },
-	    {
+            {
                 "targets":20,
                 visible:false
             },
@@ -259,6 +266,48 @@ $(document).ready(function() {
 	    {
                 "targets":25,
                 visible:false
+            },
+	    {
+                "targets":26,
+                visible:false
+            },
+	    {
+                "targets":27,
+                visible:false
+            },
+	    {
+                "targets":28,
+                visible:false
+            },
+        {
+            "targets":29,
+            visible:false,
+            orderable: false,
+            "data": "link",
+            "render": function ( data, type, row, meta ) 
+            {
+                return '<a href="genes?param='+data+'" target="_blank" rel="noopener noreferrer">View</a>';
+            }
+            },
+        {
+            "targets":30,
+            visible:false,
+            orderable: false,
+            "data": "link",
+            "render": function ( data, type, row, meta ) 
+            {
+                return '<a href="genes?param='+data+'" target="_blank" rel="noopener noreferrer">View</a>';
+            }
+            },
+        {
+            "targets":31,
+            visible:false,
+            orderable: false,
+            "data": "link",
+            "render": function ( data, type, row, meta ) 
+            {
+                return '<a href="genes?param='+data+'" target="_blank" rel="noopener noreferrer">View</a>';
+            }
             }
         ],
         //"scrollX": true, // Vertically scrollable table
@@ -293,11 +342,11 @@ $(document).ready(function() {
                     },
                     //excel button : export only colums containing text metadatas (not links to files)
                     { 
-                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,18,19,20,22,23,24,25]}
+                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,7,8,9,21,22,23,25,26,27,28]}
                     },
                     //pdf button : eexport only colums containing text metadatas (not links to files), at a landscape format (useful in order to do not crop table)
                     {
-                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,18,19,20,22,23,24,25]}
+                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,7,8,9,21,22,23,25,26,27,28]}
                     },
                     //column visibility button
                     {

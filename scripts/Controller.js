@@ -28,9 +28,9 @@ const shell = require('shelljs'); // run bash scripts from NodeJS
 // const crypto = require("crypto"); // used for generating uuids --> now generated on client-side
 
 // ------------- Configuration ------------- //
-let listenIp = process.argv[2] || '192.168.184.133'; // default listening ip
+let listenIp = process.argv[2] || '192.168.184.55'; // default listening ip
 let listenPort = process.argv[3] || 3000; // default listening port
-let nbThreads = 38;
+let nbThreads = 30;
 
 args // App usage (help)
   .version('0.99')
@@ -42,7 +42,7 @@ args // App usage (help)
 
 // if  --dev mode: change localhost ip to server ip
 if (args.dev) {
-  listenIp = '192.168.184.133';
+  listenIp = '192.168.184.55';
   listenPort = 3001;
 }
 if (args.local) {
@@ -231,6 +231,8 @@ const server = http.createServer((req, res) => {
         send500(`readFileAndIncludeAndRenderBySpecies : Error getting the file ${templateFilePath} : ${errors}.`);
       } else if (templateFilePath.indexOf('genomes') >= 0) {
         views.renderDataTables(species, contents, res, template, msg);
+      } else if (templateFilePath.indexOf('genes') >= 0) {
+        views.renderDataTables(species, contents, res, template, msg);
       } else if (templateFilePath.indexOf('refs') >= 0) {
         views.renderDataTablesRefs(species, contents, res, template, msg);
       } else if (templateFilePath.indexOf('ccdistribution') >= 0) {
@@ -257,6 +259,8 @@ const server = http.createServer((req, res) => {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/sdistribution.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // CC/ST/Serovar distribution
     } else if (urlPath === `/species/${species}/genomes`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genomes.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
+    } else if (urlPath === `/species/${species}/genes`) {
+      readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/genes.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize());
     } else if (urlPath === `/species/${species}/refs`) {
       readFileAndIncludeAndRenderBySpecies(`./../interface/views/species/${species}/refs.html`, 200, 'Phylogeny.Genus', species.capitalize(), species.capitalize()); // Genomes (Genus = species.capitalize())
     } else if (urlPath === `/species/${species}/genomes_tutorial`) {
@@ -313,11 +317,11 @@ const server = http.createServer((req, res) => {
             if (validator.isJSON(JSON.stringify(post))) {
               const clientuid = req.url.split('/').pop();
               // Create tmp directory (with uuid) SYNChronously ({ async: false })
-              shell.exec('mkdir -p /mnt/20To-vol/tmp/' + clientuid, { async: false });
+              shell.exec('mkdir -p /global/scratch/tmp/' + clientuid, { async: false });
               console.log('uuuid : ', clientuid);
               // Init filelist to zip
-              const stream = fs.createWriteStream('/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt'); // fs object containing list of files to zip
-              const zipfilesList = '/mnt/20To-vol/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt' // list of files to zip
+              const stream = fs.createWriteStream('/global/scratch/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt'); // fs object containing list of files to zip
+              const zipfilesList = '/global/scratch/tmp/' + clientuid + '/filestozip_' + clientuid + '.txt' // list of files to zip
               const zipOutputPathToSend = 'tmp/' + clientuid + '/wgsdata_' + clientuid + '.zip'
               console.log('files streamed: '); // debug
               // debug : stdout files list to zip
@@ -518,7 +522,10 @@ const server = http.createServer((req, res) => {
               }
             });
             // // Launch Fashtosh script asynchrously (=when callback)
-            const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 10', { async: true });
+            const fastosh = shell.exec('python FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 1', { async: true });
+	
+            //const fastosh = shell.exec('echo FasTosh_web.py -i ' + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T 1 > ' + fashtoshTmpPath + 'command.txt', { async: true });
+
             // const child = shell.exec("srun --cpus-per-task=" + nbThreads + " --nodelist=SAS-PP-LSCALC1 python FasTosh_web.py -i " + fashtoshTmpPath + 'sketch_paths.tsv -u ' + fashtoshTmpPath + ' -o ' + fashtoshTmpPath + 'distance_matrix -e ' + fashtoshTmpPath + 'taxonomy -T ' nbThreads, { async: true })
             // Serve files when child process ended
             fastosh.stdout.on('end', (data) => {;

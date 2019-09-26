@@ -130,7 +130,7 @@ def make_dist_tab(fasta_querie, fasta_targets, nbThreads, mashDist, dir_name):
 	# la sortie de mash est écrite dans outputFile_name
 
 	outputFile_name = fasta_querie.split('/')[-1] + "_dist.tsv"
-	outputFile = open(dir_name + outputFile_name,'w')
+	#outputFile = open(dir_name + outputFile_name,'w')
 
 	if mashDist :
 		os.system("mash dist -t -p " + str(nbThreads) + " " + fasta_querie + \
@@ -317,6 +317,8 @@ def write_reroot_tree(reroot_tree, tree_file_name):
 
 
 def main():
+
+	os.system("sleep 2")
 
 	begin = time.time()
 	##################### gets arguments #####################

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Genes</title>
+        <meta name="description" content="GAMeR genomic database - Clostridium genes"/>
+        <link rel="shortcut icon" type="image/x-icon" href="../../../img/favicon.ico" />
+        <!-- SEMANTIC UI main styles-->
+        <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/semantic.min.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../semantic/dist/components/icon.min.css"/>
+        <!--DataTables css-->
+        <link rel="stylesheet" type="text/css" href="../../../css/gamer.effects.datatables.css"/> <!--DataTables custom CSS overrides-->    
+        <link rel="stylesheet" type="text/css" href="../../../css/dataTables.semanticui.min.css"/> <!--SemanticUI integration for DataTables-->
+        <link rel="stylesheet" type="text/css" href="../../../css/select.dataTables.min.css"> <!--SemanticUI styling for DataTables selected rows -->
+        <link rel="stylesheet" type="text/css" href="../../../css/buttons.semanticui.min.css"/> <!--SemanticUI styling for DataTables buttons-->       
+        <!--jQuery JS-->
+        <script src="../../../../js/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery-1.12.4.js"></script><!--jQuery version adapted to DataTables-->
+        <!-- SEMANTIC UI main JS-->
+        <script src="../../../../semantic/dist/semantic.min.js"></script>
+        <!--DataTables JS-->
+        <script type="text/javascript" charset="utf8" src="../../../js/gamer.datatables.clostridium.js" defer></script><!--Setting Semantic UI custom JS effects settings + DataTables settings-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jquery.dataTables.min.js"></script><!--Main jQuery for Datatables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.semanticui.min.js"></script><!--SemanticUI integration for DataTables-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.select.min.js"></script><!--SemanticUI integration for DataTables selected rows-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.buttons.min.js"></script><!--SemanticUI integration for DataTables selected buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.semanticui.min.js"></script><!--SemanticUI integration for DataTables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/jszip.min.js"></script><!--JS class for generating or read zip files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/pdfmake.min.js"></script><!--JS class for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/vfs_fonts.js"></script><!--PdfMake dependency for generating pdf files-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.html5.min.js" defer></script><!--JS class for generating Datatables buttons-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.print.min.js" defer></script><!--JS class for copying/priting the DataTable-->
+        <script type="text/javascript" charset="utf8" src="../../../js/buttons.colVis.min.js"></script><!--JS class for handling DataTables columns visibility-->
+        <script type="text/javascript" charset="utf8" src="../../../js/dataTables.colReorder.min.js"></script>
+        <!-- common JS -->
+        <script type="text/javascript" charset="utf8" src="../../js/gamer.common.js" defer></script><!-- exec when document loaded -->
+        
+            <script type="text/javascript" src="../../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../js/jquery.csv.min.js"></script>
+    <script type="text/javascript" src="../../../js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="../../../js/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="../../../js/csv_to_html_table.js"></script>
+        
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../../css/dataTables.bootstrap.css" rel="stylesheet">
+        
+        
+    </head>
+    <body>    
+        <div id="bloc_page"><!-- main wrapper-->
+
+            <!-- Visible modal when "download" was clicked : start -->
+            <div class="ui basic modal preparing">
+                <div class="ui indeterminate big text loader">We are preparing your files</div>
+            </div>
+            <!-- Visible modal when "download" was clicked : end -->
+            <div class="ui small modal pleaseselect">
+                <i class="close icon"></i>
+                <div class="header">
+                    No download settings
+                </div>
+                <div class="image content">
+                    <div class="image">
+                        <img class="ui tiny image" src="../../../img/dna.png">
+                    </div>
+                    <div class="description">
+                        <i class="hand point right icon"></i><span class="ui small header"><b>Please select which kind of files you want to download:</b></span>
+                        <ol>
+                            <li>Select strains from the table (left click or CTRL+left click or SHIFT+left click)</li>
+                            <li>Then, go to bottom section: <i class="small cloud download icon"></i>download settings</li>
+                            <li>Then, click download</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!-- Visible modal when "need help?" was clicked : start -->
+            <%include ./../interface/views/includes/genomes_help.html%></%include>
+            <!-- Visible modal when "need help?" was clicked : end -->
+            <!-- Visible EMBED MultiQC when "MultiQC report was clicked: start-->
+            <div class="ui massive modal scrolling vontent transition" >
+                <div class="column" id="multiQC">
+                    <div class="ui medium message">
+                        <span class="ui medium header"> 
+                            MultiQC of the <i>Staphylococcus</i> strains processed by ARTwork (updated monthly)
+                            <br/>
+                        </span>    
+                    </div>
+                </div>
+            </div>
+            <!-- Visible EMBED MultiQC when "MultiQC report was clicked: start-->
+            <!------------------------------------------------------------------>
+            <!-- MAIN PAGE -->
+            <!------------------------------------------------------------------>
+    
+            <center>
+
+                            
+             <div id='table-container'></div>
+             </center>
+
+             
+             
+                            
+<script>
+
+    function getParamByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    var csv = getParamByName('param')
+
+  CsvToHtmlTable.init({
+    csv_path: csv,
+    element: 'table-container', 
+    allow_download: true,
+    csv_options: {separator: '\t', delimiter: '"'},
+    datatables_options: {"paging": false}
+  });
+</script>
+                            
+                            
+
+    </body>
+    <script>
+       
+        var data = <%datatablesJSON%>
+    </script>
+</html>
