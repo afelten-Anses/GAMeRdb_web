@@ -151,6 +151,7 @@ $(document).ready(function() {
             {
                 "targets":9,
                 orderable: false,
+		visible:false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
                 {
@@ -160,6 +161,7 @@ $(document).ready(function() {
             {
                 "targets":10,
                 orderable: false,
+		visible:false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -271,8 +273,8 @@ $(document).ready(function() {
             },
         {
             "targets":27,
-            visible:false,
             orderable: false,
+	    visible:false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
             {
@@ -281,7 +283,6 @@ $(document).ready(function() {
             },
         {
             "targets":28,
-            visible:false,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 

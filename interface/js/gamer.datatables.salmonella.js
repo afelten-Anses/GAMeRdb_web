@@ -100,8 +100,8 @@ $(document).ready(function() {
 	    { data: 'Reads.RefSNP' , "title": "SNP reference"},
 	    { data: 'Genome.RefScaffold' , "title": "Scaffolding reference"},
         { data: 'Gene.resfinder' , "title": "Antibiotic resistance"},
-        { data: 'Gene.vfdb' , "title": "Virulence factors"},
-        { data: 'Gene.spi' , "title": "SPI"}
+	{ data: 'Gene.spi' , "title": "SPI"},
+        { data: 'Gene.vfdb' , "title": "Virulence factors"}
             
         ],
         columnDefs: 
@@ -152,6 +152,7 @@ $(document).ready(function() {
             {
                 "targets":10,
                 orderable: false,
+		visible:false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -161,6 +162,7 @@ $(document).ready(function() {
             {
                 "targets":11,
                 orderable: false,
+		visible:false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
                 {
@@ -291,7 +293,6 @@ $(document).ready(function() {
             },
         {
             "targets":30,
-            visible:false,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
@@ -301,7 +302,6 @@ $(document).ready(function() {
             },
         {
             "targets":31,
-            visible:false,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 

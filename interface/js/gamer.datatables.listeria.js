@@ -144,6 +144,7 @@ $(document).ready(function() {
             {
                 "targets":10,
                 orderable: false,
+		visible:false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -153,6 +154,7 @@ $(document).ready(function() {
             {
                 "targets":11,
                 orderable: false,
+		visible:false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
                 {
@@ -283,7 +285,6 @@ $(document).ready(function() {
             },
         {
             "targets":30,
-            visible:false,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 

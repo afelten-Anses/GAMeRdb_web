@@ -97,8 +97,8 @@ $(document).ready(function() {
 	    { data: 'Reads.RefSNP' , "title": "SNP reference"},
 	    { data: 'Genome.RefScaffold' , "title": "Scaffolding reference"},
         { data: 'Gene.resfinder' , "title": "Antibiotic resistance"},
-        { data: 'Gene.vfdb' , "title": "Virulence factors"},
-        { data: 'Gene.enterotox_staph' , "title": "Enterotoxins"}
+	{ data: 'Gene.enterotox_staph' , "title": "Enterotoxins"},
+        { data: 'Gene.vfdb' , "title": "Virulence factors"}
         ],
         columnDefs: 
         [   
@@ -144,6 +144,7 @@ $(document).ready(function() {
             {
                 "targets":9,
                 orderable: false,
+		visible:false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
                 {
@@ -153,6 +154,7 @@ $(document).ready(function() {
             {
                 "targets":10,
                 orderable: false,
+		visible:false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta )
                 {
@@ -273,8 +275,8 @@ $(document).ready(function() {
             },
         {
             "targets":28,
-            visible:false,
             orderable: false,
+	    visible:false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
             {
@@ -283,7 +285,6 @@ $(document).ready(function() {
             },
         {
             "targets":29,
-            visible:false,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
@@ -293,7 +294,6 @@ $(document).ready(function() {
             },
         {
             "targets":30,
-            visible:false,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
