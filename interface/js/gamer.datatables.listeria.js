@@ -71,6 +71,8 @@ $(document).ready(function() {
             { data: 'SampleID' , "title": "Strain ID"},
             { data: 'Project' , "title": "Project"},
             { data: 'Reads.Center' , "title": "Center"},
+			{ data: 'Reads.Predicted_Technology' , "title": "Technology"},
+			{ data: 'ProcessingDate' , "title": "Processing date"},
             { data: 'Phylogeny.SequenceType' , "title": "Predicted ST"},
             { data: 'Phylogeny.ClonalComplex' , "title": "Predicted CC"},
             { data: 'Reads.FASTQC_pair1', "title": " Fastqc R1"},
@@ -87,7 +89,6 @@ $(document).ready(function() {
             { data: 'Genome.GFF' , "title": "GFF"},
             { data: 'Genome.GBK' , "title": "GBK"},
             { data: 'Report' , "title": "ARTwork report"},
-            { data: 'Report' , "title": "ARTwork HTML report"},
             { data: 'Reads.NbReads' , "title": "Number of reads"},
 	    { data: 'Reads.BreadthCoverage' , "title": "Breadth coverage (%)"},
 	    { data: 'Genome.N50' , "title": "N50"},
@@ -115,8 +116,16 @@ $(document).ready(function() {
                 "targets":2,
                 visible:false
             },
+			{
+                "targets":3,
+                visible:false
+            },
+			{
+                "targets":4,
+                visible:false
+            },
             {
-                "targets": 5,
+                "targets": 7,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -125,7 +134,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":6,
+                "targets":8,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -134,15 +143,15 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":8,
-                visible:false
-            },
-            {
-                "targets":9,
-                visible:false
-            },
-            {
                 "targets":10,
+                visible:false
+            },
+            {
+                "targets":11,
+                visible:false
+            },
+            {
+                "targets":12,
                 orderable: false,
 		visible:false,
                 "data": "download_link",
@@ -152,7 +161,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":11,
+                "targets":13,
                 orderable: false,
 		visible:false,
                 "data": "download_link",
@@ -162,7 +171,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":12,
+                "targets":14,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
@@ -171,41 +180,22 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":13,
+                "targets":15,
                 visible:false,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
                     return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
-                }
-            },
-            {
-                "targets":14,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
-                }
-            },
-            {
-                "targets":15,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
                 }
             },
             {
                 "targets":16,
-                visible:false,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GFF</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
                 }
             },
             {
@@ -214,7 +204,7 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GBK</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
                 }
             },
             {
@@ -224,24 +214,29 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Txt</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GFF</a>';
                 }
             },
             {
                 "targets":19,
+                orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">GBK</a>';
+                }
+            },
+            {
+                "targets":20,
                 visible:false,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'.html'+'" target="_blank" rel="noopener noreferrer">View</a>'; //important ==> format txt.html
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Txt</a>';
                 }
             },
             {
-                "targets":20,
-                visible:false
-            },
-	    {
                 "targets":21,
                 visible:false
             },
@@ -273,8 +268,12 @@ $(document).ready(function() {
                 "targets":28,
                 visible:false
             },
+	    {
+                "targets":29,
+                visible:false
+            },
         {
-            "targets":29,
+            "targets":30,
             visible:false,
             orderable: false,
             "data": "link",
@@ -284,7 +283,7 @@ $(document).ready(function() {
             }
             },
         {
-            "targets":30,
+            "targets":31,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
@@ -325,11 +324,11 @@ $(document).ready(function() {
                     },
                     //excel button : export only colums containing text metadatas (not links to files)
                     { 
-                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,7,8,9,21,22,23,25,26,27,28]}
+                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,5,6,9,10,11,22,23,24,26,27,28,29]}
                     },
                     //pdf button : eexport only colums containing text metadatas (not links to files), at a landscape format (useful in order to do not crop table)
                     {
-                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,7,8,9,21,22,23,25,26,27,28]}
+                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,5,6,9,22,23,24,26,27]}
                     },
                     //column visibility button
                     {

@@ -71,6 +71,8 @@ $(document).ready(function() {
             { data: 'SampleID' , "title": "Strain ID"},
             { data: 'Project' , "title": "Project"},
             { data: 'Reads.Center' , "title": "Center"},
+			{ data: 'Reads.Predicted_Technology' , "title": "Technology"},
+			{ data: 'ProcessingDate' , "title": "Processing date"},
             { data: 'Phylogeny.SequenceType' , "title": "Predicted ST"},
             { data: 'Reads.FASTQC_pair1', "title": " Fastqc R1"},
             { data: 'Reads.FASTQC_pair2' , "title": "Fastqc R2"},
@@ -85,8 +87,7 @@ $(document).ready(function() {
             { data: 'Genome.QUAST' , "title": "Assembly quality"},
             { data: 'Genome.GFF' , "title": "GFF"},
             { data: 'Genome.GBK' , "title": "GBK"},
-            { data: 'Report' , "title": "ARTwork report"},
-            { data: 'Report' , "title": "ARTwork HTML report"},
+            { data: 'Report' , "title": "ARTwork report"},			
             { data: 'Reads.NbReads' , "title": "Number of reads"},
 	    { data: 'Reads.BreadthCoverage' , "title": "Breadth coverage (%)"},
 	    { data: 'Genome.N50' , "title": "N50"},
@@ -115,8 +116,16 @@ $(document).ready(function() {
                 "targets":2,
                 visible:false
             },
+			{
+                "targets":3,
+                visible:false
+            },
+			{
+                "targets":4,
+                visible:false
+            },
             {
-                "targets": 4,
+                "targets": 6,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -125,7 +134,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":5,
+                "targets":7,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -134,15 +143,15 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":7,
-                visible:false
-            },
-            {
-                "targets":8,
-                visible:false
-            },
-            {
                 "targets":9,
+                visible:false
+            },
+            {
+                "targets":10,
+                visible:false
+            },
+            {
+                "targets":11,
                 orderable: false,
 		visible:false,
                 "data": "download_link",
@@ -152,7 +161,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":10,
+                "targets":12,
                 orderable: false,
 		visible:false,
                 "data": "download_link",
@@ -162,7 +171,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":11,
+                "targets":13,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
@@ -171,7 +180,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":12,
+                "targets":14,
                 visible:false,
                 orderable: false,
                 "data": "link",
@@ -181,7 +190,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":13,
+                "targets":15,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -190,7 +199,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":14,
+                "targets":16,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -199,7 +208,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":15,
+                "targets":17,
                 visible:false,
                 orderable: false,
                 "data": "link",
@@ -209,7 +218,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":16,
+                "targets":18,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -218,7 +227,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":17,
+                "targets":19,
                 orderable: false,
 		visible:false,
                 "data": "link",
@@ -227,25 +236,19 @@ $(document).ready(function() {
                     return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Txt</a>';
                 }
             },
-            {
-                "targets":18,
-                visible:false,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'.html'+'" target="_blank" rel="noopener noreferrer">View</a>'; //important ==> format txt.html
-                }
-            },
-            {
-                "targets":19,
-                visible:false
-            },
+
+
+
+
+
+
+
+
             {
                 "targets":20,
                 visible:false
             },
-	    {
+            {
                 "targets":21,
                 visible:false
             },
@@ -273,8 +276,12 @@ $(document).ready(function() {
                 "targets":27,
                 visible:false
             },
+	    {
+                "targets":28,
+                visible:false
+            },
         {
-            "targets":28,
+            "targets":29,
             orderable: false,
 	    visible:false,
             "data": "link",
@@ -284,7 +291,7 @@ $(document).ready(function() {
             }
             },
         {
-            "targets":29,
+            "targets":30,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
@@ -293,7 +300,7 @@ $(document).ready(function() {
             }
             },
         {
-            "targets":30,
+            "targets":31,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
@@ -334,11 +341,11 @@ $(document).ready(function() {
                     },
                     //excel button : export only colums containing text metadatas (not links to files)
                     { 
-                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,6,7,8,20,21,22,23,25,26,27]}
+                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,5,8,9,10,20,21,22,23,24,25,26,27,28]}
                     },
                     //pdf button : eexport only colums containing text metadatas (not links to files), at a landscape format (useful in order to do not crop table)
                     {
-                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,6,7,8,20,21,22,23,25,26,27]}
+                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,5,8,20,21,22,23,24,25,26,28]}
                     },
                     //column visibility button
                     {
