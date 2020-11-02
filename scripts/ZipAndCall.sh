@@ -10,7 +10,8 @@
 # init and create currentir : zip directory (tmp/uuid/)
 sleep 6 #async file creation support quickfix
 #currentDir=/mnt/20To-vol/tmp/$1 #arg $1 = uuid
-currentDir=/global/scratch/tmp/$1
+#currentDir=/global/scratch/tmp/$1
+currentDir=tmp/$1
 mkdir -p $currentDir 
 
 # parse list of files to zip 

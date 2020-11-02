@@ -133,16 +133,13 @@ def make_dist_tab(fasta_querie, fasta_targets, nbThreads, mashDist, dir_name):
 	#outputFile = open(dir_name + outputFile_name,'w')
 
 	if mashDist :
-	#print("mash dist -t -p " + str(nbThreads) + " " + fasta_querie + \
-	#	" " + " ".join(fasta_targets) + " > " + dir_name + outputFile_name)
-	
 		os.system("mash dist -t -p " + str(nbThreads) + " " + fasta_querie + \
-		" " + " ".join(fasta_targets) + " > " + dir_name + outputFile_name)
-	
+			" " + " ".join(fasta_targets) + " > " + dir_name + outputFile_name)
+
 	else :
 		os.system("mash dist -p " + str(nbThreads) + " " + fasta_querie +
                     " " + " ".join(fasta_targets) + " > " + dir_name + outputFile_name)
-	
+
 	#outputFile.close()
 
 	return dir_name + outputFile_name
@@ -154,21 +151,13 @@ def mash_dist_loop(sketch_files, nbThreads, mashDist, dir_name):
 
 	distTable_files = []
 
-	new_sketch_files = []
 	for sketch_file in sketch_files :
-		s = sketch_file.split('/')[-1]
-		ns = dir_name + '/' + s
-		os.system("cp " + sketch_file + ' ' + ns)
-		new_sketch_files.append(ns)
 
-	for sketch_file in new_sketch_files :
-		#print(sketch_file)
-		sketch_targets = copy.copy(new_sketch_files)
-		
+		sketch_targets = copy.copy(sketch_files)
 		sketch_targets.remove(sketch_file)
-		
+
 		distTable_files.append(make_dist_tab(sketch_file, sketch_targets, nbThreads, mashDist, dir_name))
-		
+
 	return 	distTable_files
 
 
@@ -351,9 +340,7 @@ def main():
     #####################  Create mash matrix  #####################
 	
 	sketch_files_name = make_sketch_files(Arguments.input, Arguments.nbThreads, Arguments.kmer_size, Arguments.sketch_size)
-	
 	distTable_files = mash_dist_loop(sketch_files_name, Arguments.nbThreads, mashDist, Arguments.uuid)
-	
 	distMatrix = make_dist_matrix(distTable_files, mashDist)
 	distMatrix = write_dist_matrix(distMatrix, Arguments.output + '.tsv')
 
@@ -370,7 +357,7 @@ def main():
 
 	if Arguments.sketch :
 		supress_sketch = supress_sketch_files()
-	
+
 	end = time.time()
 	total = round(end - begin,3)
 	print "Temps d'éxécution FasTosh: " + str(total) + " secondes"

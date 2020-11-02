@@ -71,7 +71,10 @@ $(document).ready(function() {
         columns: 
         [   
             { data: 'ReferenceID' , "title": "Strain"},
+			{ data: 'Accession_number' , "title": "Accession number"},
+			{ data: 'Phylogeny.Subspecies' , "title": "Subspecies"},
             { data: 'Phylogeny.Serovar' , "title": "Serovar", "defaultContent": "-"},
+			{ data: 'Phylogeny.SequenceType' , "title": "ST", "defaultContent": "-"},
             { data: 'ZIPpath', "title": " Archive"},
         ],
         columnDefs: 
@@ -86,7 +89,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets": 2,
+                "targets": 5,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 

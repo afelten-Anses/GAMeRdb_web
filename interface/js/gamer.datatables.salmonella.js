@@ -76,6 +76,7 @@ $(document).ready(function() {
 			{ data: 'Reads.Predicted_Technology' , "title": "Technology"},
 			{ data: 'ProcessingDate' , "title": "Processing date"},
             { data: 'Phylogeny.Serovar' , "title": "Predicted Serovar"},
+			{ data: 'Phylogeny.SequenceType' , "title": "Predicted ST"},
 	    { data: 'Phylogeny.Antigenic_profile' , "title": "Predicted Antigenic Profile"},
             { data: 'Reads.FASTQC_pair1', "title": " Fastqc R1"},
             { data: 'Reads.FASTQC_pair2' , "title": "Fastqc R2"},
@@ -132,8 +133,13 @@ $(document).ready(function() {
                 "targets":6,
                 visible:false
             },
+			
+	    {
+                "targets":7,
+                visible:false
+            },
             {
-                "targets": 7,
+                "targets": 8,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -142,7 +148,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":8,
+                "targets":9,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -151,15 +157,15 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":10,
-                visible:false
-            },
-            {
                 "targets":11,
                 visible:false
             },
             {
                 "targets":12,
+                visible:false
+            },
+            {
+                "targets":13,
                 orderable: false,
 		visible:false,
                 "data": "download_link",
@@ -169,7 +175,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":13,
+                "targets":14,
                 orderable: false,
 		visible:false,
                 "data": "download_link",
@@ -179,7 +185,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":14,
+                "targets":15,
                 orderable: false,
                 "data": "download_link",
                 "render": function ( data, type, row, meta ) 
@@ -188,17 +194,8 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":15,
-                visible:false,
-                orderable: false,
-                "data": "link",
-                "render": function ( data, type, row, meta ) 
-                {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
-                }
-            },
-            {
                 "targets":16,
+                visible:false,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -212,11 +209,20 @@ $(document).ready(function() {
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
                 {
-                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Fasta</a>';
                 }
             },
             {
                 "targets":18,
+                orderable: false,
+                "data": "link",
+                "render": function ( data, type, row, meta ) 
+                {
+                    return '<a href="'+data+'" target="_blank" rel="noopener noreferrer">Quast</a>';
+                }
+            },
+            {
+                "targets":19,
                 visible:false,
                 orderable: false,
                 "data": "link",
@@ -226,7 +232,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":19,
+                "targets":20,
                 orderable: false,
                 "data": "link",
                 "render": function ( data, type, row, meta ) 
@@ -235,7 +241,7 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":20,
+                "targets":21,
                 visible:false,
                 orderable: false,
                 "data": "link",
@@ -245,10 +251,6 @@ $(document).ready(function() {
                 }
             },
             {
-                "targets":21,
-                visible:false
-            },
-	    {
                 "targets":22,
                 visible:false
             },
@@ -280,8 +282,12 @@ $(document).ready(function() {
                 "targets":29,
                 visible:false
             },
+	    {
+                "targets":30,
+                visible:false
+            },
         {
-            "targets":30,
+            "targets":31,
             visible:false,
             orderable: false,
             "data": "link",
@@ -291,7 +297,7 @@ $(document).ready(function() {
             }
             },
         {
-            "targets":31,
+            "targets":32,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
@@ -300,7 +306,7 @@ $(document).ready(function() {
             }
             },
         {
-            "targets":32,
+            "targets":33,
             orderable: false,
             "data": "link",
             "render": function ( data, type, row, meta ) 
@@ -341,11 +347,11 @@ $(document).ready(function() {
                     },
                     //excel button : export only colums containing text metadatas (not links to files)
                     { 
-                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,5,6,9,10,11,22,23,24,26,27,28,29]}
+                        extend: 'excel', text: 'Excel', messageBottom:false, exportOptions: {columns: [0,1,2,3,4,5,6,7,10,11,12,23,24,25,27,28,29,30]}
                     },
                     //pdf button : eexport only colums containing text metadatas (not links to files), at a landscape format (useful in order to do not crop table)
                     {
-                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,5,6,9,22,23,24,26,27]}
+                        extend: 'pdfHtml5', orientation: 'landscape', pageSize: 'LEGAL', messageBottom:false, exportOptions: {columns: [0,1,2,3,5,6,7,10,23,24,25,27,28]}
                     },
                     //column visibility button
                     {
