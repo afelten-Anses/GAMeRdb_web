@@ -26,7 +26,7 @@
     "semantic-ui": "^2.3.1",
     "shelljs": "^0.8.2",
     "templatesjs": "^2.0.0",
-    "validator": "^9.4.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "eslint-config-airbnb-base": "^12.1.0",
